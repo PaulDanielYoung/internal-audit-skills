@@ -3,24 +3,51 @@ name: risk-statements
 description: Turn a risk, concern, issue, or vague topic into a clear risk statement that explains what could happen, why it could happen, and why it matters. Use when writing, reviewing, improving, or diagnosing risk statements.
 ---
 
-Read the repository's `GLOSSARY.md` before proceeding and use any relevant definitions it provides.
-
-If a required term is not defined, uses different terminology, or its intended meaning is unclear, call the Skill tool with "shared-understanding" to resolve the terminology before proceeding.
-
-If the resolution establishes terminology or a definition that should apply beyond the current task, update `GLOSSARY.md` to reflect the agreed understanding before continuing. Do not update the glossary for task-specific exceptions or temporary interpretations.
-
-A risk statement connects an **event** to its **cause** and **consequence** in relation to an **objective**. It answers three questions: what could happen, why could it happen, and why do we care.
-
-If material ambiguity about the objective, event, causes, consequences, or intended use could meaningfully change the risk statement, call the Skill tool with "shared-understanding" before proceeding.
-
-Once the necessary context is resolved, return to this skill and continue using the agreed understanding.
+A risk statement connects an **event** to its **cause** and **consequence** in relation to an **objective**. It answers three questions: what could happen, why could it happen, and why do we care. The **objective** is the thing at stake; it is usually stated as context alongside the statement rather than inside it, and the consequence should make clear how that objective is affected.
 
 A useful starting point is:
 
 > [Event] caused by [cause/s] resulting in [consequence/s].
 
-You may split it into two sentences when it runs long:
+Split it into two sentences when it runs long:
 
 > [Event] caused by [cause/s]. This may result in [consequence/s].
 
-Do not force this wording. Adjust it to fit the context, but ensure the statement answers all three questions.
+Adapt the wording to the context. The statement is complete when a reader can point to the event, the cause, and the consequence, and can name the objective the consequence affects.
+
+## Terminology
+
+Read `GLOSSARY.md` in the working directory and use its definitions for **risk**, **objective**, **event**, **cause**, and **consequence**. If there is no glossary, offer to create one from the seed at `../../GLOSSARY.md` (relative to this skill's directory) before continuing.
+
+## When to pause
+
+Call the Skill tool with "shared-understanding" before drafting when either of these holds:
+
+- A term you need is missing from the glossary, the user's material uses different terminology, or its intended meaning is unclear.
+- Material ambiguity about the objective, event, causes, consequences, or intended use of the statement could meaningfully change what you write.
+
+When the resolution establishes a definition or synonym that should apply beyond the current task, record it in `GLOSSARY.md`. A task-specific exception or temporary interpretation stays in the conversation.
+
+## Faults
+
+Use this section when reviewing, improving, or diagnosing a statement. Each fault names what a sound statement has instead.
+
+* **A cause or control weakness stated as the risk.** A condition such as inadequate staffing, weak access controls, or insufficient monitoring may explain why an event could occur; it is not the whole risk. State the uncertain event and its consequence.
+
+* **A consequence stated as the event.** Financial loss, service disruption, regulatory action, reputational harm, and similar effects are consequences when they arise from an event. Identify what happens first.
+
+* **An issue stated as a risk.** If something has already happened or is certain to occur, it is an issue or existing condition rather than the uncertain event. Use it as context or a cause and identify any remaining uncertain event and consequence.
+
+* **The objective merely negated.** Statements such as "failure to achieve the objective" or "inability to meet requirements" do not explain what could cause that failure. Name the event that would affect the objective.
+
+* **A topic, category, or overly general condition stated as the risk.** Labels such as "cyber risk," "staffing risk," "human error," or "poor controls" do not describe a specific causal chain. State what could happen, why, and with what consequence.
+
+* **Multiple distinct risks combined into one statement.** A statement may have multiple related causes or consequences, but separate distinct event chains when they would be understood, assessed, or managed differently.
+
+* **A cause too vague to explain the event.** Replace generic labels with the specific condition that could give rise to the event when the available information supports it. Do not invent a root cause that is not known.
+
+* **A consequence too vague or disconnected from the objective.** State a plausible effect that explains why the event matters and how an objective would be affected. Prefer specific consequences over generic phrases such as "reputational damage" when greater precision is supported.
+
+* **A broken or circular causal chain.** Each cause should plausibly give rise to the event, and each consequence should plausibly follow from the event. Do not simply restate the same condition in different words.
+
+* **An overloaded statement.** Include the causes and consequences needed to understand the material risk, not every conceivable driver or downstream effect. Split or move supporting detail to context when it obscures the core statement.
