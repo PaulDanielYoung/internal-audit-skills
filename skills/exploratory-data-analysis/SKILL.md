@@ -1,99 +1,88 @@
 ---
 name: exploratory-data-analysis
-description: Explore data an auditor has received and present what it is in a visual HTML report. Use when the user shares or names a data file (CSV, XLSX, JSON) and wants to understand, summarize, or profile it.
+description: Explore data an auditor has received and present what it contains in a visual HTML report. Use when the user shares or names a data file (CSV, XLSX, JSON) and wants a first look at what is in it, before any audit testing.
 ---
 
 # Exploratory Data Analysis
 
-Turn an unfamiliar dataset into an understanding of what it contains, how it is structured, and what deserves closer examination. The aim is to understand the data before testing. That includes its shape, fields, quality, distributions, relationships, and notable patterns.
+Turn an unfamiliar dataset into an understanding of what it contains, how it is structured, and what deserves closer examination: its shape, fields, quality, distributions, relationships, and notable patterns. Exploration comes before testing.
 
-Exploration generates observations and hypotheses, not audit conclusions. An unusual value, pattern, or relationship is a reason to investigate further, not evidence by itself of an error, control failure, or other exception.
+Exploration generates observations and hypotheses, not audit conclusions. An unusual value, pattern, or relationship is a reason to look closer, not evidence of an error, control failure, or other exception. Language that names an audit conclusion waits for a separate testing or investigation workflow that the user opens explicitly.
+
+Two words carry the analytical stance throughout:
+
+* **Apparent**: inferred from names, values, or relationships in the data. A meaning, grain, or relationship stays *apparent* until the data, accompanying documentation, or the user establishes it.
+* **Characteristic**: what a field is like (many nulls, repeated values, a long tail). Whether a characteristic is a **concern** depends on what the field means and how the data is used, so describe the characteristic first.
 
 ## Process
 
 ### 1. Orient
 
-Start by understanding what you received before analyzing it. Do not jump straight to visualizations, anomalies, or audit tests.
+Read the raw structure before analyzing it. Inspect each file, workbook, sheet, or object:
 
-Inspect each file, workbook, sheet, or object and establish its basic structure:
+* Sources provided, and the rows and columns in each
+* Fields present and the data types they appear to hold
+* The apparent role of each field: identifier, date, amount, category, free text, or measure
+* Apparent keys and relationships between datasets or sheets
+* The date range or other period covered
+* Structures that are not transactional data: empty sheets, title rows, duplicated headers, subtotals, formulas, lookup tables, instructions
 
-* What data sources were provided?
-* How many rows and columns does each contain?
-* What fields are present, and what data types do they appear to contain?
-* Which fields look like identifiers, dates, amounts, categories, free text, or measures?
-* Are there obvious keys or relationships between datasets or sheets within a dataset?
-* What date range or other period does the data cover?
-* Are there empty sheets, duplicated headers, title rows, subtotals, formulas, lookup tables, instructions, or other structures that should not be treated as transactional data?
+Read representative records and distinct values to work out what fields mean.
 
-Read representative records and inspect distinct values where useful to understand what fields appear to mean. Treat inferred meanings as hypotheses unless they are established by the data, accompanying documentation, or the user.
+Call the Skill tool with `"shared-understanding"` when a field, dataset, relationship, or intended meaning is materially ambiguous and the ambiguity would change the analysis.
 
-If a field, dataset, relationship, or intended meaning is materially ambiguous and that ambiguity would affect the analysis, call the Skill tool with `"shared-understanding"` rather than silently guessing.
+Orient is complete when every source has row and field counts, every field has an apparent role, and the grain of each source is stated or flagged as ambiguous.
 
 ### 2. Profile
 
-Build a quantitative baseline for the data before deciding what deserves deeper exploration.
+Build a quantitative baseline before deciding what deserves deeper exploration. Profile each field according to its apparent role; the statistics that explain a category say nothing about an identifier.
 
-Profile fields according to what they contain rather than applying the same statistics to every column. At minimum, establish where relevant:
+* **Identifiers and keys**: completeness, distinct count, duplicates, formatting consistency, and whether apparent relationships between datasets hold
+* **Numeric measures**: count, missing values, range, median and relevant percentiles, zero and negative values, spread, extreme observations, distribution shape. Show the mean only when it aids interpretation.
+* **Categories**: distinct count, completeness, most common values, concentration, rare values, inconsistent labels or formatting
+* **Dates and times**: earliest and latest, completeness, frequency, gaps, clustering, values outside the apparent period
+* **Free text**: completeness, repeated exact values, common prefixes or patterns, formatting variation, length distribution. Summarize only when meaningful structure exists.
 
-* **Completeness**: null, blank, or otherwise missing values
-* **Uniqueness**: distinct values, repeated values, and apparent duplicate records
-* **Cardinality**: how concentrated or varied categorical and identifier fields are
-* **Numeric distributions**: range, center, spread, zero and negative values, and extreme observations
-* **Categorical distributions**: common values, rare values, and concentration
-* **Dates and times**: coverage, gaps, frequency, clustering, and values outside the apparent period
-* **Identifiers and keys**: uniqueness, formatting consistency, and whether apparent relationships between datasets hold
-* **Text fields**: recurring values, formatting variation, and other structure that can be meaningfully summarized
+Choose the summaries that explain the field and omit the rest.
 
-Do not mechanically calculate every possible statistic. Choose summaries that help explain the field and omit metrics that would be meaningless or misleading for its apparent role.
+Preserve the original data. Record every parsing step, type conversion, filter, normalization, or other transformation so each observation stays **traceable** to the source.
 
-Distinguish **data characteristics** from **data quality concerns**. A field with many nulls, repeated values, extreme amounts, or an unexpected distribution is noteworthy, but whether it represents a problem depends on what the field means and how the data is used.
-
-Preserve the original data while profiling. Record any parsing, type conversion, filtering, normalization, or other transformation needed to analyze it so the resulting observations can be traced back to the source.
+Profile is complete when every field has the profile its role calls for and every transformation is recorded.
 
 ### 3. Explore
 
-Follow the signals that emerge from orientation and profiling. Explore organically rather than running a fixed catalog of anomaly tests.
-
-Look for patterns that help explain how the data behaves and where closer examination may be useful:
+Follow the signals from orientation and profiling rather than a fixed catalog of anomaly tests. Questions that tend to open the data up:
 
 * How do important measures vary across categories, entities, locations, or time?
-* Are apparent outliers isolated observations or part of a broader pattern?
-* Do unusual values cluster around particular people, vendors, departments, accounts, dates, or other dimensions?
+* Are apparent outliers isolated or part of a broader pattern?
+* Do unusual values cluster around particular people, vendors, departments, accounts, or dates?
 * Are there discontinuities, spikes, gaps, seasonality, or changes in behavior over time?
 * Do fields that appear related behave consistently with one another?
-* Do subsets of the data behave materially differently from the overall population?
-* Are duplicates, missing values, rare categories, or other quality characteristics concentrated somewhere specific?
+* Do subsets behave materially differently from the whole population?
+* Are duplicates, missing values, or rare categories concentrated somewhere specific?
 * Do relationships between datasets reveal unmatched, one-to-many, or otherwise unexpected records?
 
-Let one observation lead to the next. When a pattern looks interesting, slice it along relevant dimensions, inspect the underlying records, and determine whether the pattern persists or disappears under closer examination.
+Let one observation lead to the next. When a pattern looks interesting, slice it along relevant dimensions and inspect the underlying records; keep the patterns that persist and drop those that dissolve.
 
-Prefer explanations supported directly by the data over speculation about why a pattern exists. Clearly distinguish:
+Write up every kept pattern in three separated parts:
 
-* **Observation** — what the data shows
-* **Interpretation** — what that pattern may mean
-* **Open question** — what would need additional context or evidence to understand it
+* **Observation**: what the data shows. "Four expense categories account for 78% of recorded spend."
+* **Interpretation**: what the pattern may mean, offered only when useful and stated as a possibility. "The concentration may reflect centralized purchasing, department size, or both."
+* **Open question**: what additional context or evidence would change the interpretation. "Are these departments expected to purchase on behalf of other units?"
 
-Do not turn exploration into audit testing. Avoid declaring exceptions, control failures, root causes, fraud indicators, or other audit conclusions unless the user explicitly moves into a separate testing or investigation workflow.
+Explore is complete when every surfaced pattern has been sliced along at least one dimension and its records inspected, then either dropped or written up with an observation and the context (denominator, period, population, comparison group) needed to read it.
 
 ### 4. Present
 
-Present the exploration as a self-contained visual HTML report that helps the auditor understand the dataset and decide what, if anything, deserves further examination.
+Compute in a script; the HTML is the presentation layer only. Aggregate, group, or bin during analysis and pass the results to the page.
 
-Write the report to the OS temporary directory so the analysis does not modify the user's source files or working directory. Use a fresh filename for each run and open the completed report for the user when the environment permits it.
+Read `HTML-REPORT.md` before writing any HTML. It defines the scaffold, sections, chart patterns, and style of the report.
 
-Make the report **visual first**. Use charts, tables, distributions, timelines, relationship diagrams, and concise annotations where they communicate the data better than prose. Choose each visualization because it answers a question; do not generate charts merely because a field can be charted.
+Write the report to the OS temporary directory under a fresh filename for each run, so the user's source files and working directory stay untouched. Open the completed report for the user when the environment permits.
 
-Structure the report around the story of the data rather than reproducing every statistic collected during profiling. Include:
+Present is complete when the report passes four checks:
 
-* **Data overview**: sources, rows, fields, apparent grain, coverage period, and relationships between datasets
-* **Field profile**: the characteristics needed to understand important fields and material data-quality observations
-* **Key observations**: the patterns, distributions, relationships, and unusual characteristics that emerged during exploration
-* **Visual evidence**: charts or tables showing the observations directly
-* **Questions and hypotheses**: matters that may warrant context, validation, or subsequent audit work
-* **Analysis notes**: material assumptions, inferred meanings, transformations, and limitations that affect interpretation
-
-For every notable observation, make it possible to understand **what was observed and why it was surfaced**. Show enough supporting context to avoid making ordinary variation look anomalous.
-
-Prioritize findings by their usefulness for understanding the data, not by how dramatic they appear. Do not assign audit severity, risk ratings, or exception status during exploratory analysis.
-
-End the report with **Areas for closer examination**: a short set of evidence-backed questions or hypotheses that naturally follow from the exploration. These are possible directions for subsequent work, not findings or recommended audit conclusions.
+* Every section helps the auditor understand the dataset.
+* Every observation shows its evidence.
+* Every interpretation is separated from what the data establishes.
+* Every adverse word rests on something exploration actually established; otherwise the observation stands and the conclusion stays open.
