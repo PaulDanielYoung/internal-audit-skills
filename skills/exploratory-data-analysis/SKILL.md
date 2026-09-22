@@ -1,74 +1,63 @@
 ---
 name: exploratory-data-analysis
-description: Explore data an auditor has received and present what it contains in a visual HTML report. Use when the user shares or names a data file (CSV, XLSX, JSON) and wants a first look at what is in it, before any audit testing.
+description: Explores one CSV an auditor has received and produces an offline HTML report of its contents, structure, quality, and patterns. Use for a first look at a dataset before audit testing. Supports one table with a header row.
 ---
 
 # Exploratory Data Analysis
 
-Turn an unfamiliar dataset into an understanding of what it contains, how it is structured, and what deserves closer examination: its shape, fields, quality, distributions, relationships, and notable patterns. Exploration comes before testing.
+Turn an unfamiliar CSV into an understanding of what it contains and what deserves closer examination. Exploration generates observations and hypotheses, not audit conclusions. An unusual value or relationship is a reason to look closer; an error or control failure requires a separate testing or investigation workflow.
 
-Exploration generates observations and hypotheses, not audit conclusions. An unusual value, pattern, or relationship is a reason to look closer, not evidence of an error, control failure, or other exception. Language that names an audit conclusion waits for a separate testing or investigation workflow that the user opens explicitly.
+Two terms guide the analysis:
 
-Two words carry the analytical stance throughout:
+- **Apparent:** a meaning, field role, or grain inferred from the data, pending supporting context.
+- **Characteristic:** what a field is like, such as repeated values or a long tail. Whether it is a concern depends on its meaning and use.
 
-* **Apparent**: inferred from names, values, or relationships in the data. A meaning, grain, or relationship stays *apparent* until the data, accompanying documentation, or the user establishes it.
-* **Characteristic**: what a field is like (many nulls, repeated values, a long tail). Whether a characteristic is a **concern** depends on what the field means and how the data is used, so describe the characteristic first.
+## Scope and files
 
-## Scripts
+Analyze exactly one comma-delimited CSV, with one table and field names in the first record, small enough to process in memory. If several files are offered, establish which one to explore. For an unsupported structure, explain what is needed rather than silently choosing a table or changing the source.
 
-Two scripts live in `scripts/` under this skill's base directory, with the page template in `assets/`. Run them with `uv run`, which installs the dependencies they declare inline. Without uv, run `python -m pip install pandas openpyxl` once and use `python` instead.
+Read the existing CSV in place and leave its bytes unchanged. Put the retained outputs in a sibling directory named `<csv-stem> - exploratory data analysis`, where the stem is the filename without `.csv`:
 
-* `profile.py FILE...` loads every file and every sheet, profiles each field by apparent role, tests apparent relationships between sources, writes the full profile as JSON to the OS temp directory and prints a summary. `--help` lists what it records.
-* `report.py` is a library the per-run driver script imports: one emitter per section and visual, and `write_report()`, which fills the template, writes a fresh file to the OS temp directory and opens it.
+```text
+transactions.csv
+transactions - exploratory data analysis/
+    analysis.py
+    report.html
+```
 
-Per-run code goes in the scratchpad or temp directory. The skill folder and the user's files stay untouched.
+Reuse that directory on subsequent runs. Read any existing `analysis.py` before revising it; retain relevant interpretation choices. Replace these generated outputs when rerunning this analysis, leaving unrelated files untouched. Keep intermediate files in the OS temporary directory and remove only those created for this run when finished. The retained script must regenerate the report from the CSV without a temporary profile or conversation state. It may import the installed skill's helpers.
 
-## Process
+## 1. Orient and profile
 
-### 1. Orient and profile
+Run `uv run "<skill directory>/scripts/profile_csv.py" "<CSV path>"`. Read the printed summary and temporary JSON profile. If uv is unavailable, use Python 3.10+ with `pandas>=2.0,<4` installed in a virtual environment. Script paths are relative to the skill directory, not the engagement directory; `--help` describes parsing overrides.
 
-Run `profile.py` against every file received. Read the printed summary, then the JSON: the structural notes for each source, its sample records, each field's apparent role and statistics, and the apparent relationships between sources. A hidden sheet, a title row, a duplicated header, or a field stored as text appears in the notes. A non-tabular source carries a raw sample instead of a profile; decide what it is from the sample.
+Review every field's apparent role against its name and raw values. The profiler preserves strings, including leading-zero identifiers and literal `NA` values. It treats whitespace-only cells as blank, infers plain numbers and ISO dates, and reports conversion failures separately from blanks. Inspect failed examples before using parsed values. Correct roles and date formats by rerunning the profiler with overrides; the retained script must use the same choices. Do not guess locale, date order, currency, or business meaning when it would change the analysis.
 
-Check every apparent role against the sample values and the field's name, and note the ones to correct. Note the characteristics that deserve exploration.
+Ask only when unresolved meaning would materially change a calculation or interpretation. If `shared-understanding` is available, invoke it with the specific ambiguity and already-established context; for this workflow, resolve that question without restarting a full engagement interview. Otherwise ask the specific question directly. Continue independent analysis while the affected decision remains unresolved.
 
-Call the Skill tool with `"shared-understanding"` when a field, dataset, relationship, or intended meaning is materially ambiguous and the ambiguity would change the analysis.
+This step is complete when row and field counts, blanks, and appropriate basic field summaries are established; every field's role has been reviewed; and the dataset's grain is stated with its basis or flagged as unresolved. An empty table can have a complete profile without supporting further analysis.
 
-Preserve the original data. Record every transformation the analysis needs beyond the profiler's own notes so each observation stays **traceable** to the source.
+## 2. Explore
 
-Orient and profile is complete when every source has row and field counts and is classified as tabular or not, every field's role is confirmed or corrected, the grain of each source is stated or flagged as ambiguous, and every transformation is recorded.
+Follow useful signals from the profile. Examine distributions, concentrations, changes over time, relationships between columns, or concentrations of missing and repeated values when relevant. Choose comparisons that help interpret the pattern and inspect the contributing records. Keep raw values available alongside parsed values; record exclusions and transformations in the script and report notes.
 
-### 2. Explore
+Write each retained pattern with:
 
-Follow the signals from the profile rather than a fixed catalog of anomaly tests. Questions that tend to open the data up:
+- **Observation:** what the data shows, with its denominator, population, period, or comparison group as needed.
+- **Interpretation:** optional; a possible explanation, clearly separated from the observation.
+- **Open question:** optional; additional context that would materially change the interpretation.
 
-* How do important measures vary across categories, entities, locations, or time?
-* Are apparent outliers isolated or part of a broader pattern?
-* Do unusual values cluster around particular people, vendors, departments, accounts, or dates?
-* Are there discontinuities, spikes, gaps, seasonality, or changes in behavior over time?
-* Do fields that appear related behave consistently with one another?
-* Do subsets behave materially differently from the whole population?
-* Are duplicates, missing values, or rare categories concentrated somewhere specific?
-* Do relationships between datasets reveal unmatched, one-to-many, or otherwise unexpected records?
+Exploration is complete when the basic profile has been considered for useful follow-up, each retained pattern is supported by calculations and inspected records, and material unresolved limitations are stated. Briefly record the dimensions explored and relevant limitations. Require no minimum number of observations or charts; a short report is appropriate when further exploration adds little. A quiet dataset does not establish that controls are effective.
 
-Let one observation lead to the next. When a pattern looks interesting, slice it along relevant dimensions and inspect the underlying records; keep the patterns that persist and drop those that dissolve.
+## 3. Present and verify
 
-Write up every kept pattern in three separated parts:
+Read [HTML-REPORT.md](HTML-REPORT.md) for the retained script and report helpers. Create `analysis.py` in the output directory with the source filename, helper location, interpretation choices, and all calculations needed to regenerate `report.html`. Derive statements containing numbers from calculated values. Give the report a readable narrative, using tables or embedded charts where they answer a useful question. All styling and visuals must work offline.
 
-* **Observation**: what the data shows. "Four expense categories account for 78% of recorded spend."
-* **Interpretation**: what the pattern may mean, offered only when useful and stated as a possibility. "The concentration may reflect centralized purchasing, department size, or both."
-* **Open question**: what additional context or evidence would change the interpretation. "Are these departments expected to purchase on behalf of other units?"
+Run the script and check:
 
-Explore is complete when every surfaced pattern has been sliced along at least one dimension and its records inspected, then either dropped or written up with an observation and the context (denominator, period, population, comparison group) needed to read it.
+- Counts reconcile to the source; blanks, parsing failures, and exclusions explain the denominators used.
+- Each reported number matches its calculation, and every interpretation remains distinct from what the data establishes.
+- The report renders with readable labels, tables, and charts. Inspect it in a browser when a preview is available; otherwise disclose that visual verification remains outstanding.
+- The script reruns from another working directory without temporary inputs, producing the report beside it and leaving the CSV unchanged.
 
-### 3. Present
-
-Read `HTML-REPORT.md` before writing the driver. It shows the driver's shape, what each section takes, and which visual answers which question.
-
-Write the driver script in the scratchpad or temp directory. Compute there: bin, group, and aggregate the data behind each card, then pass the results to the emitters. Run it with `uv run` (or `python`) and give the user the path it prints.
-
-Present is complete when the report passes four checks:
-
-* Every section helps the auditor understand the dataset.
-* Every observation shows its evidence.
-* Every interpretation is separated from what the data establishes.
-* Every adverse word rests on something exploration actually established; otherwise the observation stands and the conclusion stays open.
+Return links to `report.html` and `analysis.py`, a short account of useful observations or limitations, and the command for rerunning the script. Formal audit-trail packaging is outside this version's scope.
