@@ -14,44 +14,32 @@ Two words carry the analytical stance throughout:
 * **Apparent**: inferred from names, values, or relationships in the data. A meaning, grain, or relationship stays *apparent* until the data, accompanying documentation, or the user establishes it.
 * **Characteristic**: what a field is like (many nulls, repeated values, a long tail). Whether a characteristic is a **concern** depends on what the field means and how the data is used, so describe the characteristic first.
 
+## Scripts
+
+Two scripts live in `scripts/` under this skill's base directory, with the page template in `assets/`. Run them with `uv run`, which installs the dependencies they declare inline. Without uv, run `python -m pip install pandas openpyxl` once and use `python` instead.
+
+* `profile.py FILE...` loads every file and every sheet, profiles each field by apparent role, tests apparent relationships between sources, writes the full profile as JSON to the OS temp directory and prints a summary. `--help` lists what it records.
+* `report.py` is a library the per-run driver script imports: one emitter per section and visual, and `write_report()`, which fills the template, writes a fresh file to the OS temp directory and opens it.
+
+Per-run code goes in the scratchpad or temp directory. The skill folder and the user's files stay untouched.
+
 ## Process
 
-### 1. Orient
+### 1. Orient and profile
 
-Read the raw structure before analyzing it. Inspect each file, workbook, sheet, or object:
+Run `profile.py` against every file received. Read the printed summary, then the JSON: the structural notes for each source, its sample records, each field's apparent role and statistics, and the apparent relationships between sources. A hidden sheet, a title row, a duplicated header, or a field stored as text appears in the notes. A non-tabular source carries a raw sample instead of a profile; decide what it is from the sample.
 
-* Sources provided, and the rows and columns in each
-* Fields present and the data types they appear to hold
-* The apparent role of each field: identifier, date, amount, category, free text, or measure
-* Apparent keys and relationships between datasets or sheets
-* The date range or other period covered
-* Structures that are not transactional data: empty sheets, title rows, duplicated headers, subtotals, formulas, lookup tables, instructions
-
-Read representative records and distinct values to work out what fields mean.
+Check every apparent role against the sample values and the field's name, and note the ones to correct. Note the characteristics that deserve exploration.
 
 Call the Skill tool with `"shared-understanding"` when a field, dataset, relationship, or intended meaning is materially ambiguous and the ambiguity would change the analysis.
 
-Orient is complete when every source has row and field counts, every field has an apparent role, and the grain of each source is stated or flagged as ambiguous.
+Preserve the original data. Record every transformation the analysis needs beyond the profiler's own notes so each observation stays **traceable** to the source.
 
-### 2. Profile
+Orient and profile is complete when every source has row and field counts and is classified as tabular or not, every field's role is confirmed or corrected, the grain of each source is stated or flagged as ambiguous, and every transformation is recorded.
 
-Build a quantitative baseline before deciding what deserves deeper exploration. Profile each field according to its apparent role; the statistics that explain a category say nothing about an identifier.
+### 2. Explore
 
-* **Identifiers and keys**: completeness, distinct count, duplicates, formatting consistency, and whether apparent relationships between datasets hold
-* **Numeric measures**: count, missing values, range, median and relevant percentiles, zero and negative values, spread, extreme observations, distribution shape. Show the mean only when it aids interpretation.
-* **Categories**: distinct count, completeness, most common values, concentration, rare values, inconsistent labels or formatting
-* **Dates and times**: earliest and latest, completeness, frequency, gaps, clustering, values outside the apparent period
-* **Free text**: completeness, repeated exact values, common prefixes or patterns, formatting variation, length distribution. Summarize only when meaningful structure exists.
-
-Choose the summaries that explain the field and omit the rest.
-
-Preserve the original data. Record every parsing step, type conversion, filter, normalization, or other transformation so each observation stays **traceable** to the source.
-
-Profile is complete when every field has the profile its role calls for and every transformation is recorded.
-
-### 3. Explore
-
-Follow the signals from orientation and profiling rather than a fixed catalog of anomaly tests. Questions that tend to open the data up:
+Follow the signals from the profile rather than a fixed catalog of anomaly tests. Questions that tend to open the data up:
 
 * How do important measures vary across categories, entities, locations, or time?
 * Are apparent outliers isolated or part of a broader pattern?
@@ -72,13 +60,11 @@ Write up every kept pattern in three separated parts:
 
 Explore is complete when every surfaced pattern has been sliced along at least one dimension and its records inspected, then either dropped or written up with an observation and the context (denominator, period, population, comparison group) needed to read it.
 
-### 4. Present
+### 3. Present
 
-Compute in a script; the HTML is the presentation layer only. Aggregate, group, or bin during analysis and pass the results to the page.
+Read `HTML-REPORT.md` before writing the driver. It shows the driver's shape, what each section takes, and which visual answers which question.
 
-Read `HTML-REPORT.md` before writing any HTML. It defines the scaffold, sections, chart patterns, and style of the report.
-
-Write the report to the OS temporary directory under a fresh filename for each run, so the user's source files and working directory stay untouched. Open the completed report for the user when the environment permits.
+Write the driver script in the scratchpad or temp directory. Compute there: bin, group, and aggregate the data behind each card, then pass the results to the emitters. Run it with `uv run` (or `python`) and give the user the path it prints.
 
 Present is complete when the report passes four checks:
 
