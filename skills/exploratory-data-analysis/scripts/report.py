@@ -186,20 +186,23 @@ def overview(question: str, visual: str, *, takeaway: str, context: str) -> str:
     )
 
 
-def card(title: str, visual: str = "", *, observation: str, why_it_matters: str,
-         question: str) -> str:
-    """A supported observation ending with a concrete question for the data provider."""
-    if any(not value.strip() for value in (title, observation, why_it_matters, question)):
+def observation(title: str, visual: str = "", *, noticed: str, why_it_matters: str,
+                question: str) -> str:
+    """A supported observation ending with a concrete question for the data provider.
+
+    Laid out like an overview item: a heading and prose on the page, with no box around it.
+    """
+    if any(not value.strip() for value in (title, noticed, why_it_matters, question)):
         raise ValueError("An observation needs a title, evidence, why it matters, and a stakeholder question.")
     paragraphs = "".join(
         f'<p><strong>{label}:</strong> {esc(text)}</p>'
         for label, text in [
-            ("What we noticed", observation), ("Why it matters", why_it_matters),
+            ("What we noticed", noticed), ("Why it matters", why_it_matters),
         ]
     )
     return (
-        f'<article><h3>{esc(title)}</h3>{paragraphs}{visual}'
-        f'<p><strong>Question for the data provider:</strong> {esc(question)}</p></article>'
+        f'<div class="observation"><h3>{esc(title)}</h3>{paragraphs}{visual}'
+        f'<p><strong>Question for the data provider:</strong> {esc(question)}</p></div>'
     )
 
 
