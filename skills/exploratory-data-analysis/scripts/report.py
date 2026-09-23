@@ -6,6 +6,7 @@ from __future__ import annotations
 import datetime as dt
 import html
 import math
+import tempfile
 from pathlib import Path
 
 TEMPLATE = Path(__file__).resolve().parent.parent / "assets" / "template.html"
@@ -56,11 +57,13 @@ def pct(share: float | None) -> str:
     return NA if share is None else f"{share:.1%}"
 
 
-def output_directory(csv_path: str | Path) -> Path:
+def report_path(csv_path: str | Path) -> Path:
+    """A fresh, timestamped report path in the OS temporary directory, named after the CSV stem."""
     source = Path(csv_path).resolve()
     if source.suffix.lower() != ".csv":
         raise ValueError("Expected a .csv source path.")
-    return source.parent / f"{source.stem} - exploratory data analysis"
+    stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+    return Path(tempfile.gettempdir()) / f"{source.stem}-exploratory-data-analysis-{stamp}.html"
 
 
 def section(title: str, body: str) -> str:
@@ -204,7 +207,7 @@ def analysis_notes(notes: list[str]) -> str:
 
 
 def write_report(title: str, sections: list[str], path: str | Path) -> Path:
-    """Write to an explicit HTML path. Reruns replace that report, never the CSV."""
+    """Write the page to an explicit HTML path. The CSV is never written."""
     path = Path(path).resolve()
     if path.suffix.lower() != ".html":
         raise ValueError("Report output must have an .html extension.")

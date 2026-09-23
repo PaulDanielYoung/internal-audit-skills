@@ -4,9 +4,9 @@ Write the report for an auditor who has not opened the file. Order: header, what
 
 The helpers in `scripts/report.py` use embedded CSS and SVG, without JavaScript, CDNs, external fonts, or images. Text arguments are escaped. Pass HTML only to `section()` bodies and `card()` visuals, using the helper output; pass dataset values through text arguments or `table()`.
 
-## Retained script
+## Driver script
 
-Save the driver as `analysis.py` in `<csv-stem> - exploratory data analysis` beside the CSV. Resolve the source relative to the driver's location, not the shell's working directory. Set the installed skill location explicitly. Rerunning requires that skill and pandas; moving the engagement folder together is supported, but moving the skill requires updating its path in the driver.
+Save the driver in the OS temporary directory. Use absolute paths for the source CSV and the installed skill; `report_path(SOURCE)` names a fresh report file in the same temporary directory.
 
 This runnable starting point illustrates a calculated missingness observation. Replace the placeholders in angle brackets, set the parsing choices, and adapt the observations to what exploration established. This is not a required chart or a complete exploration by itself.
 
@@ -19,8 +19,8 @@ from pathlib import Path
 import sys
 
 SKILL_DIR = Path(r"<absolute skill directory>")
-OUTPUT_DIR = Path(__file__).resolve().parent
-SOURCE = OUTPUT_DIR.parent / "<original CSV filename>"
+SOURCE = Path(r"<absolute CSV path>")
+sys.dont_write_bytecode = True  # keep __pycache__ out of the skill folder
 sys.path.insert(0, str(SKILL_DIR / "scripts"))
 from profile_csv import profile_csv
 import report as r
@@ -38,7 +38,6 @@ MONEY_FIELDS = {"<fields holding dollar amounts>"}
 # Persist all interpretation choices here; overrides recompute field statistics.
 # Example syntax: roles={"account": "identifier"}, date_formats={"date": "%d/%m/%Y"}
 raw, data, profile = profile_csv(SOURCE, roles={}, date_formats={})
-assert OUTPUT_DIR == r.output_directory(SOURCE)
 assert len(raw) == len(data) == profile["rows"]
 assert all(
     field["blank"] + field["parse_failures"] + field["parsed"] == len(raw)
@@ -68,7 +67,7 @@ failed = sum(field["parse_failures"] for field in profile["columns"])
 notes = profile["notes"] + [
     f"{profile['duplicate_records']} duplicate records beyond their first occurrences; retained.",
     "Reviewed field profiles and source blank counts; further business-context exploration is not included in this example.",
-    "The source CSV was read without modification. Rerun the adjacent analysis.py with the installed skill to regenerate this report.",
+    "The source CSV was read without modification. This report is temporary; rerun the exploratory-data-analysis skill to regenerate it.",
 ]
 if failed:
     notes.append(f"{failed} nonblank cells could not be parsed under the selected types; "
@@ -81,10 +80,10 @@ sections = [
 if cards:
     sections.append(r.section("Observations", "".join(cards)))
 sections.append(r.analysis_notes(notes))
-print(r.write_report(TITLE, sections, OUTPUT_DIR / "report.html"))
+print(r.write_report(TITLE, sections, r.report_path(SOURCE)))
 ```
 
-Run `uv run "<output directory>/analysis.py"`, or use the Python interpreter from the environment containing pandas. The script must reread the CSV and recalculate its profile and observations each time. Keep any filters, date formats, role overrides, and extra transformations in that script, not in a temporary file. Fixed labels and explanations are fine; counts, percentages, and periods must follow the calculations on rerun.
+Run `uv run "<driver path>"`, or use the Python interpreter from the environment containing pandas. Keep filters, date formats, role overrides, and extra transformations in the driver, so every count, percentage, and period in the report follows from its calculations.
 
 ## Helpers and analytical choices
 
@@ -99,10 +98,11 @@ Run `uv run "<output directory>/analysis.py"`, or use the Python interpreter fro
 | `table(columns, rows, title=...)` | Group comparisons, distributions, or representative records. Format numeric cells with `fmt()`, `money()`, or `pct()`. |
 | `fmt(value, compact=...)`, `money(value, compact=...)`, `pct(share)` | Numbers for the reader. `compact=True` writes 2.96M or $391.2M for prose; tables keep the full figure. |
 | `analysis_notes(notes)` | Choices affecting interpretation, including parsing, exclusions, assumptions, dimensions explored, and limitations. Combine with the profiler's notes. |
+| `report_path(csv_path)` | A fresh, timestamped `.html` path in the OS temporary directory, named after the CSV stem. |
 | `write_report(title, sections, path)` | Write the complete offline report to an explicit `.html` path. |
 
 Numbers in prose carry their units: $391.2M, 2.96M acres, 32.9% of records. Build record tables from the parsed values in `data` and format each cell; raw cell strings such as `2022.0` belong only in the sample records table. Use a number or table when it explains the observation better than a chart. For category charts, show a manageable number of groups, combining the rest as Other where appropriate and saying so. For time comparisons, retain chronological order and distinguish incomplete periods. For distributions, explain bins and any display-range exclusions; extreme values remain in the underlying analysis. Choose units from established context and state the assumption in the notes when the file does not give them.
 
 Identify inspected records using the profiler's one-based data-record index or a source identifier. Data-record indexes exclude the header and empty lines outside quoted fields; they are not physical line numbers when cells contain line breaks.
 
-Use neutral language. Describe missingness or an unusual value before assigning significance. Keep implementation details in the retained script; the report needs only the choices that affect interpretation, written in words rather than format codes.
+Use neutral language. Describe missingness or an unusual value before assigning significance. Keep implementation details in the driver; the report needs only the choices that affect interpretation, written in words rather than format codes.
