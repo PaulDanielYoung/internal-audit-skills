@@ -17,16 +17,13 @@ Adapt the wording to the context. The statement is complete when a reader can po
 
 ## Terminology
 
-Read `GLOSSARY.md` in the working directory and use its definitions for **risk**, **objective**, **event**, **cause**, and **consequence**. If there is no glossary, offer to create one from the seed at `../../GLOSSARY.md` (relative to this skill's directory) before continuing.
+Read `GLOSSARY.md` in the working directory, if it exists, and use its definitions for **risk**, **objective**, **event**, **cause**, and **consequence**. Without one, the meanings in the opening paragraph apply.
 
 ## When to pause
 
-Call the Skill tool with "shared-understanding" before drafting when either of these holds:
+Before drafting, call the Skill tool with "glossary" when a term you need is missing from the glossary, the user's material uses different terminology, or its intended meaning is unclear.
 
-- A term you need is missing from the glossary, the user's material uses different terminology, or its intended meaning is unclear.
-- Material ambiguity about the objective, event, causes, consequences, or intended use of the statement could meaningfully change what you write.
-
-When the resolution establishes a definition or synonym that should apply beyond the current task, record it in `GLOSSARY.md`. A task-specific exception or temporary interpretation stays in the conversation.
+Call the Skill tool with "shared-understanding" when material ambiguity about the objective, event, causes, consequences, or intended use of the statement could meaningfully change what you write.
 
 ## Faults
 

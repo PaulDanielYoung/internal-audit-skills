@@ -15,11 +15,11 @@ Format each question like so:
 
 ❓ **Q1** - **<question title>**
 
-🔴 <question body, might be multiple paragraphs, including multiple choices>
+<question body, might be multiple paragraphs, including multiple choices>
 
 ➡️ **Recommended answer**
 
-🔵 <your recommended answer, keep it brief and explain your reasoning>
+<your recommended answer, keep it brief and explain your reasoning>
 
 After each answer, reassess what remains unresolved. The user's answer may settle other questions, introduce new ones, or change which question should come next.
 

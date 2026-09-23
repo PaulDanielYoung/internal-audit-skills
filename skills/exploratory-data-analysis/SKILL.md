@@ -7,10 +7,7 @@ description: Explores one CSV an auditor has received and produces an offline HT
 
 Turn an unfamiliar CSV into an understanding of what it contains and what deserves closer examination. Exploration generates observations and hypotheses, not audit conclusions. An unusual value or relationship is a reason to look closer; an error or control failure requires a separate testing or investigation workflow.
 
-Two terms guide the analysis:
-
-- **Apparent:** a meaning, field role, or grain inferred from the data, pending supporting context.
-- **Characteristic:** what a field is like, such as repeated values or a long tail. Whether it is a concern depends on its meaning and use.
+One term guides the analysis. **Apparent** marks a meaning, field role, or grain inferred from the data, pending supporting context.
 
 ## Scope and files
 
@@ -35,7 +32,7 @@ Review every field's apparent role against its name and raw values. The profiler
 
 Ask only when unresolved meaning would materially change a calculation or interpretation. If `shared-understanding` is available, invoke it with the specific ambiguity and already-established context; for this workflow, resolve that question without restarting a full engagement interview. Otherwise ask the specific question directly. Continue independent analysis while the affected decision remains unresolved.
 
-This step is complete when row and field counts, blanks, and appropriate basic field summaries are established; every field's role has been reviewed; and the dataset's grain is stated with its basis or flagged as unresolved. An empty table can have a complete profile without supporting further analysis.
+This step is complete when row and field counts, blanks, and appropriate basic field summaries are established; every field's role has been reviewed and its apparent meaning written in plain words; and the dataset's grain is stated with its basis or flagged as unresolved. An empty table can have a complete profile without supporting further analysis.
 
 ## 2. Explore
 
@@ -53,11 +50,25 @@ Exploration is complete when the basic profile has been considered for useful fo
 
 Read [HTML-REPORT.md](HTML-REPORT.md) for the retained script and report helpers. Create `analysis.py` in the output directory with the source filename, helper location, interpretation choices, and all calculations needed to regenerate `report.html`. Derive statements containing numbers from calculated values. Give the report a readable narrative, using tables or embedded charts where they answer a useful question. All styling and visuals must work offline.
 
+Write for an auditor who has not opened the file:
+
+- Name the dataset in plain words inferred from the filename and contents. `city_property_details_datasd.csv` becomes San Diego City Property Details. Describe it in a sentence or two, including what one record represents. The filename appears only on the Source line.
+- Give every field an apparent meaning in plain words.
+- Carry units in prose: $391.2M, 2.96M acres, 32.9% of records. Tables hold formatted figures from parsed values.
+
 Run the script and check:
 
 - Counts reconcile to the source; blanks, parsing failures, and exclusions explain the denominators used.
 - Each reported number matches its calculation, and every interpretation remains distinct from what the data establishes.
-- The report renders with readable labels, tables, and charts. Inspect it in a browser when a preview is available; otherwise disclose that visual verification remains outstanding.
+- The report renders with readable labels, tables, and charts. Render it with headless Chrome or Edge and read the screenshot; the Chrome extension opens only web URLs, not local files. Use a tall window and crop the image when the page is long:
+
+  ```text
+  "<chrome or msedge executable>" --headless=new --disable-gpu --hide-scrollbars --window-size=1280,12000 --screenshot="<temp png>" "<file URL of report.html>"
+  ```
+
+  If no browser can render it, disclose that visual verification remains outstanding.
 - The script reruns from another working directory without temporary inputs, producing the report beside it and leaving the CSV unchanged.
 
-Return links to `report.html` and `analysis.py`, a short account of useful observations or limitations, and the command for rerunning the script. Formal audit-trail packaging is outside this version's scope.
+Open `report.html` in the user's default browser: `Start-Process` on Windows, `open` on macOS, `xdg-open` on Linux. Return the absolute paths of `report.html` and `analysis.py`, a short account of useful observations or limitations, and the command for rerunning the script.
+
+This step is complete when the checks pass, the report is open in the browser, and the title, description, and field meanings read as plain language. Formal audit-trail packaging is outside this version's scope.

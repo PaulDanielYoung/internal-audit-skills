@@ -31,6 +31,15 @@ PARSE_THRESHOLD = 0.95
 ROLES = {"identifier", "measure", "category", "date", "text"}
 ID_NAME = re.compile(r"(^|[^a-z])(id|key|code|number|no|ref|reference)$", re.I)
 ISO_DATE = r"\d{4}-\d{2}-\d{2}"
+DATE_FORMAT_NAMES = {
+    "%Y-%m-%d": "year-month-day", "%m/%d/%Y": "month/day/year", "%d/%m/%Y": "day/month/year",
+    "%Y/%m/%d": "year/month/day", "%d-%m-%Y": "day-month-year", "%m-%d-%Y": "month-day-year",
+    "%Y%m%d": "yearmonthday", "%d.%m.%Y": "day.month.year",
+}
+
+
+def describe_format(date_format: str) -> str:
+    return DATE_FORMAT_NAMES.get(date_format, f"the format {date_format}")
 
 
 def read_csv(path: Path, encoding: str = "utf-8-sig") -> tuple[pd.DataFrame, list[str]]:
@@ -126,6 +135,7 @@ def profile_csv(
 
     data = raw.copy()
     columns = []
+    measures, dated, overridden = [], {}, []
     for name in raw.columns:
         original = raw[name]
         blank = original.str.strip().eq("")
@@ -135,15 +145,15 @@ def profile_csv(
         parsed = values
         if role == "measure":
             parsed = numeric(values.str.strip())
-            notes.append(f"'{name}': parsed as plain numbers; currency and locale rules were not inferred.")
+            measures.append(name)
         elif role == "date":
             date_format = date_formats.get(name, "%Y-%m-%d")
             parsed = pd.to_datetime(values.str.strip(), format=date_format, errors="coerce")
             if name not in date_formats:
                 parsed = parsed.where(values.str.fullmatch(ISO_DATE).fillna(False))
-            notes.append(f"'{name}': parsed as dates using {date_format}.")
+            dated.setdefault(describe_format(date_format), []).append(name)
         if name in roles or name in date_formats:
-            notes.append(f"'{name}': explicit role {role}; initial apparent role was {inferred}.")
+            overridden.append(f"{name} ({role}; initially {inferred})")
         failed = ~blank & parsed.isna()
         data[name] = parsed
         present = parsed.dropna()
@@ -164,7 +174,8 @@ def profile_csv(
             }.items()})
             entry.update(zeros=int(present.eq(0).sum()), negatives=int(present.lt(0).sum()))
         elif role == "date" and not present.empty:
-            entry.update(start=scalar(present.min()), end=scalar(present.max()))
+            style = "%Y-%m-%d" if (present.dt.normalize() == present).all() else "%Y-%m-%d %H:%M:%S"
+            entry.update(start=present.min().strftime(style), end=present.max().strftime(style))
         elif role in {"identifier", "category", "text"}:
             counts = present.value_counts()
             entry["top_values"] = [
@@ -174,6 +185,13 @@ def profile_csv(
             if role == "identifier":
                 entry["duplicates"] = int(len(present) - present.nunique())
         columns.append(entry)
+
+    if measures:
+        notes.append("Parsed as plain numbers, without currency or locale rules: " + ", ".join(measures) + ".")
+    for style, names in dated.items():
+        notes.append(f"Parsed as dates written {style}: " + ", ".join(names) + ".")
+    if overridden:
+        notes.append("Roles set explicitly: " + "; ".join(overridden) + ".")
 
     profile = {
         "file": path.name, "path": str(path),
