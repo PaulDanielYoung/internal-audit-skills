@@ -90,13 +90,14 @@ def header(profile: dict, title: str, *, description: str, facts: list[str] | tu
     )
 
 
-def table(columns: list[str], rows: list[list], title: str = "") -> str:
+def table(columns: list[str], rows: list[list], title: str = "", *, css_class: str = "") -> str:
     caption = f'<caption>{esc(title)}</caption>' if title else ""
     headings = "".join(f'<th scope="col">{esc(column)}</th>' for column in columns)
     body = "".join(
         '<tr>' + "".join(f'<td>{esc(cell)}</td>' for cell in row) + '</tr>' for row in rows
     )
-    return f'<div class="scroll-table"><table>{caption}<thead><tr>{headings}</tr></thead><tbody>{body}</tbody></table></div>'
+    attrs = f' class="{esc(css_class)}"' if css_class else ""
+    return f'<div class="scroll-table"><table{attrs}>{caption}<thead><tr>{headings}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
 def field_profile(profile: dict, meanings: dict[str, str]) -> str:
@@ -111,7 +112,7 @@ def field_profile(profile: dict, meanings: dict[str, str]) -> str:
     unknown = set(meanings) - set(names)
     if unknown:
         raise ValueError(f"Meanings name fields not in the file: {', '.join(sorted(unknown))}")
-    return table(["Field", "Apparent meaning"], [[name, meanings[name]] for name in names])
+    return table(["Field", "Apparent meaning"], [[name, meanings[name]] for name in names], css_class="fields")
 
 
 def data_quality(conditions: list[tuple[str, str, str, int, str]], rows: int) -> str:
@@ -144,7 +145,8 @@ def data_quality(conditions: list[tuple[str, str, str, int, str]], rows: int) ->
         hidden = len(area_rows) - len(shown)
         if shown:
             ranked = [row for _, _, row in sorted(shown, key=lambda item: item[0], reverse=True)]
-            parts.append(table(["Field", "Observation", "Affected records", "Why it matters"], ranked))
+            # Same fixed column widths in every area, so the tables line up down the section.
+            parts.append(table(["Field", "Observation", "Affected records", "Why it matters"], ranked, css_class="quality"))
         elif not hidden:
             parts.append('<p class="muted">Checked; nothing to report.</p>')
         if hidden:
