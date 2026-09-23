@@ -37,21 +37,37 @@ Each condition names its field, states the observation as a short plain-language
 
 This step is complete when every area has been checked against the profile and the records, and each condition found is recorded with its field, observation, affected records, and why it matters, or the area is recorded as checked with nothing to report.
 
-## 3. Explore
+## 3. Build the data overview
 
-Follow useful signals from the profile and the data quality conditions. Examine distributions, concentrations, changes over time, relationships between columns, or concentrations of missing and repeated values when relevant. Choose comparisons that help interpret the pattern and inspect the contributing records. Keep raw values available alongside parsed values; record exclusions and transformations in the script, and state those that change a denominator in the context of the observation they affect.
+Help the reader understand their dataset through useful descriptive questions, using important fields as the starting point. Use judgment to select questions about composition, distributions, changes over time, or relationships that the data can meaningfully answer. Choose measures at the appropriate grain: counts of records and counts of distinct entities answer different questions, and repeated entity-level values may not be additive.
 
-Write each retained pattern with:
+Present each retained question as a heading, one suitable chart, and two short prose paragraphs: a descriptive takeaway, then context needed to read the chart correctly. The context explains the measure, population, or relevant limitation; it need not invent a caveat. Keep ordinary descriptive patterns, such as peaks over time or a category's share, beside their charts. Choose chart types to suit the questions; no fixed number of charts, field-by-field chart inventory, or mix of chart types is required. Include only questions the data supports answering with a meaningful chart. This section has no tables or chart-values dropdowns.
 
-- **Observation:** what the data shows, with its denominator, population, period, or comparison group as needed.
-- **Interpretation:** optional; a possible explanation, clearly separated from the observation.
-- **Open question:** optional; additional context that would materially change the interpretation.
+Keep raw values available alongside parsed values. Record exclusions and transformations in the script and explain choices that affect interpretation alongside the affected visual, including units, population, period, and denominators as needed. Apply unresolved limitations to the choice of measures and calculations.
 
-Exploration is complete when the basic profile has been considered for useful follow-up, each retained pattern is supported by calculations and inspected records, and material unresolved limitations are stated in the observations they affect. Require no minimum number of observations or charts; a short report is appropriate when further exploration adds little.
+This step is complete when the important fields have been considered for useful descriptive questions, each retained question has a rendered chart supported by calculations, and its chart and two prose paragraphs agree. If the file supports no meaningful overview, state why briefly in this section.
 
-## 4. Present and verify
+## 4. Develop observations when warranted
+
+Follow patterns from the profile, data quality assessment, and overview that raise meaningful questions an auditor could take to the data provider. These may concern business activity, unusual relationships, or the meaning and reliability of the data. Inspect the contributing records and useful comparisons before retaining an observation.
+
+Write each observation with:
+
+- **What we noticed:** the supported pattern, with its denominator, population, period, or comparison group as needed.
+- **Why it matters:** how the pattern could affect interpretation or what it prompts the auditor to explore. Include possible explanations only when useful and clearly label them as hypotheses.
+- **Question for the data provider:** a specific question that would help explain or resolve the pattern. Place any supporting chart or table before this question.
+
+For example, peaks in recorded acquisitions belong in the overview; identical costs across related acquisition records may warrant asking whether the cost is allocated per record or repeated from a shared purchase price. Retain an observation only when its evidence supports a meaningful stakeholder question. Omit the Observations section when nothing warrants it.
+
+When an observation also limits analysis, apply the limitation to all affected calculations and visuals, including those earlier in the report. Keep the full evidence and stakeholder question in Observations. Describe an uncertain meaning as unresolved, without treating a suspected explanation as an established error.
+
+This step is complete when useful follow-up signals have been examined, each retained observation is supported by calculations and inspected records and ends with a concrete stakeholder question, and any resulting limitations are reflected throughout the report.
+
+## 5. Present and verify
 
 Read [HTML-REPORT.md](HTML-REPORT.md) for the driver and report helpers. Write the driver in the OS temporary directory with the source path, helper location, interpretation choices, and all calculations behind the report. Derive statements containing numbers from calculated values. Give the report a readable narrative, using tables or embedded charts where they answer a useful question. All styling and visuals must work offline.
+
+Consolidate material constraints on interpretation into one optional **Analysis limitations** section at the end, after Observations when present. Use a concise list, referring to an observation by title when it carries the full investigation. Keep chart-specific context in the second paragraph beneath the affected chart so it can be read on its own. Routine calculation choices, such as counting distinct sites, belong in chart context and are not automatically report-wide limitations. Data quality retains its condition tables without an introductory limitations block.
 
 Write for an auditor who has not opened the file:
 
@@ -63,6 +79,7 @@ Run the driver and check:
 
 - Counts reconcile to the source; blanks, parsing failures, and exclusions explain the denominators used.
 - Each reported number matches its calculation, and every interpretation remains distinct from what the data establishes.
+- Each Data overview question has a chart followed by a takeaway and context, with no tables or dropdowns. Optional Observations raise concrete questions for the data provider. Consolidated limitations appear once at the end, with essential context also beneath affected charts.
 - The report renders with readable labels, tables, and charts. Render it with headless Chrome or Edge and read the screenshot; the Chrome extension opens only web URLs, not local files. Use a tall window and crop the image when the page is long:
 
   ```text
@@ -71,6 +88,6 @@ Run the driver and check:
 
   If no browser can render it, disclose that visual verification remains outstanding.
 
-Open the report in the user's default browser: `Start-Process` on Windows, `open` on macOS, `xdg-open` on Linux. Return the report's absolute path and a short account of useful observations, the dimensions explored, and limitations. The report is temporary; rerun the skill to regenerate it.
+Open the report in the user's default browser: `Start-Process` on Windows, `open` on macOS, `xdg-open` on Linux. Return the report's absolute path and a short account of the dimensions explored, any stakeholder questions, and limitations. The report is temporary; rerun the skill to regenerate it.
 
 This step is complete when the checks pass, the report is open in the browser, and the title, description, and field meanings read as plain language. Formal audit-trail packaging is outside this version's scope.

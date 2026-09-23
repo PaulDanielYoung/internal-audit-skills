@@ -16,6 +16,8 @@
     h3 { font-size: 18px; }
     section { margin-top: 44px; }
     article { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin: 18px 0; }
+    .overview { margin: 32px 0; }
+    .overview figure { margin-top: 16px; }
     p { overflow-wrap: anywhere; }
     .eyebrow { color: #4f46e5; font-size: 16px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
     .lede { font-size: 18px; margin: 0 0 12px; }
@@ -24,7 +26,6 @@
     .scroll-table, .scroll-chart { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
     th, td { text-align: left; vertical-align: top; padding: 11px 12px; border-bottom: 1px solid #e2e8f0; }
-    table.fields td:nth-child(1), table.quality td:nth-child(-n+3) { text-align: center; }
     td { max-width: 420px; overflow-wrap: break-word; }
     th { text-align: center; color: #475569; background: #f1f5f9; }
     table.quality { table-layout: fixed; min-width: 640px; }
@@ -37,8 +38,6 @@
     figcaption { font-weight: 600; margin-bottom: 10px; }
     svg { width: 100%; min-width: 640px; display: block; }
     svg text { font: 13px system-ui, sans-serif; fill: #475569; }
-    details { margin-top: 12px; }
-    summary { cursor: pointer; color: #475569; }
     @media (max-width: 600px) { main { padding: 24px 16px; } article { padding: 16px; } h1 { font-size: 26px; } }
     @media print { body { background: white; } main { padding: 0; } article { break-inside: avoid; } .scroll-table { overflow: visible; } }
   </style>

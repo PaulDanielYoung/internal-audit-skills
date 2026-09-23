@@ -1,5 +1,5 @@
 """Offline HTML report helpers. Text arguments are escaped; section bodies and
-card visuals accept HTML produced by these helpers. No browser or network needed.
+visuals accept trusted HTML or inline SVG from the driver. No browser or network needed.
 """
 from __future__ import annotations
 
@@ -8,6 +8,8 @@ import html
 import math
 import numbers
 import tempfile
+import textwrap
+from html.parser import HTMLParser
 from pathlib import Path
 
 TEMPLATE = Path(__file__).resolve().parent.parent / "assets" / "template.html"
@@ -155,20 +157,54 @@ def data_quality(conditions: list[tuple[str, str, str, int, str]], rows: int) ->
     return "".join(parts)
 
 
-def card(title: str, visual: str = "", *, observation: str, context: str,
-         interpretation: str = "", open_question: str = "") -> str:
+def analysis_limitations(notes: list[str] | tuple[str, ...]) -> str:
+    """One optional final section containing material limitations as a concise list."""
+    items = "".join(f'<li>{esc(note)}</li>' for note in notes if note.strip())
+    return section("Analysis limitations", f'<ul>{items}</ul>') if items else ""
+
+
+class _MarkupTags(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.tags = []
+
+    def handle_starttag(self, tag, attrs):
+        self.tags.append(tag)
+
+
+def overview(question: str, visual: str, *, takeaway: str, context: str) -> str:
+    """A question, one SVG chart, a takeaway, and a brief context paragraph; no tables."""
+    if any(not value.strip() for value in (question, visual, takeaway, context)):
+        raise ValueError("An overview needs a question, chart, takeaway, and context.")
+    markup = _MarkupTags()
+    markup.feed(visual)
+    if markup.tags.count("svg") != 1 or {"table", "details", "summary"}.intersection(markup.tags):
+        raise ValueError("Each overview needs one SVG chart, without tables or dropdowns.")
+    return (
+        f'<div class="overview"><h3>{esc(question)}</h3>{visual}'
+        f'<p>{esc(takeaway)}</p><p class="muted">{esc(context)}</p></div>'
+    )
+
+
+def card(title: str, visual: str = "", *, observation: str, why_it_matters: str,
+         question: str) -> str:
+    """A supported observation ending with a concrete question for the data provider."""
+    if any(not value.strip() for value in (title, observation, why_it_matters, question)):
+        raise ValueError("An observation needs a title, evidence, why it matters, and a stakeholder question.")
     paragraphs = "".join(
         f'<p><strong>{label}:</strong> {esc(text)}</p>'
         for label, text in [
-            ("Observation", observation), ("Context", context),
-            ("Interpretation", interpretation), ("Open question", open_question),
-        ] if text
+            ("What we noticed", observation), ("Why it matters", why_it_matters),
+        ]
     )
-    return f'<article><h3>{esc(title)}</h3>{paragraphs}{visual}</article>'
+    return (
+        f'<article><h3>{esc(title)}</h3>{paragraphs}{visual}'
+        f'<p><strong>Question for the data provider:</strong> {esc(question)}</p></article>'
+    )
 
 
 def chart(labels: list, values: list, *, title: str, unit: str = "") -> str:
-    """Horizontal SVG bars with a zero baseline and a complete data table.
+    """Horizontal SVG bars with a zero baseline, full labels, and visible values.
 
     Supply already aggregated values; sort categories or keep chronological order
     in the driver. Negative values extend to the left of zero. No remote assets.
@@ -182,29 +218,35 @@ def chart(labels: list, values: list, *, title: str, unit: str = "") -> str:
         raise ValueError("Chart values must be finite; explain exclusions before plotting.")
     low, high = min(0, min(values)), max(0, max(values))
     span = high - low or 1
-    left, width, label_limit = 330, 380, 44
+    left, width = 330, 380
     def x(value):
         return left + (value - low) / span * width
     zero = x(0)
-    height = 48 + len(values) * 34
+    wrapped_labels = [textwrap.wrap(str(label), width=44) or [""] for label in labels]
+    row_heights = [max(34, len(lines) * 16 + 10) for lines in wrapped_labels]
+    height = 48 + sum(row_heights)
     marks = [f'<line x1="{zero:.2f}" x2="{zero:.2f}" y1="16" y2="{height - 28}" stroke="#94a3b8"/>']
-    for index, (label, value) in enumerate(zip(labels, values)):
-        y = 20 + index * 34
-        label = str(label)
-        short = label if len(label) <= label_limit else label[:label_limit - 1] + "…"
-        marks.append(
-            f'<text x="{left - 14}" y="{y + 16}" text-anchor="end">{esc(short)}</text>'
-            f'<rect x="{min(zero, x(value)):.2f}" y="{y}" width="{abs(x(value) - zero):.2f}" '
-            f'height="24" rx="3" fill="#4f46e5"><title>{esc(label)}: {esc(fmt(value))}</title></rect>'
-            f'<text x="{left + width + 18}" y="{y + 16}">{esc(fmt(value))}</text>'
+    y = 20
+    for label, value, lines, row_height in zip(labels, values, wrapped_labels, row_heights):
+        center = y + row_height / 2
+        label_y = center + 4 - (len(lines) - 1) * 8
+        label_text = "".join(
+            f'<tspan x="{left - 14}" y="{label_y + index * 16:.2f}">{esc(line)}</tspan>'
+            for index, line in enumerate(lines)
         )
+        marks.append(
+            f'<text text-anchor="end">{label_text}</text>'
+            f'<rect x="{min(zero, x(value)):.2f}" y="{center - 12:.2f}" width="{abs(x(value) - zero):.2f}" '
+            f'height="24" rx="3" fill="#4f46e5"><title>{esc(label)}: {esc(fmt(value))}</title></rect>'
+            f'<text x="{left + width + 18}" y="{center + 4:.2f}">{esc(fmt(value))}</text>'
+        )
+        y += row_height
     marks.append(f'<text x="{zero:.2f}" y="{height - 7}" text-anchor="middle">0</text>')
-    data_table = table(["Category", unit or "Value"], [[label, fmt(value)] for label, value in zip(labels, values)])
     return (
         f'<figure><figcaption>{esc(title)}{(" · " + esc(unit)) if unit else ""}</figcaption>'
         f'<div class="scroll-chart"><svg xmlns="http://www.w3.org/2000/svg" role="img" '
         f'aria-label="{esc(title)}" viewBox="0 0 820 {height}"><title>{esc(title)}</title>'
-        f'{"".join(marks)}</svg></div><details><summary>Chart values</summary>{data_table}</details></figure>'
+        f'{"".join(marks)}</svg></div></figure>'
     )
 
 
