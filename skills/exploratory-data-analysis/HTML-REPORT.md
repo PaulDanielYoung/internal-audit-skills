@@ -1,6 +1,6 @@
 # HTML report and retained analysis
 
-Write the report for an auditor who has not opened the file. The `Report` module in `scripts/report.py` owns the section order (header and summary, What the file contains, Data quality, Data overview, Observations when any, Analysis limitations when any), validates each addition, and escapes every text argument. Visuals are trusted HTML or inline SVG from the driver: build them with `chart()` and `table()`, or escape labels with `esc()` when generating custom SVG. The selection criteria for overview questions and observations are in steps 3 and 4 of [SKILL.md](SKILL.md); each method's docstring states what it accepts.
+The `Report` module in `scripts/report.py` owns the section order (header and summary, What the file contains, Data quality, Data overview, Observations when any, Analysis limitations when any), validates each addition, and escapes every text argument. Visuals are trusted HTML or inline SVG from the driver: build them with `chart()` and `table()`, or escape labels with `esc()` when generating custom SVG. The selection criteria for overview questions and observations are in steps 3 and 4 of [SKILL.md](SKILL.md); each method's docstring states what it accepts.
 
 ## Driver script
 
