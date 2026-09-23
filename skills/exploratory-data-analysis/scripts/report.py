@@ -17,6 +17,8 @@ NA = "n/a"
 QUALITY_AREAS = ("Completeness", "Validity", "Uniqueness", "Consistency", "Coverage")
 # Conditions affecting a smaller share of records are left out of the data quality tables.
 QUALITY_MIN_SHARE = 0.01
+# A table supporting an observation is a sample of the evidence, not a data dump.
+OBSERVATION_MAX_ROWS = 10
 
 
 def esc(value) -> str:
@@ -164,12 +166,24 @@ def analysis_limitations(notes: list[str] | tuple[str, ...]) -> str:
 
 
 class _MarkupTags(HTMLParser):
+    """Tag names in a visual, plus the number of table rows outside any thead."""
+
     def __init__(self):
         super().__init__()
         self.tags = []
+        self.body_rows = 0
+        self._in_thead = 0
 
     def handle_starttag(self, tag, attrs):
         self.tags.append(tag)
+        if tag == "thead":
+            self._in_thead += 1
+        elif tag == "tr" and not self._in_thead:
+            self.body_rows += 1
+
+    def handle_endtag(self, tag):
+        if tag == "thead" and self._in_thead:
+            self._in_thead -= 1
 
 
 def overview(question: str, visual: str, *, takeaway: str, context: str) -> str:
@@ -191,17 +205,23 @@ def observation(title: str, visual: str = "", *, noticed: str, why_it_matters: s
     """A supported observation ending with a concrete question for the data provider.
 
     Laid out like an overview item: a heading and prose on the page, with no box around it.
+    The optional visual follows What we noticed, the claim it lets the reader check, so
+    Why it matters and the question read together. A table in the visual shows at most
+    OBSERVATION_MAX_ROWS body rows.
     """
     if any(not value.strip() for value in (title, noticed, why_it_matters, question)):
         raise ValueError("An observation needs a title, evidence, why it matters, and a stakeholder question.")
-    paragraphs = "".join(
-        f'<p><strong>{label}:</strong> {esc(text)}</p>'
-        for label, text in [
-            ("What we noticed", noticed), ("Why it matters", why_it_matters),
-        ]
-    )
+    markup = _MarkupTags()
+    markup.feed(visual)
+    if markup.body_rows > OBSERVATION_MAX_ROWS:
+        raise ValueError(
+            f"An observation table shows at most {OBSERVATION_MAX_ROWS} rows; got {markup.body_rows}. "
+            "Show the rows that best support the observation and say how many of the total they are."
+        )
     return (
-        f'<div class="observation"><h3>{esc(title)}</h3>{paragraphs}{visual}'
+        f'<div class="observation"><h3>{esc(title)}</h3>'
+        f'<p><strong>What we noticed:</strong> {esc(noticed)}</p>{visual}'
+        f'<p><strong>Why it matters:</strong> {esc(why_it_matters)}</p>'
         f'<p><strong>Question for the data provider:</strong> {esc(question)}</p></div>'
     )
 

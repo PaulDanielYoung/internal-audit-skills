@@ -53,9 +53,9 @@ Follow patterns from the profile, data quality assessment, and overview that rai
 
 Write each observation with:
 
-- **What we noticed:** the supported pattern, with its denominator, population, period, or comparison group as needed.
+- **What we noticed:** the supported pattern, with its denominator, population, period, or comparison group as needed. Any supporting chart or table follows this directly, so the reader can check the claim before reading on.
 - **Why it matters:** how the pattern could affect interpretation or what it prompts the auditor to explore. Include possible explanations only when useful and clearly label them as hypotheses.
-- **Question for the data provider:** a specific question that would help explain or resolve the pattern. Place any supporting chart or table before this question.
+- **Question for the data provider:** a specific question that would help explain or resolve the pattern.
 
 For example, peaks in recorded acquisitions belong in the overview; identical costs across related acquisition records may warrant asking whether the cost is allocated per record or repeated from a shared purchase price. Retain an observation only when its evidence supports a meaningful stakeholder question. Omit the Observations section when nothing warrants it.
 
