@@ -1,6 +1,6 @@
 # HTML report and retained analysis
 
-Write the report for an auditor who has not opened the file. Order: header, what the file contains, observation sections, analysis notes. Add areas for closer examination only when grounded in observations already shown. No section needs to manufacture a finding.
+Write the report for an auditor who has not opened the file. Order: header, what the file contains, observation sections. Add areas for closer examination only when grounded in observations already shown. No section needs to manufacture a finding.
 
 The helpers in `scripts/report.py` use embedded CSS and SVG, without JavaScript, CDNs, external fonts, or images. Text arguments are escaped. Pass HTML only to `section()` bodies and `card()` visuals, using the helper output; pass dataset values through text arguments or `table()`.
 
@@ -63,15 +63,6 @@ if blank_fields:
                  "Counts overlap across fields; conversion failures are reported separately."),
     ))
 
-failed = sum(field["parse_failures"] for field in profile["columns"])
-notes = profile["notes"] + [
-    f"{profile['duplicate_records']} duplicate records beyond their first occurrences; retained.",
-    "Reviewed field profiles and source blank counts; further business-context exploration is not included in this example.",
-    "The source CSV was read without modification. This report is temporary; rerun the exploratory-data-analysis skill to regenerate it.",
-]
-if failed:
-    notes.append(f"{failed} nonblank cells could not be parsed under the selected types; "
-                 "they are excluded from typed summaries and retained in the source.")
 sections = [
     r.header(profile, TITLE, description=DESCRIPTION),
     r.section("What the file contains",
@@ -79,7 +70,6 @@ sections = [
 ]
 if cards:
     sections.append(r.section("Observations", "".join(cards)))
-sections.append(r.analysis_notes(notes))
 print(r.write_report(TITLE, sections, r.report_path(SOURCE)))
 ```
 
@@ -97,11 +87,10 @@ Run `uv run "<driver path>"`, or use the Python interpreter from the environment
 | `chart(labels, values, title=..., unit=...)` | Simple horizontal bars with a zero baseline and expandable values table. Aggregate or bin in the driver; pass only finite values. |
 | `table(columns, rows, title=...)` | Group comparisons, distributions, or representative records. Format numeric cells with `fmt()`, `money()`, or `pct()`. |
 | `fmt(value, compact=...)`, `money(value, compact=...)`, `pct(share)` | Numbers for the reader. `compact=True` writes 2.96M or $391.2M for prose; tables keep the full figure. |
-| `analysis_notes(notes)` | Choices affecting interpretation, including parsing, exclusions, assumptions, dimensions explored, and limitations. Combine with the profiler's notes. |
 | `report_path(csv_path)` | A fresh, timestamped `.html` path in the OS temporary directory, named after the CSV stem. |
 | `write_report(title, sections, path)` | Write the complete offline report to an explicit `.html` path. |
 
-Numbers in prose carry their units: $391.2M, 2.96M acres, 32.9% of records. Build record tables from the parsed values in `data` and format each cell; raw cell strings such as `2022.0` belong only in the sample records table. Use a number or table when it explains the observation better than a chart. For category charts, show a manageable number of groups, combining the rest as Other where appropriate and saying so. For time comparisons, retain chronological order and distinguish incomplete periods. For distributions, explain bins and any display-range exclusions; extreme values remain in the underlying analysis. Choose units from established context and state the assumption in the notes when the file does not give them.
+Numbers in prose carry their units: $391.2M, 2.96M acres, 32.9% of records. Build record tables from the parsed values in `data` and format each cell; raw cell strings such as `2022.0` belong only in the sample records table. Use a number or table when it explains the observation better than a chart. For category charts, show a manageable number of groups, combining the rest as Other where appropriate and saying so. For time comparisons, retain chronological order and distinguish incomplete periods. For distributions, explain bins and any display-range exclusions; extreme values remain in the underlying analysis. Choose units from established context and state the assumption in the context of each observation that relies on it when the file does not give them.
 
 Identify inspected records using the profiler's one-based data-record index or a source identifier. Data-record indexes exclude the header and empty lines outside quoted fields; they are not physical line numbers when cells contain line breaks.
 

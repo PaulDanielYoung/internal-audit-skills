@@ -13,25 +13,27 @@ For each question, give a recommended answer and briefly explain your reasoning.
 
 Format each question like so:
 
-❓ **Q1** - **<question title>**
+❓ **Q1** - **{question title}**
 
-<question body, might be multiple paragraphs, including multiple choices>
+{question body, might be multiple paragraphs, including multiple choices}
 
 ➡️ **Recommended answer**
 
-<your recommended answer, keep it brief and explain your reasoning>
+{your recommended answer, keep it brief and explain your reasoning}
 
 After each answer, reassess what remains unresolved. The user's answer may settle other questions, introduce new ones, or change which question should come next.
 
 When supporting material would settle a question or remove an important assumption, name the specific kind that would help (a methodology, policy, procedure, spreadsheet, report, prior workpaper, meeting notes) and invite the user to share it. Let them answer the underlying question directly instead if they prefer.
 
-The session is done when each of the following is either stated by the user or written down as an assumption they have confirmed:
+The session is done when every row of the following table is either stated by the user or written down as an assumption they have confirmed. Then summarize the shared understanding in this two-column Markdown table:
 
-- the **objective** of the work
-- the relevant **context**
-- the key **decisions**
-- the **assumptions** you are relying on
-- the **constraints**
-- the **expected output**
+| Area                | Shared understanding |
+| ------------------- | -------------------- |
+| **Objective**       | {the objective of the work} |
+| **Context**         | {the relevant context} |
+| **Decisions**       | {the key decisions} |
+| **Assumptions**     | {the assumptions you are relying on} |
+| **Constraints**     | {the constraints} |
+| **Expected output** | {the expected output} |
 
-Then summarize those six briefly and ask the user to confirm them before proceeding.
+Keep each cell concise but specific enough to capture what was agreed. Separate multiple items in a cell with semicolons. After the table, ask the user to confirm the shared understanding before proceeding.

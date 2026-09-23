@@ -202,10 +202,6 @@ def chart(labels: list, values: list, *, title: str, unit: str = "") -> str:
     )
 
 
-def analysis_notes(notes: list[str]) -> str:
-    return section("Analysis notes", '<ul>' + "".join(f'<li>{esc(note)}</li>' for note in notes) + '</ul>')
-
-
 def write_report(title: str, sections: list[str], path: str | Path) -> Path:
     """Write the page to an explicit HTML path. The CSV is never written."""
     path = Path(path).resolve()

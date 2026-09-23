@@ -25,7 +25,7 @@ This step is complete when row and field counts, blanks, and appropriate basic f
 
 ## 2. Explore
 
-Follow useful signals from the profile. Examine distributions, concentrations, changes over time, relationships between columns, or concentrations of missing and repeated values when relevant. Choose comparisons that help interpret the pattern and inspect the contributing records. Keep raw values available alongside parsed values; record exclusions and transformations in the script and report notes.
+Follow useful signals from the profile. Examine distributions, concentrations, changes over time, relationships between columns, or concentrations of missing and repeated values when relevant. Choose comparisons that help interpret the pattern and inspect the contributing records. Keep raw values available alongside parsed values; record exclusions and transformations in the script, and state those that change a denominator in the context of the observation they affect.
 
 Write each retained pattern with:
 
@@ -33,7 +33,7 @@ Write each retained pattern with:
 - **Interpretation:** optional; a possible explanation, clearly separated from the observation.
 - **Open question:** optional; additional context that would materially change the interpretation.
 
-Exploration is complete when the basic profile has been considered for useful follow-up, each retained pattern is supported by calculations and inspected records, and material unresolved limitations are stated. Briefly record the dimensions explored and relevant limitations. Require no minimum number of observations or charts; a short report is appropriate when further exploration adds little.
+Exploration is complete when the basic profile has been considered for useful follow-up, each retained pattern is supported by calculations and inspected records, and material unresolved limitations are stated in the observations they affect. Require no minimum number of observations or charts; a short report is appropriate when further exploration adds little.
 
 ## 3. Present and verify
 
@@ -57,6 +57,6 @@ Run the driver and check:
 
   If no browser can render it, disclose that visual verification remains outstanding.
 
-Open the report in the user's default browser: `Start-Process` on Windows, `open` on macOS, `xdg-open` on Linux. Return the report's absolute path and a short account of useful observations or limitations. The report is temporary; rerun the skill to regenerate it.
+Open the report in the user's default browser: `Start-Process` on Windows, `open` on macOS, `xdg-open` on Linux. Return the report's absolute path and a short account of useful observations, the dimensions explored, and limitations. The report is temporary; rerun the skill to regenerate it.
 
 This step is complete when the checks pass, the report is open in the browser, and the title, description, and field meanings read as plain language. Formal audit-trail packaging is outside this version's scope.

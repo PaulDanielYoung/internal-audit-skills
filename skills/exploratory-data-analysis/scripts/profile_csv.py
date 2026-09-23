@@ -31,18 +31,9 @@ PARSE_THRESHOLD = 0.95
 ROLES = {"identifier", "measure", "category", "date", "text"}
 ID_NAME = re.compile(r"(^|[^a-z])(id|key|code|number|no|ref|reference)$", re.I)
 ISO_DATE = r"\d{4}-\d{2}-\d{2}"
-DATE_FORMAT_NAMES = {
-    "%Y-%m-%d": "year-month-day", "%m/%d/%Y": "month/day/year", "%d/%m/%Y": "day/month/year",
-    "%Y/%m/%d": "year/month/day", "%d-%m-%Y": "day-month-year", "%m-%d-%Y": "month-day-year",
-    "%Y%m%d": "yearmonthday", "%d.%m.%Y": "day.month.year",
-}
 
 
-def describe_format(date_format: str) -> str:
-    return DATE_FORMAT_NAMES.get(date_format, f"the format {date_format}")
-
-
-def read_csv(path: Path, encoding: str = "utf-8-sig") -> tuple[pd.DataFrame, list[str]]:
+def read_csv(path: Path, encoding: str = "utf-8-sig") -> tuple[pd.DataFrame, int]:
     """Read strings exactly; reject missing/duplicate headers and ragged records."""
     path = Path(path)
     if path.suffix.lower() != ".csv":
@@ -68,14 +59,7 @@ def read_csv(path: Path, encoding: str = "utf-8-sig") -> tuple[pd.DataFrame, lis
             records.append(record)
     raw = pd.DataFrame(records, columns=header, dtype="string")
     raw.index = pd.RangeIndex(1, len(raw) + 1, name="csv_record")
-    notes = [
-        f"Read as comma-delimited CSV using {encoding}; first record used as the header.",
-        "Empty or whitespace-only cells count as blank; literal NA, NULL and similar strings are retained.",
-        "Record numbers count data records after the header, not physical lines; duplicate records are retained.",
-    ]
-    if skipped:
-        notes.append(f"Ignored {skipped} empty lines outside quoted fields; all table records are retained.")
-    return raw, notes
+    return raw, skipped
 
 
 def numeric(values: pd.Series) -> pd.Series:
@@ -123,7 +107,7 @@ def profile_csv(
     assigns the date role. Numeric parsing does not infer currency or locale rules.
     """
     path = Path(path).resolve()
-    raw, notes = read_csv(path, encoding)
+    raw, skipped = read_csv(path, encoding)
     roles, date_formats = roles or {}, date_formats or {}
     unknown = (set(roles) | set(date_formats)) - set(raw.columns)
     if unknown:
@@ -135,7 +119,6 @@ def profile_csv(
 
     data = raw.copy()
     columns = []
-    measures, dated, overridden = [], {}, []
     for name in raw.columns:
         original = raw[name]
         blank = original.str.strip().eq("")
@@ -145,15 +128,11 @@ def profile_csv(
         parsed = values
         if role == "measure":
             parsed = numeric(values.str.strip())
-            measures.append(name)
         elif role == "date":
             date_format = date_formats.get(name, "%Y-%m-%d")
             parsed = pd.to_datetime(values.str.strip(), format=date_format, errors="coerce")
             if name not in date_formats:
                 parsed = parsed.where(values.str.fullmatch(ISO_DATE).fillna(False))
-            dated.setdefault(describe_format(date_format), []).append(name)
-        if name in roles or name in date_formats:
-            overridden.append(f"{name} ({role}; initially {inferred})")
         failed = ~blank & parsed.isna()
         data[name] = parsed
         present = parsed.dropna()
@@ -186,19 +165,12 @@ def profile_csv(
                 entry["duplicates"] = int(len(present) - present.nunique())
         columns.append(entry)
 
-    if measures:
-        notes.append("Parsed as plain numbers, without currency or locale rules: " + ", ".join(measures) + ".")
-    for style, names in dated.items():
-        notes.append(f"Parsed as dates written {style}: " + ", ".join(names) + ".")
-    if overridden:
-        notes.append("Roles set explicitly: " + "; ".join(overridden) + ".")
-
     profile = {
         "file": path.name, "path": str(path),
         "generated": dt.datetime.now().isoformat(timespec="seconds"),
         "rows": len(raw), "fields": len(raw.columns),
         "duplicate_records": int(raw.duplicated().sum()),
-        "notes": notes, "columns": columns,
+        "empty_lines_skipped": skipped, "columns": columns,
         "sample": [
             {"record": int(index), "values": row.to_dict()}
             for index, row in raw.head(5).iterrows()
@@ -231,6 +203,8 @@ def main(argv: list[str] | None = None) -> int:
         json.dump(profile, output, ensure_ascii=False, indent=2, allow_nan=False)
         output_path = output.name
     print(f"{profile['file']}: {profile['rows']:,} records, {profile['fields']} fields")
+    if profile["empty_lines_skipped"]:
+        print(f"  {profile['empty_lines_skipped']} empty lines outside quoted fields skipped")
     for field in profile["columns"]:
         print(f"  {field['name']}: {field['role']}; {field['blank']} blank, {field['parse_failures']} unparsed")
     print(f"Temporary profile: {output_path}")
