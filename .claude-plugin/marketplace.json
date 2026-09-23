@@ -1,0 +1,13 @@
+{
+  "name": "internal-audit-skills",
+  "owner": {
+    "name": "Paul Young"
+  },
+  "plugins": [
+    {
+      "name": "internal-audit-skills",
+      "source": "./",
+      "description": "Agent skills for internal auditors: glossary, shared understanding, risk statements, and exploratory data analysis."
+    }
+  ]
+}

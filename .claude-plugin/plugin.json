@@ -1,0 +1,11 @@
+{
+  "name": "internal-audit-skills",
+  "version": "0.1.0",
+  "description": "Agent skills for internal auditors: glossary, shared understanding, risk statements, and exploratory data analysis.",
+  "author": {
+    "name": "Paul Young"
+  },
+  "repository": "https://github.com/PaulDanielYoung/internal-audit-skills",
+  "license": "MIT",
+  "keywords": ["internal-audit", "audit", "risk", "skills", "data-analysis"]
+}

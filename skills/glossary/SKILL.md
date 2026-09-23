@@ -9,7 +9,7 @@ description: Build and sharpen the project's GLOSSARY.md, the definitions every 
 
 ## Creating one
 
-Create the file only when there is a definition to record. Offer to start from the seed at `${CLAUDE_PLUGIN_ROOT}/GLOSSARY.md`, which holds the general internal audit definitions the skills assume, and adapt its wording to the organization's own terminology. If the seed is unavailable, create the file with the terms resolved so far.
+Create the file only when there is a definition to record. Offer to start from the seed glossary in [SEED-GLOSSARY.md](SEED-GLOSSARY.md), which holds the general internal audit definitions the skills assume, and adapt its wording to the organization's own terminology.
 
 ## During the session
 

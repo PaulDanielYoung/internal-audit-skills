@@ -11,7 +11,7 @@ Turn an unfamiliar CSV into an understanding of what it contains and what deserv
 
 Analyze exactly one comma-delimited CSV, with one table and field names in the first record. If several files are offered, establish which one to explore. For an unsupported structure, explain what is needed rather than silently choosing a table or changing the source.
 
-Read the existing CSV in place and leave its bytes unchanged. The report is throwaway: write the driver script, the report, and every intermediate file to the OS temporary directory. Each run writes a fresh report, named by `report_path()` in the skill's helpers. The driver may import the installed skill's helpers.
+Read the existing CSV in place and leave its bytes unchanged. The report is throwaway: write the driver script, the report, and every intermediate file to the OS temporary directory. Each run writes a fresh, timestamped report; `Report.write()` in the skill's `scripts/report.py` names it. The driver imports the installed skill's scripts.
 
 ## 1. Orient and profile
 
@@ -65,7 +65,7 @@ This step is complete when useful follow-up signals have been examined, each ret
 
 ## 5. Present and verify
 
-Read [HTML-REPORT.md](HTML-REPORT.md) for the driver and report helpers. Write the driver in the OS temporary directory with the source path, helper location, interpretation choices, and all calculations behind the report. Derive statements containing numbers from calculated values. Give the report a readable narrative, using tables or embedded charts where they answer a useful question. All styling and visuals must work offline.
+Read [HTML-REPORT.md](HTML-REPORT.md) for the driver and the `Report` module. Write the driver in the OS temporary directory with the source path, skill location, interpretation choices, and all calculations behind the report. Derive statements containing numbers from calculated values. Give the report a readable narrative, using tables or embedded charts where they answer a useful question. All styling and visuals must work offline.
 
 Consolidate material constraints on interpretation into one optional **Analysis limitations** section at the end, after Observations when present. Use a concise list, referring to an observation by title when it carries the full investigation. Keep chart-specific context in the second paragraph beneath the affected chart so it can be read on its own. Routine calculation choices, such as counting distinct sites, belong in chart context and are not automatically report-wide limitations. Data quality retains its condition tables without an introductory limitations block.
 

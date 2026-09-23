@@ -1,5 +1,13 @@
-"""Offline HTML report helpers. Text arguments are escaped; section bodies and
-visuals accept trusted HTML or inline SVG from the driver. No browser or network needed.
+"""Offline HTML report for one exploratory data analysis.
+
+The driver builds a Report: construct it with the profile and the reader-facing framing,
+add data quality conditions, overview items, observations, and limitations as the analysis
+produces them, then write(). The Report owns section order and titles, leaves out empty
+optional sections, validates each addition, and escapes every text argument. Visuals and
+the bodies they contain are trusted HTML or inline SVG from the driver; build them with
+chart() and table(), or escape labels with esc() when generating custom SVG.
+
+No browser, network, JavaScript, or external asset is needed to read the result.
 """
 from __future__ import annotations
 
@@ -20,6 +28,8 @@ QUALITY_MIN_SHARE = 0.01
 # A table supporting an observation is a sample of the evidence, not a data dump.
 OBSERVATION_MAX_ROWS = 10
 
+
+# --- Numbers and text for the reader -------------------------------------------------
 
 def esc(value) -> str:
     return html.escape(str(value), quote=True)
@@ -65,36 +75,11 @@ def pct(share: float | None) -> str:
     return NA if share is None else f"{share:.1%}"
 
 
-def report_path(csv_path: str | Path) -> Path:
-    """A fresh, timestamped report path in the OS temporary directory, named after the CSV stem."""
-    source = Path(csv_path).resolve()
-    if source.suffix.lower() != ".csv":
-        raise ValueError("Expected a .csv source path.")
-    stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
-    return Path(tempfile.gettempdir()) / f"{source.stem}-exploratory-data-analysis-{stamp}.html"
-
-
-def section(title: str, body: str) -> str:
-    return f'<section><h2>{esc(title)}</h2>{body}</section>'
-
-
-def header(profile: dict, title: str, *, description: str, facts: list[str] | tuple[str, ...] = ()) -> str:
-    """Plain-language title and description, then record and field counts with any key facts.
-
-    title: the dataset's name in words, never the file stem.
-    description: one or two sentences on what the data is and what one record represents.
-    facts: optional extra key figures beyond records and fields, e.g. "1,668 sites".
-    """
-    items = [f"{fmt(profile['rows'])} records", f"{fmt(profile['fields'])} fields", *facts]
-    return (
-        f'<header><p class="eyebrow">Exploratory data analysis</p><h1>{esc(title)}</h1>'
-        f'<p class="lede">{esc(description)}</p>'
-        f'<p class="facts">{" · ".join(esc(item) for item in items)}</p>'
-        '</header>'
-    )
-
+# --- Visual vocabulary -----------------------------------------------------------------
 
 def table(columns: list[str], rows: list[list], title: str = "", *, css_class: str = "") -> str:
+    """Group comparisons, distributions, or representative records. Cells are escaped;
+    format numeric cells with fmt(), money(), or pct() first."""
     caption = f'<caption>{esc(title)}</caption>' if title else ""
     headings = "".join(f'<th scope="col">{esc(column)}</th>' for column in columns)
     body = "".join(
@@ -104,133 +89,12 @@ def table(columns: list[str], rows: list[list], title: str = "", *, css_class: s
     return f'<div class="scroll-table"><table{attrs}>{caption}<thead><tr>{headings}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
-def field_profile(profile: dict, meanings: dict[str, str]) -> str:
-    """Every field in file order with its apparent meaning in plain words.
-
-    meanings: one sentence per field on what it appears to hold; required for every field.
-    """
-    names = [field["name"] for field in profile["columns"]]
-    missing = [name for name in names if not str(meanings.get(name, "")).strip()]
-    if missing:
-        raise ValueError(f"Write an apparent meaning for every field; missing: {', '.join(missing)}")
-    unknown = set(meanings) - set(names)
-    if unknown:
-        raise ValueError(f"Meanings name fields not in the file: {', '.join(sorted(unknown))}")
-    return table(["Field", "Apparent meaning"], [[name, meanings[name]] for name in names], css_class="fields")
-
-
-def data_quality(conditions: list[tuple[str, str, str, int, str]], rows: int) -> str:
-    """One subheading and table per area in QUALITY_AREAS order.
-
-    conditions: one (area, field, observation, affected, why_it_matters) per condition.
-    field names the field or fields involved, or "All fields"; observation is a short
-    plain-language phrase; affected is the count of records the condition applies to,
-    shown as a percentage of rows. Conditions affecting less than QUALITY_MIN_SHARE of rows are
-    not shown, and a note gives how many were left out. Rows within an area are sorted by affected
-    records, most first; ties keep their given order. An area with no condition says so under its heading.
-    """
-    by_area = {area: [] for area in QUALITY_AREAS}
-    for condition in conditions:
-        if len(condition) != 5:
-            raise ValueError("Each condition needs area, field, observation, affected records, and why it matters.")
-        area, field, observation, affected, why = condition
-        if area not in by_area:
-            raise ValueError(f"Area must be one of: {', '.join(QUALITY_AREAS)}; got {area!r}")
-        if any(not str(cell).strip() for cell in (field, observation, why)):
-            raise ValueError(f"Every text cell of a {area} condition needs text.")
-        if isinstance(affected, bool) or not isinstance(affected, numbers.Integral) or not 0 <= affected <= rows:
-            raise ValueError(f"Affected records must be a record count from 0 to {rows}; got {affected!r}")
-        share = int(affected) / rows if rows else 0.0
-        by_area[area].append((int(affected), share, [field, observation, pct(share), why]))
-    parts = []
-    for area, area_rows in by_area.items():
-        parts.append(f'<h3>{esc(area)}</h3>')
-        shown = [item for item in area_rows if item[1] >= QUALITY_MIN_SHARE]
-        hidden = len(area_rows) - len(shown)
-        if shown:
-            ranked = [row for _, _, row in sorted(shown, key=lambda item: item[0], reverse=True)]
-            # Same fixed column widths in every area, so the tables line up down the section.
-            parts.append(table(["Field", "Observation", "Affected records", "Why it matters"], ranked, css_class="quality"))
-        elif not hidden:
-            parts.append('<p class="muted">Checked; nothing to report.</p>')
-        if hidden:
-            noun = "condition" if hidden == 1 else "conditions"
-            parts.append(f'<p class="muted">{hidden} {noun} affecting less than {QUALITY_MIN_SHARE:.0%} of records not shown.</p>')
-    return "".join(parts)
-
-
-def analysis_limitations(notes: list[str] | tuple[str, ...]) -> str:
-    """One optional final section containing material limitations as a concise list."""
-    items = "".join(f'<li>{esc(note)}</li>' for note in notes if note.strip())
-    return section("Analysis limitations", f'<ul>{items}</ul>') if items else ""
-
-
-class _MarkupTags(HTMLParser):
-    """Tag names in a visual, plus the number of table rows outside any thead."""
-
-    def __init__(self):
-        super().__init__()
-        self.tags = []
-        self.body_rows = 0
-        self._in_thead = 0
-
-    def handle_starttag(self, tag, attrs):
-        self.tags.append(tag)
-        if tag == "thead":
-            self._in_thead += 1
-        elif tag == "tr" and not self._in_thead:
-            self.body_rows += 1
-
-    def handle_endtag(self, tag):
-        if tag == "thead" and self._in_thead:
-            self._in_thead -= 1
-
-
-def overview(question: str, visual: str, *, takeaway: str, context: str) -> str:
-    """A question, one SVG chart, a takeaway, and a brief context paragraph; no tables."""
-    if any(not value.strip() for value in (question, visual, takeaway, context)):
-        raise ValueError("An overview needs a question, chart, takeaway, and context.")
-    markup = _MarkupTags()
-    markup.feed(visual)
-    if markup.tags.count("svg") != 1 or {"table", "details", "summary"}.intersection(markup.tags):
-        raise ValueError("Each overview needs one SVG chart, without tables or dropdowns.")
-    return (
-        f'<div class="overview"><h3>{esc(question)}</h3>{visual}'
-        f'<p>{esc(takeaway)}</p><p class="muted">{esc(context)}</p></div>'
-    )
-
-
-def observation(title: str, visual: str = "", *, noticed: str, why_it_matters: str,
-                question: str) -> str:
-    """A supported observation ending with a concrete question for the data provider.
-
-    Laid out like an overview item: a heading and prose on the page, with no box around it.
-    The optional visual follows What we noticed, the claim it lets the reader check, so
-    Why it matters and the question read together. A table in the visual shows at most
-    OBSERVATION_MAX_ROWS body rows.
-    """
-    if any(not value.strip() for value in (title, noticed, why_it_matters, question)):
-        raise ValueError("An observation needs a title, evidence, why it matters, and a stakeholder question.")
-    markup = _MarkupTags()
-    markup.feed(visual)
-    if markup.body_rows > OBSERVATION_MAX_ROWS:
-        raise ValueError(
-            f"An observation table shows at most {OBSERVATION_MAX_ROWS} rows; got {markup.body_rows}. "
-            "Show the rows that best support the observation and say how many of the total they are."
-        )
-    return (
-        f'<div class="observation"><h3>{esc(title)}</h3>'
-        f'<p><strong>What we noticed:</strong> {esc(noticed)}</p>{visual}'
-        f'<p><strong>Why it matters:</strong> {esc(why_it_matters)}</p>'
-        f'<p><strong>Question for the data provider:</strong> {esc(question)}</p></div>'
-    )
-
-
 def chart(labels: list, values: list, *, title: str, unit: str = "") -> str:
     """Horizontal SVG bars with a zero baseline, full labels, and visible values.
 
-    Supply already aggregated values; sort categories or keep chronological order
-    in the driver. Negative values extend to the left of zero. No remote assets.
+    Supply already aggregated, finite values; sort categories or keep chronological order
+    in the driver. Negative values extend to the left of zero. An empty input returns a
+    no-values message, which is not an overview chart.
     """
     if len(labels) != len(values):
         raise ValueError("Chart labels and values must have the same length.")
@@ -273,13 +137,207 @@ def chart(labels: list, values: list, *, title: str, unit: str = "") -> str:
     )
 
 
-def write_report(title: str, sections: list[str], path: str | Path) -> Path:
-    """Write the page to an explicit HTML path. The CSV is never written."""
-    path = Path(path).resolve()
-    if path.suffix.lower() != ".html":
-        raise ValueError("Report output must have an .html extension.")
-    template = TEMPLATE.read_text(encoding="utf-8")
-    page = template.replace("{{title}}", esc(title)).replace("{{body}}", "\n".join(sections))
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(page, encoding="utf-8")
-    return path
+# --- The report ------------------------------------------------------------------------
+
+class _MarkupTags(HTMLParser):
+    """Tag names in a visual, plus the number of table rows outside any thead."""
+
+    def __init__(self):
+        super().__init__()
+        self.tags = []
+        self.body_rows = 0
+        self._in_thead = 0
+
+    def handle_starttag(self, tag, attrs):
+        self.tags.append(tag)
+        if tag == "thead":
+            self._in_thead += 1
+        elif tag == "tr" and not self._in_thead:
+            self.body_rows += 1
+
+    def handle_endtag(self, tag):
+        if tag == "thead" and self._in_thead:
+            self._in_thead -= 1
+
+
+def _section(title: str, body: str) -> str:
+    return f'<section><h2>{esc(title)}</h2>{body}</section>'
+
+
+class Report:
+    """One report, assembled in a fixed order when written.
+
+    Sections, in order: header; What the file contains; Data quality; Data overview;
+    Observations, only when one was added; Analysis limitations, only when one was added.
+
+    profile: the dict returned by profile_csv().
+    title: the dataset's name in plain words, never the file stem.
+    description: one or two sentences on what the data is and what one record represents.
+    meanings: one sentence per field on what it appears to hold; every field is required.
+    facts: optional key figures shown beside the record and field counts, e.g. "1,668 sites".
+    """
+
+    def __init__(self, profile: dict, title: str, *, description: str,
+                 meanings: dict[str, str], facts: list[str] | tuple[str, ...] = ()):
+        if not str(title).strip() or not str(description).strip():
+            raise ValueError("A report needs a plain-language title and a description.")
+        names = [field["name"] for field in profile["columns"]]
+        missing = [name for name in names if not str(meanings.get(name, "")).strip()]
+        if missing:
+            raise ValueError(f"Write an apparent meaning for every field; missing: {', '.join(missing)}")
+        unknown = set(meanings) - set(names)
+        if unknown:
+            raise ValueError(f"Meanings name fields not in the file: {', '.join(sorted(unknown))}")
+        self._profile = profile
+        self._title = str(title)
+        self._description = str(description)
+        self._meanings = {name: meanings[name] for name in names}
+        self._facts = tuple(facts)
+        self._quality: list[tuple[str, int, list]] = []
+        self._overview: list[str] = []
+        self._no_overview = ""
+        self._observations: list[str] = []
+        self._limitations: list[str] = []
+
+    # -- Adding content ----------------------------------------------------------------
+
+    def quality(self, area: str, field: str, observation: str, affected: int, why_it_matters: str) -> None:
+        """One data quality condition. area is one of QUALITY_AREAS; field names the field
+        or fields involved, or "All fields" for whole-record conditions; observation is a
+        short plain-language phrase; affected is the count of records the condition applies
+        to, shown as a percentage of the file's records. Add every condition found: those
+        under QUALITY_MIN_SHARE are counted in a note rather than listed."""
+        rows = self._profile["rows"]
+        if area not in QUALITY_AREAS:
+            raise ValueError(f"Area must be one of: {', '.join(QUALITY_AREAS)}; got {area!r}")
+        if any(not str(cell).strip() for cell in (field, observation, why_it_matters)):
+            raise ValueError(f"Every text cell of a {area} condition needs text.")
+        if isinstance(affected, bool) or not isinstance(affected, numbers.Integral) or not 0 <= affected <= rows:
+            raise ValueError(f"Affected records must be a record count from 0 to {rows}; got {affected!r}")
+        share = int(affected) / rows if rows else 0.0
+        self._quality.append((area, int(affected), [field, observation, pct(share), why_it_matters]))
+
+    def overview(self, question: str, chart: str, *, takeaway: str, context: str) -> None:
+        """One descriptive question answered by exactly one SVG chart, a takeaway, and the
+        context needed to read the chart correctly. Tables and dropdowns are rejected."""
+        if any(not value.strip() for value in (question, chart, takeaway, context)):
+            raise ValueError("An overview needs a question, chart, takeaway, and context.")
+        markup = _MarkupTags()
+        markup.feed(chart)
+        if markup.tags.count("svg") != 1 or {"table", "details", "summary"}.intersection(markup.tags):
+            raise ValueError("Each overview needs one SVG chart, without tables or dropdowns.")
+        self._overview.append(
+            f'<div class="overview"><h3>{esc(question)}</h3>{chart}'
+            f'<p>{esc(takeaway)}</p><p class="muted">{esc(context)}</p></div>'
+        )
+
+    def no_overview(self, reason: str) -> None:
+        """Why the file cannot support a meaningful overview, for example a CSV with headers
+        but no records. Only for a report with no overview items."""
+        if not reason.strip():
+            raise ValueError("Give the reason the file supports no overview.")
+        self._no_overview = reason
+
+    def observation(self, title: str, visual: str = "", *, noticed: str, why_it_matters: str,
+                    question: str) -> None:
+        """A supported pattern ending with a concrete question for the data provider. The
+        optional visual follows What we noticed, the claim it lets the reader check. A table
+        in the visual shows at most OBSERVATION_MAX_ROWS body rows."""
+        if any(not value.strip() for value in (title, noticed, why_it_matters, question)):
+            raise ValueError("An observation needs a title, evidence, why it matters, and a stakeholder question.")
+        markup = _MarkupTags()
+        markup.feed(visual)
+        if markup.body_rows > OBSERVATION_MAX_ROWS:
+            raise ValueError(
+                f"An observation table shows at most {OBSERVATION_MAX_ROWS} rows; got {markup.body_rows}. "
+                "Show the rows that best support the observation and say how many of the total they are."
+            )
+        self._observations.append(
+            f'<div class="observation"><h3>{esc(title)}</h3>'
+            f'<p><strong>What we noticed:</strong> {esc(noticed)}</p>{visual}'
+            f'<p><strong>Why it matters:</strong> {esc(why_it_matters)}</p>'
+            f'<p><strong>Question for the data provider:</strong> {esc(question)}</p></div>'
+        )
+
+    def limitation(self, note: str) -> None:
+        """A material constraint on interpretation, listed once at the end of the report.
+        Refer to an observation by title when it carries the full investigation."""
+        if note.strip():
+            self._limitations.append(note)
+
+    # -- Writing -----------------------------------------------------------------------
+
+    def write(self, path: str | Path | None = None) -> Path:
+        """Write the complete offline report and return its path. Without a path, a fresh
+        timestamped .html file in the OS temporary directory, named after the CSV stem.
+        The CSV is never written."""
+        if path is None:
+            stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+            stem = Path(self._profile["path"]).stem
+            path = Path(tempfile.gettempdir()) / f"{stem}-exploratory-data-analysis-{stamp}.html"
+        path = Path(path).resolve()
+        if path.suffix.lower() != ".html":
+            raise ValueError("Report output must have an .html extension.")
+        sections = [
+            self._header(),
+            _section("What the file contains", self._field_profile()),
+            _section("Data quality", self._data_quality()),
+            _section("Data overview", self._overview_body()),
+        ]
+        if self._observations:
+            sections.append(_section("Observations", "".join(self._observations)))
+        if self._limitations:
+            items = "".join(f'<li>{esc(note)}</li>' for note in self._limitations)
+            sections.append(_section("Analysis limitations", f'<ul>{items}</ul>'))
+        template = TEMPLATE.read_text(encoding="utf-8")
+        page = template.replace("{{title}}", esc(self._title)).replace("{{body}}", "\n".join(sections))
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(page, encoding="utf-8")
+        return path
+
+    def _header(self) -> str:
+        profile = self._profile
+        items = [f"{fmt(profile['rows'])} records", f"{fmt(profile['fields'])} fields", *self._facts]
+        return (
+            f'<header><p class="eyebrow">Exploratory data analysis</p><h1>{esc(self._title)}</h1>'
+            f'<p class="lede">{esc(self._description)}</p>'
+            f'<p class="facts">{" · ".join(esc(item) for item in items)}</p>'
+            '</header>'
+        )
+
+    def _field_profile(self) -> str:
+        """Every field in file order with its apparent meaning."""
+        rows = [[name, meaning] for name, meaning in self._meanings.items()]
+        return table(["Field", "Apparent meaning"], rows, css_class="fields")
+
+    def _data_quality(self) -> str:
+        """One subheading and table per area in QUALITY_AREAS order, rows sorted by affected
+        records, most first. An area with no condition says so under its heading."""
+        by_area = {area: [] for area in QUALITY_AREAS}
+        for area, affected, row in self._quality:
+            by_area[area].append((affected, row))
+        rows = self._profile["rows"]
+        parts = []
+        for area, area_rows in by_area.items():
+            parts.append(f'<h3>{esc(area)}</h3>')
+            shown = [item for item in area_rows if (item[0] / rows if rows else 0.0) >= QUALITY_MIN_SHARE]
+            hidden = len(area_rows) - len(shown)
+            if shown:
+                ranked = [row for _, row in sorted(shown, key=lambda item: item[0], reverse=True)]
+                # Same fixed column widths in every area, so the tables line up down the section.
+                parts.append(table(["Field", "Observation", "Affected records", "Why it matters"], ranked, css_class="quality"))
+            elif not hidden:
+                parts.append('<p class="muted">Checked; nothing to report.</p>')
+            if hidden:
+                noun = "condition" if hidden == 1 else "conditions"
+                parts.append(f'<p class="muted">{hidden} {noun} affecting less than {QUALITY_MIN_SHARE:.0%} of records not shown.</p>')
+        return "".join(parts)
+
+    def _overview_body(self) -> str:
+        if self._overview and self._no_overview:
+            raise ValueError("A report has overview items or a reason there are none, not both.")
+        if self._overview:
+            return "".join(self._overview)
+        if self._no_overview:
+            return f'<p>{esc(self._no_overview)}</p>'
+        raise ValueError("Build the data overview or call no_overview() with why the file cannot support one.")
