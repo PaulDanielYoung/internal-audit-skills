@@ -33,8 +33,6 @@ DESCRIPTION = "<One or two sentences: what the data is and what one record repre
 MEANINGS = {
     "<field>": "<what it appears to hold>",
 }
-MONEY_FIELDS = {"<fields holding dollar amounts>"}
-
 # Persist all interpretation choices here; overrides recompute field statistics.
 # Example syntax: roles={"account": "identifier"}, date_formats={"date": "%d/%m/%Y"}
 raw, data, profile = profile_csv(SOURCE, roles={}, date_formats={})
@@ -65,8 +63,7 @@ if blank_fields:
 
 sections = [
     r.header(profile, TITLE, description=DESCRIPTION),
-    r.section("What the file contains",
-              r.field_profile(profile, MEANINGS, money_fields=MONEY_FIELDS) + r.sample_records(profile)),
+    r.section("What the file contains", r.field_profile(profile, MEANINGS)),
 ]
 if cards:
     sections.append(r.section("Observations", "".join(cards)))
@@ -79,9 +76,8 @@ Run `uv run "<driver path>"`, or use the Python interpreter from the environment
 
 | Helper | Purpose |
 | --- | --- |
-| `header(profile, title, description=..., facts=...)` | Plain-language title and description, record and field counts plus optional key facts such as "1,668 sites", source filename, and generation date. State a reporting period only when the relevant date field is understood. |
-| `field_profile(profile, meanings, money_fields=...)` | All fields with their apparent meaning in plain words, role, raw blanks, conversion failures, distinct raw strings, and a summary. Correct roles in `profile_csv()`, not in the display. |
-| `sample_records(profile)` | The first five records exactly as written in the file. |
+| `header(profile, title, description=..., facts=...)` | Plain-language title and description, record and field counts plus optional key facts such as "1,668 sites". State a reporting period only when the relevant date field is understood. |
+| `field_profile(profile, meanings)` | All fields in file order with their apparent meaning in plain words. Blanks, conversion failures, roles, and distributions belong in observations, not here. |
 | `section(title, body)` | Group helper-produced HTML. Omit optional sections when they add nothing. |
 | `card(title, visual, observation=..., context=..., interpretation=..., open_question=...)` | One supported observation. Interpretation and open question are optional. |
 | `chart(labels, values, title=..., unit=...)` | Simple horizontal bars with a zero baseline and expandable values table. Aggregate or bin in the driver; pass only finite values. |
@@ -90,7 +86,7 @@ Run `uv run "<driver path>"`, or use the Python interpreter from the environment
 | `report_path(csv_path)` | A fresh, timestamped `.html` path in the OS temporary directory, named after the CSV stem. |
 | `write_report(title, sections, path)` | Write the complete offline report to an explicit `.html` path. |
 
-Numbers in prose carry their units: $391.2M, 2.96M acres, 32.9% of records. Build record tables from the parsed values in `data` and format each cell; raw cell strings such as `2022.0` belong only in the sample records table. Use a number or table when it explains the observation better than a chart. For category charts, show a manageable number of groups, combining the rest as Other where appropriate and saying so. For time comparisons, retain chronological order and distinguish incomplete periods. For distributions, explain bins and any display-range exclusions; extreme values remain in the underlying analysis. Choose units from established context and state the assumption in the context of each observation that relies on it when the file does not give them.
+Numbers in prose carry their units: $391.2M, 2.96M acres, 32.9% of records. Build record tables from the parsed values in `data` and format each cell; raw cell strings such as `2022.0` stay out of the report. Use a number or table when it explains the observation better than a chart. For category charts, show a manageable number of groups, combining the rest as Other where appropriate and saying so. For time comparisons, retain chronological order and distinguish incomplete periods. For distributions, explain bins and any display-range exclusions; extreme values remain in the underlying analysis. Choose units from established context and state the assumption in the context of each observation that relies on it when the file does not give them.
 
 Identify inspected records using the profiler's one-based data-record index or a source identifier. Data-record indexes exclude the header and empty lines outside quoted fields; they are not physical line numbers when cells contain line breaks.
 

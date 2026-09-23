@@ -71,19 +71,17 @@ def section(title: str, body: str) -> str:
 
 
 def header(profile: dict, title: str, *, description: str, facts: list[str] | tuple[str, ...] = ()) -> str:
-    """Plain-language title and description, key facts, source filename and generation date.
+    """Plain-language title and description, then record and field counts with any key facts.
 
     title: the dataset's name in words, never the file stem.
     description: one or two sentences on what the data is and what one record represents.
     facts: optional extra key figures beyond records and fields, e.g. "1,668 sites".
     """
-    generated = dt.datetime.fromisoformat(profile["generated"]).strftime("%m/%d/%Y")
     items = [f"{fmt(profile['rows'])} records", f"{fmt(profile['fields'])} fields", *facts]
     return (
         f'<header><p class="eyebrow">Exploratory data analysis</p><h1>{esc(title)}</h1>'
         f'<p class="lede">{esc(description)}</p>'
         f'<p class="facts">{" · ".join(esc(item) for item in items)}</p>'
-        f'<p class="muted">Source: <code>{esc(profile["file"])}</code> · Generated {generated}</p>'
         '</header>'
     )
 
@@ -97,21 +95,10 @@ def table(columns: list[str], rows: list[list], title: str = "") -> str:
     return f'<div class="scroll-table"><table>{caption}<thead><tr>{headings}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
-def sample_records(profile: dict) -> str:
-    """The first records exactly as written in the file."""
-    sample = profile["sample"]
-    if not sample:
-        return '<p class="muted">The file has no data records.</p>'
-    columns = ["Record", *sample[0]["values"].keys()]
-    rows = [[item["record"], *item["values"].values()] for item in sample]
-    return table(columns, rows, title=f"First {len(sample)} records as written in the file")
-
-
-def field_profile(profile: dict, meanings: dict[str, str], *, money_fields: set[str] | tuple[str, ...] = ()) -> str:
-    """Every field with its apparent meaning in plain words, its role, and a summary.
+def field_profile(profile: dict, meanings: dict[str, str]) -> str:
+    """Every field in file order with its apparent meaning in plain words.
 
     meanings: one sentence per field on what it appears to hold; required for every field.
-    money_fields: fields whose summaries should show dollar amounts.
     """
     names = [field["name"] for field in profile["columns"]]
     missing = [name for name in names if not str(meanings.get(name, "")).strip()]
@@ -120,33 +107,7 @@ def field_profile(profile: dict, meanings: dict[str, str], *, money_fields: set[
     unknown = set(meanings) - set(names)
     if unknown:
         raise ValueError(f"Meanings name fields not in the file: {', '.join(sorted(unknown))}")
-    rows = []
-    for field in profile["columns"]:
-        role = field["role"]
-        number = money if field["name"] in money_fields else fmt
-        summary = "No usable values" if not field["parsed"] else ""
-        if role == "measure" and "min" in field:
-            summary = (
-                f"Range {number(field['min'])} to {number(field['max'])}; median {number(field['median'])}; "
-                f"5th to 95th percentile {number(field['p05'])} to {number(field['p95'])}; "
-                f"{fmt(field['negatives'])} negative, {fmt(field['zeros'])} zero"
-            )
-        elif role == "date" and "start" in field:
-            summary = f"{field['start']} to {field['end']}"
-        elif field.get("top_values"):
-            summary = "; ".join(f"{item['value']} ({fmt(item['count'])})" for item in field["top_values"])
-            if role == "identifier":
-                summary = f"{fmt(field['duplicates'])} repeated nonblank values; " + summary
-        rows.append([
-            field["name"], meanings[field["name"]], role, fmt(field["blank"]),
-            fmt(field["parse_failures"]), fmt(field["distinct"]), summary,
-        ])
-    return (
-        '<p class="muted">Meanings are what each field appears to hold, pending confirmation from the data owner. '
-        'Blank and unparsed counts are separate. Distinct counts use original nonblank strings; number and date '
-        'summaries use successfully parsed values. Common values show counts, up to five per field.</p>'
-        + table(["Field", "Apparent meaning", "Role", "Blank", "Unparsed", "Distinct", "Summary"], rows)
-    )
+    return table(["Field", "Apparent meaning"], [[name, meanings[name]] for name in names])
 
 
 def card(title: str, visual: str = "", *, observation: str, context: str,
