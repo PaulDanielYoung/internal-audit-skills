@@ -1,6 +1,6 @@
 # HTML report and retained analysis
 
-Write the report for an auditor who has not opened the file. Order: header, what the file contains, observation sections. Add areas for closer examination only when grounded in observations already shown. No section needs to manufacture a finding.
+Write the report for an auditor who has not opened the file. Order: header, what the file contains, data quality, observation sections. Add areas for closer examination only when grounded in observations already shown. No section needs to manufacture a finding.
 
 The helpers in `scripts/report.py` use embedded CSS and SVG, without JavaScript, CDNs, external fonts, or images. Text arguments are escaped. Pass HTML only to `section()` bodies and `card()` visuals, using the helper output; pass dataset values through text arguments or `table()`.
 
@@ -8,7 +8,7 @@ The helpers in `scripts/report.py` use embedded CSS and SVG, without JavaScript,
 
 Save the driver in the OS temporary directory. Use absolute paths for the source CSV and the installed skill; `report_path(SOURCE)` names a fresh report file in the same temporary directory.
 
-This runnable starting point illustrates a calculated missingness observation. Replace the placeholders in angle brackets, set the parsing choices, and adapt the observations to what exploration established. This is not a required chart or a complete exploration by itself.
+This runnable starting point illustrates data quality conditions calculated from the profile. Replace the placeholders in angle brackets, set the parsing choices, add the conditions the assessment found beyond the profile, and adapt the observations to what exploration established. This is not a complete assessment or exploration by itself.
 
 ```python
 # /// script
@@ -42,28 +42,31 @@ assert all(
     for field in profile["columns"]
 )
 
-cards = []
-blank_fields = sorted(
-    [field for field in profile["columns"] if field["blank"]],
-    key=lambda field: field["blank"], reverse=True,
-)
-if blank_fields:
-    shown = blank_fields[:15]
-    # Field counts can overlap: the same record may have several blank cells.
-    blank_records = int(raw.apply(lambda column: column.str.strip().eq("")).any(axis=1).sum())
-    cards.append(r.card(
-        "Source blanks by field",
-        r.chart([field["name"] for field in shown], [field["blank"] for field in shown],
-                title="How many source cells are blank in each field?", unit="cells"),
-        observation=(f"{r.fmt(blank_records)} of {r.fmt(len(raw))} records "
-                     f"({r.pct(blank_records / len(raw))}) have at least one blank cell."),
-        context=(f"All source records. Showing {len(shown)} of {len(blank_fields)} fields with blanks. "
-                 "Counts overlap across fields; conversion failures are reported separately."),
-    ))
+rows = profile["rows"]
+# One (area, field, observation, affected records, why it matters) per condition; area from r.QUALITY_AREAS.
+# Observations are short plain-language phrases. Consistency and coverage conditions come from the assessment, not the profile.
+quality = []
+for field in sorted(profile["columns"], key=lambda field: field["blank"], reverse=True):
+    if field["blank"] == rows:
+        quality.append(("Completeness", field["name"], "Entirely blank", rows,
+                        "<what a reader loses without this field>"))
+    elif field["blank"]:
+        quality.append(("Completeness", field["name"], "Blank", field["blank"],
+                        "<what the blanks change for calculations on this field>"))
+for field in profile["columns"]:
+    if field["parse_failures"]:
+        quality.append(("Validity", field["name"], f"Does not parse as a {field['role']}", field["parse_failures"],
+                        "<what the unparsed values are excluded from>"))
+if profile["duplicate_records"]:
+    quality.append(("Uniqueness", "All fields", "Exact duplicate record", profile["duplicate_records"],
+                    "<what the duplicates change for counts and totals>"))
+
+cards = []  # One r.card() per retained pattern from exploration, with r.chart() or r.table() as its visual.
 
 sections = [
     r.header(profile, TITLE, description=DESCRIPTION),
     r.section("What the file contains", r.field_profile(profile, MEANINGS)),
+    r.section("Data quality", r.data_quality(quality, rows)),
 ]
 if cards:
     sections.append(r.section("Observations", "".join(cards)))
@@ -77,7 +80,8 @@ Run `uv run "<driver path>"`, or use the Python interpreter from the environment
 | Helper | Purpose |
 | --- | --- |
 | `header(profile, title, description=..., facts=...)` | Plain-language title and description, record and field counts plus optional key facts such as "1,668 sites". State a reporting period only when the relevant date field is understood. |
-| `field_profile(profile, meanings)` | All fields in file order with their apparent meaning in plain words. Blanks, conversion failures, roles, and distributions belong in observations, not here. |
+| `field_profile(profile, meanings)` | All fields in file order with their apparent meaning in plain words. Blanks, conversion failures, roles, and distributions belong in data quality or observations, not here. |
+| `data_quality(conditions, rows)` | A subheading and table per area, in `QUALITY_AREAS` order: Completeness, Validity, Uniqueness, Consistency, Coverage. Columns are Field, Observation, Affected records, Why it matters; rows within each area are sorted by affected records, most first. Pass the affected record count; the helper shows it as a percentage of `rows` to one decimal place and leaves out conditions affecting less than `QUALITY_MIN_SHARE` (1%) of records, noting how many under the area. Still pass every condition found. Name every field involved, or "All fields" for whole-record conditions. For a coverage date range, count the records carrying that date. An area with no condition reads as checked with nothing to report. |
 | `section(title, body)` | Group helper-produced HTML. Omit optional sections when they add nothing. |
 | `card(title, visual, observation=..., context=..., interpretation=..., open_question=...)` | One supported observation. Interpretation and open question are optional. |
 | `chart(labels, values, title=..., unit=...)` | Simple horizontal bars with a zero baseline and expandable values table. Aggregate or bin in the driver; pass only finite values. |

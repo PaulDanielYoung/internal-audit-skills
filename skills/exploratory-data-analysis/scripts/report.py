@@ -6,11 +6,15 @@ from __future__ import annotations
 import datetime as dt
 import html
 import math
+import numbers
 import tempfile
 from pathlib import Path
 
 TEMPLATE = Path(__file__).resolve().parent.parent / "assets" / "template.html"
 NA = "n/a"
+QUALITY_AREAS = ("Completeness", "Validity", "Uniqueness", "Consistency", "Coverage")
+# Conditions affecting a smaller share of records are left out of the data quality tables.
+QUALITY_MIN_SHARE = 0.01
 
 
 def esc(value) -> str:
@@ -108,6 +112,45 @@ def field_profile(profile: dict, meanings: dict[str, str]) -> str:
     if unknown:
         raise ValueError(f"Meanings name fields not in the file: {', '.join(sorted(unknown))}")
     return table(["Field", "Apparent meaning"], [[name, meanings[name]] for name in names])
+
+
+def data_quality(conditions: list[tuple[str, str, str, int, str]], rows: int) -> str:
+    """One subheading and table per area in QUALITY_AREAS order.
+
+    conditions: one (area, field, observation, affected, why_it_matters) per condition.
+    field names the field or fields involved, or "All fields"; observation is a short
+    plain-language phrase; affected is the count of records the condition applies to,
+    shown as a percentage of rows. Conditions affecting less than QUALITY_MIN_SHARE of rows are
+    not shown, and a note gives how many were left out. Rows within an area are sorted by affected
+    records, most first; ties keep their given order. An area with no condition says so under its heading.
+    """
+    by_area = {area: [] for area in QUALITY_AREAS}
+    for condition in conditions:
+        if len(condition) != 5:
+            raise ValueError("Each condition needs area, field, observation, affected records, and why it matters.")
+        area, field, observation, affected, why = condition
+        if area not in by_area:
+            raise ValueError(f"Area must be one of: {', '.join(QUALITY_AREAS)}; got {area!r}")
+        if any(not str(cell).strip() for cell in (field, observation, why)):
+            raise ValueError(f"Every text cell of a {area} condition needs text.")
+        if isinstance(affected, bool) or not isinstance(affected, numbers.Integral) or not 0 <= affected <= rows:
+            raise ValueError(f"Affected records must be a record count from 0 to {rows}; got {affected!r}")
+        share = int(affected) / rows if rows else 0.0
+        by_area[area].append((int(affected), share, [field, observation, pct(share), why]))
+    parts = []
+    for area, area_rows in by_area.items():
+        parts.append(f'<h3>{esc(area)}</h3>')
+        shown = [item for item in area_rows if item[1] >= QUALITY_MIN_SHARE]
+        hidden = len(area_rows) - len(shown)
+        if shown:
+            ranked = [row for _, _, row in sorted(shown, key=lambda item: item[0], reverse=True)]
+            parts.append(table(["Field", "Observation", "Affected records", "Why it matters"], ranked))
+        elif not hidden:
+            parts.append('<p class="muted">Checked; nothing to report.</p>')
+        if hidden:
+            noun = "condition" if hidden == 1 else "conditions"
+            parts.append(f'<p class="muted">{hidden} {noun} affecting less than {QUALITY_MIN_SHARE:.0%} of records not shown.</p>')
+    return "".join(parts)
 
 
 def card(title: str, visual: str = "", *, observation: str, context: str,

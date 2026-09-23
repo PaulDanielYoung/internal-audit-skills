@@ -23,9 +23,23 @@ If there are any unresolved questions about the meaning of a field or its values
 
 This step is complete when row and field counts, blanks, and appropriate basic field summaries are established; every field's role has been reviewed and its apparent meaning written in plain words; and the dataset's grain is stated with its basis or flagged as unresolved. An empty table can have a complete profile without supporting further analysis.
 
-## 2. Explore
+## 2. Assess data quality
 
-Follow useful signals from the profile. Examine distributions, concentrations, changes over time, relationships between columns, or concentrations of missing and repeated values when relevant. Choose comparisons that help interpret the pattern and inspect the contributing records. Keep raw values available alongside parsed values; record exclusions and transformations in the script, and state those that change a denominator in the context of the observation they affect.
+Record the observable conditions in the file that could affect how its data is interpreted or analyzed, one condition per row, in five areas:
+
+- **Completeness:** blank cells by field, fields that are entirely blank, and fields far sparser than the rest.
+- **Validity:** values that fail to parse as their apparent type, dates or numbers outside a possible range, and malformed values.
+- **Uniqueness:** exact duplicate records, and repeated values in apparent identifiers or composite keys.
+- **Consistency:** fields that contradict each other within a record, and values that vary within an apparent entity where they should stay constant.
+- **Coverage:** earliest and latest dates and obvious gaps between them. Whether the data are current depends on the expected refresh cycle, which the file does not give; an old latest date is an open question for the user.
+
+Each condition names its field, states the observation as a short plain-language phrase ("Blank", "Placeholder number instead of a resolution"), counts the affected records, and says why it matters: what it changes for a reader who uses the data, such as a denominator that shrinks, a join that fails, or a total that needs affected records excluded.
+
+This step is complete when every area has been checked against the profile and the records, and each condition found is recorded with its field, observation, affected records, and why it matters, or the area is recorded as checked with nothing to report.
+
+## 3. Explore
+
+Follow useful signals from the profile and the data quality conditions. Examine distributions, concentrations, changes over time, relationships between columns, or concentrations of missing and repeated values when relevant. Choose comparisons that help interpret the pattern and inspect the contributing records. Keep raw values available alongside parsed values; record exclusions and transformations in the script, and state those that change a denominator in the context of the observation they affect.
 
 Write each retained pattern with:
 
@@ -35,7 +49,7 @@ Write each retained pattern with:
 
 Exploration is complete when the basic profile has been considered for useful follow-up, each retained pattern is supported by calculations and inspected records, and material unresolved limitations are stated in the observations they affect. Require no minimum number of observations or charts; a short report is appropriate when further exploration adds little.
 
-## 3. Present and verify
+## 4. Present and verify
 
 Read [HTML-REPORT.md](HTML-REPORT.md) for the driver and report helpers. Write the driver in the OS temporary directory with the source path, helper location, interpretation choices, and all calculations behind the report. Derive statements containing numbers from calculated values. Give the report a readable narrative, using tables or embedded charts where they answer a useful question. All styling and visuals must work offline.
 
