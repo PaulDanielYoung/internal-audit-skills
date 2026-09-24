@@ -255,7 +255,13 @@ def line_chart(labels: list, values: list, *, title: str, unit: str = "", decima
         marks.append(f'<circle cx="{px:.2f}" cy="{py:.2f}" r="4" fill="{"#fafaf9" if hollow else "#4f46e5"}" '
                      f'stroke="#4f46e5" stroke-width="2"><title>{esc(label)}: {display_value}</title></circle>')
         if index in labeled:
-            marks.append(f'<text x="{px:.2f}" y="{py - 10:.2f}" text-anchor="middle">{display_value}</text>')
+            anchor, label_x, label_y = "middle", px, py - 10
+            if index == 0:
+                # Start at the point to clear the y-axis tick labels, and sit below a rising line.
+                anchor, label_x = "start", px - 4
+                if values[1] > value:
+                    label_y = py + 20
+            marks.append(f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{anchor}">{display_value}</text>')
         if index in shown:
             lines = [label, "to date"] if hollow else [label]
             marks.append(f'<text text-anchor="middle">{_tspans(lines, px, axis_y)}</text>')
