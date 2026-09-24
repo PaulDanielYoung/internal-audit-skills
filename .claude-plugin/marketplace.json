@@ -1,5 +1,6 @@
 {
   "name": "internal-audit-skills",
+  "description": "Agent skills for internal auditors across audit phases.",
   "owner": {
     "name": "Paul Young"
   },
