@@ -24,7 +24,7 @@ Identify the affected selection/cells and request values-only data or another se
 
 ## Interpret cells
 
-`raw` retains typed XLSX values, including text, numbers, booleans, dates, times, durations, missing cells, and error codes. `raw.attrs["cells"]` maps source cell addresses to their Excel types and number formats. Each profile field summarizes types and non-General formats with counts and examples. Review these alongside raw values before deciding roles.
+`raw` retains typed XLSX values, including text, numbers, booleans, dates, times, durations, missing cells, and error codes. Each profile field summarizes Excel cell types and non-General number formats with counts and examples. `raw.attrs["cells"]` lists the exceptions: the addresses of non-empty cells whose type or number format differs from their field's most common one, up to 100 per field. Review these alongside raw values before deciding roles.
 
 - Preserve text identifiers exactly, including leading zeros. Analyze numeric values at their stored precision. Formatting such as `00000`, percentages, or currency is interpretation evidence; it does not authorize rounding, padding, or scaling. Resolve formatting that materially changes a field's meaning before calculating with it, and retain any agreed transformation in the driver.
 - Native dates use the workbook's date system, recorded in `profile["source"]["date_epoch"]`. A date-format override applies to text cells; native dates retain their meaning. Numeric cells are not guessed to be date serials. Time-only values and durations remain distinct from calendar dates; establish their role and units before deriving measures from them.

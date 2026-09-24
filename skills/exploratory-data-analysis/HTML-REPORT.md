@@ -44,7 +44,7 @@ r = Report(
     },
 )
 
-# Data quality: one call per condition found. Consistency and coverage come from the assessment, not the profile.
+# Data quality: one call per condition found. Coverage, and consistency beyond formats, come from the assessment, not the profile.
 for field in profile["columns"]:
     if rows and field["blank"] == rows:
         r.quality("Completeness", field["name"], "Entirely blank", rows, "<what a reader loses without this field>")
@@ -56,6 +56,12 @@ for field in profile["columns"]:
     if field["source_errors"]:
         r.quality("Validity", field["name"], "Excel error value", field["source_errors"],
                   "<what the invalid values are excluded from>")
+    if shapes := field.get("value_shapes"):
+        r.quality("Consistency", field["name"], "Mixed identifier formats", field["parsed"] - shapes["shapes"][0]["records"],
+                  "<where the less common shapes occur and what they change for joins and distinct counts>")
+    if variants := field.get("case_variants"):
+        r.quality("Consistency", field["name"], "Same value in different case or spacing", variants["count"],
+                  "<which counts the variants split>")
 if profile["blank_records"]:
     r.quality("Completeness", "All fields", "Entirely blank record", profile["blank_records"],
               "<how retained blank records affect the population and denominators>")
@@ -84,7 +90,7 @@ Numbers in prose carry their units; invented examples are $12.5M, 1.25M service 
 
 `bar_chart()`, `line_chart()`, and `pie_chart()` draw the chart types that step 3 of [SKILL.md](SKILL.md) chooses between; each docstring states its limits. `bar_chart()` takes at most 12 bars; labels wrap beneath their bars, or tilt when a word is too long to fit. `line_chart()` takes every period in the range, in chronological order, with zero for an empty one, and `partial_last=True` draws an incomplete final period dashed and marked "to date". `pie_chart()` takes at most five non-negative parts of one whole and rejects more. Set `decimals` to choose display precision for non-integral value labels and tooltips (for example, `decimals=1` for service hours); the default is 2, integral values have no decimal places, and the marks use the supplied values without rounding. An observation's supporting table is a sample of the evidence: only the columns the prose cites, and a caption naming the selection and its share of the population, such as the invented "Longest 5 of 48 service requests awaiting assignment".
 
-Record each date field's span with `r.coverage(field, start, end, dated, why_it_matters)`, taking start and end from the valid values and `dated` as the count of records carrying the date; record gaps within the span with `r.quality("Coverage", ...)`. State a reporting period in the header facts only when the relevant date field is understood.
+Record each date field's span with `r.coverage(field, start, end, dated, why_it_matters)`, taking start and end from the valid values and `dated` as the count of records carrying the date; record gaps within the span with `r.quality("Coverage", ...)`. State a reporting period in the header facts only when the relevant date field is understood. A period stored as a label, such as `FY24 JUL-DEC` or `2023-Q3`, profiles as a category: map each label to its calendar start in the driver, order and gap-check the periods from that mapping, and state the fiscal-year convention the mapping assumes, with its basis.
 
 Identify inspected CSV records using the profiler's one-based data-record index or a source identifier. CSV record indexes exclude the header and empty lines outside quoted fields; they are not physical line numbers when cells contain line breaks. For XLSX, use the worksheet row or cell address from source metadata; the Report automatically displays the selected worksheet/range and visibility and totals exclusions.
 
