@@ -1,36 +1,118 @@
-"""Read one source table without changing the file or reshaping its records."""
+"""Read one source table without changing the file or reshaping its records.
+
+SourceTable is the interface: raw values, error flags, the source facts a profile carries,
+locations, duplicate identity, the text form of every field, and per-field facts. The CSV
+and XLSX adapters differ behind it. locate() turns a record into reader words from the
+source facts alone, so a driver can identify a record with only the profile in hand.
+"""
 from __future__ import annotations
 
 import csv
-from dataclasses import dataclass, field
 from pathlib import Path
 
 import pandas as pd
 
 # Cells listed per field whose type or number format differs from the field's usual one.
-CELL_EXCEPTIONS_MAX = 100
+CELL_EXCEPTION_EXAMPLES = 10
 
 
-@dataclass
+def _location(source: dict, columns: list[str], record: int, field: str | None = None) -> dict:
+    if source["format"] == "csv":
+        return {"record": int(record)}
+    from openpyxl.utils import get_column_letter
+
+    row = source["header_row"] + int(record)
+    result = {"record": int(record), "sheet": source["sheet"], "row": row}
+    if field is not None:
+        column = source["first_column"] + columns.index(field)
+        result["cell"] = f"{get_column_letter(column)}{row}"
+    return result
+
+
+def locate(source: dict, columns: list[str], record: int, field: str | None = None) -> str:
+    """A record's place in the source, in the reader's words: "record 12" for a CSV, and
+    "row 14" or, with a field, "cell C14" for a worksheet. source is profile["source"] and
+    columns the profile's field names in order."""
+    where = _location(source, columns, record, field)
+    if "cell" in where:
+        return f"cell {where['cell']}"
+    if "row" in where:
+        return f"row {where['row']}"
+    return f"record {where['record']}"
+
+
 class SourceTable:
-    raw: pd.DataFrame
-    source: dict
-    errors: pd.DataFrame
-    formats: dict
-    cell_types: dict
-    cell_metadata: dict = field(default_factory=dict)
+    """One selected table, read in place.
+
+    raw holds the source values with a one-based record index; errors flags typed error
+    cells. source holds the facts the profile carries about the selection, including
+    reader-facing disclosures. Adapters implement duplicate_records(), texts(), and
+    field_facts(); location() is shared.
+    """
+
+    def __init__(self, raw: pd.DataFrame, source: dict, errors: pd.DataFrame):
+        self.raw = raw
+        self.source = source
+        self.errors = errors
 
     def location(self, record: int, field: str | None = None) -> dict:
-        if self.source["format"] == "csv":
-            return {"record": int(record)}
-        from openpyxl.utils import get_column_letter
+        """The structured location the profile's examples carry."""
+        return _location(self.source, list(self.raw.columns), record, field)
 
-        row = self.source["header_row"] + int(record)
-        result = {"record": int(record), "sheet": self.source["sheet"], "row": row}
-        if field is not None:
-            column = self.source["first_column"] + self.raw.columns.get_loc(field)
-            result["cell"] = f"{get_column_letter(column)}{row}"
-        return result
+    def duplicate_records(self) -> int:
+        """Records identical to an earlier record, by the adapter's notion of identity."""
+        raise NotImplementedError
+
+    def texts(self) -> pd.DataFrame:
+        """Every field as text, with missing cells as missing, for pattern work."""
+        raise NotImplementedError
+
+    def entity_values(self) -> pd.DataFrame:
+        """Every field as text with missing cells as empty strings, for entity grouping."""
+        return pd.DataFrame({name: text.fillna("") for name, text in self.texts().items()})
+
+    def field_facts(self, name: str) -> dict:
+        """Facts about one field only this source format can give, for its profile entry."""
+        return {}
+
+
+class CsvTable(SourceTable):
+    def duplicate_records(self) -> int:
+        return int(self.raw.duplicated().sum())
+
+    def texts(self) -> pd.DataFrame:
+        return self.raw
+
+
+class XlsxTable(SourceTable):
+    def __init__(self, raw, source, errors, *, formats: dict, cell_types: dict, exceptions: dict):
+        super().__init__(raw, source, errors)
+        self._formats = formats
+        self._cell_types = cell_types
+        self._exceptions = exceptions
+
+    def duplicate_records(self) -> int:
+        # A number and its text form are different cells; so are an error and its text.
+        keys = [tuple((type(value).__name__, _scalar(value), bool(error)) for value, error in zip(row, errors))
+                for row, errors in zip(self.raw.itertuples(index=False, name=None),
+                                       self.errors.itertuples(index=False, name=None))]
+        return len(keys) - len(set(keys))
+
+    def texts(self) -> pd.DataFrame:
+        return pd.DataFrame({name: self.raw[name].map(lambda value: None if pd.isna(value) else str(value)).astype("string")
+                             for name in self.raw.columns})
+
+    def field_facts(self, name: str) -> dict:
+        facts = {"number_formats": self._formats[name], "cell_types": self._cell_types[name]}
+        if exceptions := self._exceptions.get(name):
+            facts["cell_exceptions"] = exceptions
+        return facts
+
+
+def _scalar(value):
+    if hasattr(value, "item"):
+        return value.item()
+    return value
 
 
 def read_csv(path: Path, encoding: str = "utf-8-sig") -> SourceTable:
@@ -54,8 +136,12 @@ def read_csv(path: Path, encoding: str = "utf-8-sig") -> SourceTable:
             records.append(record)
     raw = pd.DataFrame(records, columns=header, dtype="string")
     raw.index = pd.RangeIndex(1, len(raw) + 1, name="record")
-    return SourceTable(raw, {"format": "csv", "empty_lines_skipped": skipped},
-                       pd.DataFrame(False, index=raw.index, columns=raw.columns), {}, {})
+    disclosures = []
+    if skipped:
+        noun = "line" if skipped == 1 else "lines"
+        disclosures.append(f"{skipped} empty {noun} outside quoted fields {'was' if skipped == 1 else 'were'} skipped.")
+    source = {"format": "csv", "encoding": encoding, "disclosures": disclosures}
+    return CsvTable(raw, source, pd.DataFrame(False, index=raw.index, columns=raw.columns))
 
 
 def _bounds(reference: str) -> tuple[int, int, int, int]:
@@ -113,6 +199,28 @@ def inspect_xlsx(path: str | Path) -> dict:
         return {"file": Path(path).name, "sheets": sheets}
     finally:
         workbook.close()
+
+
+def _xlsx_disclosures(file: str, source: dict) -> list[str]:
+    """What a reader of the report must know about the selection, in plain sentences."""
+    notes = [f"Source: {file}, worksheet {source['sheet']}, range {source['range']}."]
+    if source["table"]:
+        notes.append(f"Excel Table: {source['table']}.")
+    notes.append("All rows and columns in the selected data range are included, regardless of visibility or filters.")
+    if source["sheet_state"] != "visible":
+        notes.append("The selected worksheet is hidden.")
+    if source["hidden_rows_included"] or source["hidden_columns_included"]:
+        rows, columns = len(source["hidden_rows_included"]), len(source["hidden_columns_included"])
+        notes.append(f"Included {rows} hidden data row{'s' if rows != 1 else ''} and "
+                     f"{columns} hidden column{'s' if columns != 1 else ''}.")
+    if source["filters"]:
+        active = any(item["criteria_present"] for item in source["filters"])
+        notes.append("Saved filter criteria overlap the selection." if active
+                     else "Filter controls are present without saved criteria.")
+    if source["totals_rows_excluded"]:
+        rows = ", ".join(str(row) for row in source["totals_rows_excluded"])
+        notes.append(f"Declared Table totals row excluded from records: {rows}.")
+    return notes
 
 
 def read_xlsx(path: Path, *, sheet: str | None, table: str | None,
@@ -228,21 +336,22 @@ def read_xlsx(path: Path, *, sheet: str | None, table: str | None,
         raw = pd.DataFrame(values, columns=header, dtype=object)
         raw.index = pd.RangeIndex(1, len(raw) + 1, name="record")
         errors = pd.DataFrame(error_flags, index=raw.index, columns=header, dtype=bool)
-        # Keep addresses only for non-empty cells whose type or number format differs from
-        # their column's most common one; the per-field summaries cover the rest.
-        cell_metadata = {}
+        # Non-empty cells whose type or number format differs from their column's most
+        # common one: a count and a few addresses; the per-field summaries cover the rest.
+        exceptions = {}
         for offset, style in enumerate(styles):
             if len(style) < 2:
                 continue
             usual = max(style, key=style.get)
-            listed = 0
+            count, examples = 0, []
             for row in body:
                 cell = row[offset]
                 if cell.value is not None and (cell.data_type, cell.number_format) != usual:
-                    cell_metadata[cell.coordinate] = {"type": cell.data_type, "number_format": cell.number_format}
-                    listed += 1
-                    if listed == CELL_EXCEPTIONS_MAX:
-                        break
+                    count += 1
+                    if len(examples) < CELL_EXCEPTION_EXAMPLES:
+                        examples.append({"cell": cell.coordinate, "type": cell.data_type,
+                                         "number_format": cell.number_format})
+            exceptions[header[offset]] = {"count": count, "examples": examples}
         formats = dict(zip(header, formats))
         types = dict(zip(header, types))
         hidden_rows = [row for row in range(top + 1, bottom - totals + 1)
@@ -264,17 +373,21 @@ def read_xlsx(path: Path, *, sheet: str | None, table: str | None,
             "hidden_rows_included": hidden_rows, "hidden_columns_included": sorted(set(hidden_columns)),
             "filters": filters, "date_epoch": workbook.epoch.isoformat(),
         }
-        return SourceTable(raw, source, errors, formats, types, cell_metadata)
+        source["disclosures"] = _xlsx_disclosures(path.name, source)
+        return XlsxTable(raw, source, errors, formats=formats, cell_types=types, exceptions=exceptions)
     finally:
         workbook.close()
 
 
-def read_table(path: Path, *, encoding: str = "utf-8-sig", sheet: str | None = None,
+def read_table(path: Path, *, encoding: str | None = None, sheet: str | None = None,
                table: str | None = None, cell_range: str | None = None) -> SourceTable:
+    """The adapter for one file: CSV takes an encoding; XLSX takes a selection."""
     if path.suffix.lower() == ".csv":
         if sheet or table or cell_range:
             raise ValueError("Worksheet, Table and range selections apply only to XLSX files.")
-        return read_csv(path, encoding)
+        return read_csv(path, encoding or "utf-8-sig")
     if path.suffix.lower() == ".xlsx":
+        if encoding:
+            raise ValueError("An encoding applies only to CSV files; XLSX cells carry their own types.")
         return read_xlsx(path, sheet=sheet, table=table, cell_range=cell_range)
     raise ValueError("Provide one .csv or .xlsx file.")

@@ -17,11 +17,11 @@ Use the auditor's chosen workspace root, otherwise the parent of `engagements/` 
 
 ## 1. Orient and profile
 
-Run `uv run "<skill directory>/scripts/profile_table.py" "<source path>"` with any XLSX selection options, and read the printed summary and the temporary JSON profile. Without uv, the scripts need Python 3.10+ with `pandas>=2.0,<4` and `openpyxl>=3.1.5,<4`, plus `pillow>=10` for rendering in step 5. Use an available interpreter when `python -c "import pandas, openpyxl, PIL; print(pandas.__version__, openpyxl.__version__, PIL.__version__)"` shows versions within those pins; otherwise create a virtual environment in the OS temporary directory and install them there. Run every script with that one interpreter. Script paths are relative to the skill directory, not the working directory; `--help` describes selection and parsing overrides.
+Run `uv run "<skill directory>/scripts/profile_table.py" "<source path>"` with any XLSX selection options, and read the printed summary and the temporary JSON profile. Without uv, the scripts need Python 3.10+ with the dependencies pinned in the script headers of `profile_table.py` and, for rendering in step 5, `render_report.py`. Use an available interpreter when `python -c "import pandas, openpyxl, PIL; print(pandas.__version__, openpyxl.__version__, PIL.__version__)"` shows versions within those pins; otherwise create a virtual environment in the OS temporary directory and install them there. Run every script with that one interpreter. Script paths are relative to the skill directory, not the working directory; `--help` describes selection and parsing overrides.
 
 The summary also names an exploration cache: `pandas.read_pickle` on it returns `(raw, data, profile)`. Load it in ad-hoc exploration scripts rather than re-reading a large source; the driver still profiles the source itself.
 
-Review every field's apparent role against its name and raw values, and inspect the failure and source-error examples before using parsed values. A `date_format_hint` lists the non-ISO date formats a field's values fit; confirm one against the raw values, and treat a hint that fits both month-first and day-first as an unresolved question about the field. Correct roles and date formats by rerunning the profiler with overrides; the driver must repeat the same source selection and interpretation choices.
+Review every field's apparent role against its name and raw values, and inspect the failure and source-error examples before using parsed values. A `date_format_hint` lists the non-ISO date formats a field's values fit; confirm one against the raw values, and treat a hint that fits both month-first and day-first as an unresolved question about the field. Correct roles and date formats by rerunning the profiler with overrides. The summary ends with a `choices` line holding the selection and overrides it applied; the driver pastes that line unchanged.
 
 The profile's `entity_fields` names each identifier whose keys repeat, with the fields that never vary within a key. It is evidence for the grain: those fields describe the entity rather than the record, so count or total them once per entity. When the file spans several periods, a constant field that could plausibly change over time, such as a department, location, or name, is likely the entity's current value rather than its value in each period; breakdowns by it then describe the present, which belongs in the limitations. A status, flag, or amount can also belong to a grain above the record that no single identifier names, such as one report covering several projects. When such a field repeats across records, test the plausible composite grouping (for example, person and period) for fields that stay constant within it, and state that grain beside the record's.
 
@@ -41,9 +41,9 @@ Record the observable conditions in the file that could affect how its data is i
 
 State each observation as a short plain-language phrase ("Blank", "Placeholder number instead of a resolution"), and say why it matters: what it changes for a reader who uses the data, such as a denominator that shrinks, a join that fails, or a total that needs affected records excluded.
 
-Record every condition found with `Report.quality()`, and the span of each date or period field with `Report.coverage()`. For a condition whose impact merits attention despite affecting few records, set `always_show=True` and explain that impact in `why_it_matters`; the report otherwise collapses conditions below its display threshold. Record a check that found nothing, such as a composite key tested for repeats, with `Report.checked()`.
+The Report derives the mechanical conditions and each date field's coverage span from the profile; explain every one with `Report.explain()`, including a condition expected for its field. Record each judged condition, such as a confirmed placeholder or a second identifier scheme, with `Report.quality()`, and the span of a period stored as a label with `Report.coverage()`. For a condition whose impact merits attention despite affecting few records, set `always_show=True` and explain that impact in `why_it_matters`; the report otherwise collapses conditions below its display threshold. Record a check that found nothing, such as a composite key tested for repeats, with `Report.checked()`.
 
-This step is complete when every area has been checked against the profile and the records, and each condition found is recorded with `Report.quality()` and each check that found nothing with `Report.checked()`.
+This step is complete when every area has been checked against the profile and the records, every mechanical condition and span is explained, each judged condition is recorded with `Report.quality()`, and each check that found nothing with `Report.checked()`.
 
 ## 3. Build the data overview
 
@@ -53,11 +53,11 @@ Each retained question gets one chart suited to it, a descriptive takeaway, and 
 
 Choose the chart type from the question it answers:
 
-- **Bar chart:** compares distinct items or groups, such as departments or categories: which is bigger or smaller. At most 12 bars, including any Other.
+- **Bar chart:** compares distinct items or groups, such as departments or categories: which is bigger or smaller.
 - **Line chart:** shows change, flow, or progression over time, such as daily traffic or monthly revenue over a year.
-- **Pie chart:** shows the parts of one whole, in at most five slices including any Other.
+- **Pie chart:** shows the parts of one whole.
 
-Record exclusions and transformations in the driver, and apply unresolved limitations to the choice of measures and calculations.
+Bar and pie charts fold a long tail of groups into Other themselves and report what they folded; say so in the chart's context, and when Other outweighs the largest group shown, say in the takeaway that the field is spread thinly. Record exclusions and transformations in the driver, and apply unresolved limitations to the choice of measures and calculations.
 
 This step is complete when the important fields have been considered for useful descriptive questions, each retained question has a rendered chart supported by calculations, and its chart and prose agree. If the file supports no meaningful overview, say why instead.
 

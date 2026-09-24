@@ -14,7 +14,7 @@ Header names must be unique, nonblank text. Merged cells intersecting the select
 
 An explicit range retains every data row inside it, including entirely blank rows. Automatic discovery trims unused space around the table. An Excel Table's declared totals row is excluded from record counts and disclosed in the report. Clarify suspected subtotal rows in ordinary ranges before choosing boundaries; a label such as “Total” alone is insufficient to remove a record.
 
-Include hidden rows and columns and rows concealed by filters. The profile records visibility, overlapping filter ranges, and saved criteria; the Report discloses them. If the user requests only visible records, resolve a supported explicit data selection before proceeding.
+Include hidden rows and columns and rows concealed by filters. The profile records visibility, overlapping filter ranges, and saved criteria, and its source disclosures state them for the reader. If the user requests only visible records, resolve a supported explicit data selection before proceeding.
 
 ## Enforce values-only scope
 
@@ -24,10 +24,10 @@ Identify the affected selection/cells and request values-only data or another se
 
 ## Interpret cells
 
-`raw` retains typed XLSX values, including text, numbers, booleans, dates, times, durations, missing cells, and error codes. Each profile field summarizes Excel cell types and non-General number formats with counts and examples. `raw.attrs["cells"]` lists the exceptions: the addresses of non-empty cells whose type or number format differs from their field's most common one, up to 100 per field. Review these alongside raw values before deciding roles.
+`raw` retains typed XLSX values, including text, numbers, booleans, dates, times, durations, missing cells, and error codes. Each profile field summarizes Excel cell types and non-General number formats with counts and examples, and its `cell_exceptions` count the non-empty cells whose type or number format differs from the field's most common one, with up to ten addresses. Review these alongside raw values before deciding roles.
 
 - Preserve text identifiers exactly, including leading zeros. Analyze numeric values at their stored precision. Formatting such as `00000`, percentages, or currency is interpretation evidence; it does not authorize rounding, padding, or scaling. Resolve formatting that materially changes a field's meaning before calculating with it, and retain any agreed transformation in the driver.
 - Native dates use the workbook's date system, recorded in `profile["source"]["date_epoch"]`. A date-format override applies to text cells; native dates retain their meaning. Numeric cells are not guessed to be date serials. Time-only values and durations remain distinct from calendar dates; establish their role and units before deriving measures from them.
 - Typed Excel errors are invalid source values, distinct from blank cells and literal text such as `"#N/A"`. The profile counts `source_errors` separately, retains codes and cell addresses in `error_examples`, and masks errors in `data` for every role. Report these under Validity and explain their exclusion from calculations requiring valid values. Literal error-looking text follows the ordinary placeholder assessment.
 
-For every field, `blank + source_errors + parse_failures + parsed == rows`. Entirely blank data rows remain in that denominator. Source record indexes begin at one after the header; worksheet row is `header_row + record`. The profile's `source`, samples, and failure/error examples retain worksheet coordinates. Use worksheet rows or cell addresses when identifying Excel records to the reader.
+For every field, `blank + source_errors + parse_failures + parsed == rows`. Entirely blank data rows remain in that denominator. Source record indexes begin at one after the header. The profile's samples and failure/error examples retain worksheet coordinates, and `locate()` gives a record's worksheet row or cell in the reader's words. The report's header carries the selection, visibility, filter, and totals-row disclosures the source adapter wrote.
