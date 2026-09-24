@@ -12,6 +12,7 @@ No browser, network, JavaScript, or external asset is needed to read the result.
 from __future__ import annotations
 
 import datetime as dt
+from dataclasses import dataclass
 import html
 import math
 import numbers
@@ -22,6 +23,8 @@ from pathlib import Path
 
 TEMPLATE = Path(__file__).resolve().parent.parent / "assets" / "template.html"
 NA = "n/a"
+# The field name of a whole-record condition, such as an entirely blank record.
+ALL_FIELDS = "All fields"
 QUALITY_AREAS = ("Completeness", "Validity", "Uniqueness", "Consistency", "Coverage")
 # Default display threshold; a material condition can opt in with always_show=True.
 QUALITY_MIN_SHARE = 0.01
@@ -364,6 +367,76 @@ def _section(title: str, body: str) -> str:
     return f'<section><h2>{esc(title)}</h2>{body}</section>'
 
 
+# --- Mechanical conditions and coverage spans --------------------------------------------
+
+@dataclass(frozen=True)
+class Condition:
+    """One data quality condition Report derived from the profile. The driver explains it
+    with Report.explain(field, kind, why_it_matters); the field, area, observation, and
+    affected count are settled."""
+    field: str
+    kind: str
+    area: str
+    observation: str
+    affected: int
+
+    @property
+    def key(self) -> tuple[str, str]:
+        return (self.field, self.kind)
+
+
+@dataclass(frozen=True)
+class Span:
+    """The reach of one date field, derived from the profile: its earliest and latest valid
+    values and the count of records carrying one. The driver explains it with
+    Report.explain(field, "span", why_it_matters)."""
+    field: str
+    start: str
+    end: str
+    records: int
+
+    @property
+    def key(self) -> tuple[str, str]:
+        return (self.field, "span")
+
+
+_PARSE_NOUNS = {"measure": "number", "date": "date", "year": "year", "month": "month"}
+
+
+def _mechanical(profile: dict) -> tuple[list[Condition], list[Span]]:
+    """Every condition and span the profile establishes without judgment, in field order."""
+    rows = profile["rows"]
+    conditions, spans = [], []
+    for field in profile["columns"]:
+        name, role = field["name"], field["role"]
+        if rows and field["blank"] == rows:
+            conditions.append(Condition(name, "blank_field", "Completeness", "Entirely blank", rows))
+        elif field["blank"]:
+            conditions.append(Condition(name, "blank", "Completeness", "Blank", field["blank"]))
+        if field["parse_failures"]:
+            noun = _PARSE_NOUNS.get(role, role)
+            conditions.append(Condition(name, "unparsed", "Validity", f"Does not parse as a {noun}", field["parse_failures"]))
+        if field["source_errors"]:
+            conditions.append(Condition(name, "source_error", "Validity", "Excel error value", field["source_errors"]))
+        if field.get("outside_range"):
+            low, high = field["expected_range"]
+            conditions.append(Condition(name, "outside_range", "Validity", f"Outside {low} to {high}", field["outside_range"]))
+        if variants := field.get("case_variants"):
+            conditions.append(Condition(name, "case_variants", "Consistency",
+                                        "Same value in different case or spacing", variants["count"]))
+        if field.get("duplicates"):
+            conditions.append(Condition(name, "duplicate_id", "Uniqueness", "Repeated identifier value", field["duplicates"]))
+        if role == "date" and field.get("start") and field.get("end") and field["parsed"]:
+            spans.append(Span(name, field["start"], field["end"], field["parsed"]))
+    if profile["blank_records"]:
+        conditions.append(Condition(ALL_FIELDS, "blank_record", "Completeness", "Entirely blank record", profile["blank_records"]))
+    if profile["duplicate_records"]:
+        conditions.append(Condition(ALL_FIELDS, "duplicate_record", "Uniqueness", "Exact duplicate record", profile["duplicate_records"]))
+    return conditions, spans
+
+
+# --- The report ------------------------------------------------------------------------
+
 class Report:
     """One report, assembled in a fixed order when written.
 
@@ -375,6 +448,9 @@ class Report:
     description: one or two sentences on what the data is and what one record represents.
     meanings: one sentence per field on what it appears to hold; every field is required.
     facts: optional key figures shown beside the record and field counts, e.g. "240 service teams".
+
+    On construction the report derives its mechanical conditions and coverage spans from the
+    profile; read them from conditions and spans, and explain every one before write().
     """
 
     def __init__(self, profile: dict, title: str, *, description: str,
@@ -389,11 +465,15 @@ class Report:
         if unknown:
             raise ValueError(f"Meanings name fields not in the file: {', '.join(sorted(unknown))}")
         self._profile = profile
+        self._fields = set(names)
         self._title = str(title)
         self._description = str(description)
         self._meanings = {name: meanings[name] for name in names}
         self._facts = tuple(facts)
+        self.conditions, self.spans = _mechanical(profile)
+        self._explained: dict[tuple[str, str], tuple[str, bool]] = {}
         self._quality: list[tuple[str, int, bool, list]] = []
+        self._spans: list[tuple[int, list]] = []
         self._checked: dict[str, list[str]] = {area: [] for area in QUALITY_AREAS}
         self._overview: list[str] = []
         self._no_overview = ""
@@ -402,27 +482,52 @@ class Report:
 
     # -- Adding content ----------------------------------------------------------------
 
+    def _check_field(self, field: str) -> str:
+        if field != ALL_FIELDS and field not in self._fields:
+            raise ValueError(f"Unknown field {field!r}; name a field in the file or use ALL_FIELDS.")
+        return field
+
+    def _check_count(self, count: int, what: str) -> int:
+        rows = self._profile["rows"]
+        if isinstance(count, bool) or not isinstance(count, numbers.Integral) or not 0 <= count <= rows:
+            raise ValueError(f"{what} must be a record count from 0 to {rows}; got {count!r}")
+        return int(count)
+
+    def explain(self, field: str, kind: str, why_it_matters: str, *, always_show: bool = False) -> None:
+        """Explain one mechanical condition or coverage span, identified by its field and
+        kind (a Condition's kind, or "span"). why_it_matters says what the condition changes
+        for a reader who uses the data; a condition expected for the field, such as blanks in
+        an optional note, is explained as expected rather than left out. always_show keeps a
+        material condition visible below QUALITY_MIN_SHARE."""
+        keys = {item.key for item in (*self.conditions, *self.spans)}
+        if (field, kind) not in keys:
+            listed = ", ".join(f"{f}/{k}" for f, k in sorted(keys)) or "none"
+            raise ValueError(f"No mechanical condition or span {field!r}/{kind!r}; this report has: {listed}")
+        if not str(why_it_matters).strip():
+            raise ValueError(f"Explain why {field!r}/{kind!r} matters.")
+        if not isinstance(always_show, bool):
+            raise ValueError("always_show must be a boolean.")
+        if (field, kind) in self._explained:
+            raise ValueError(f"{field!r}/{kind!r} is already explained.")
+        self._explained[(field, kind)] = (str(why_it_matters), always_show)
+
     def quality(self, area: str, field: str, observation: str, affected: int, why_it_matters: str,
                 *, always_show: bool = False) -> None:
-        """One data quality condition. area is one of QUALITY_AREAS; field names the field
-        or fields involved, or "All fields" for whole-record conditions; observation is a
-        short plain-language phrase; affected is the count of records the condition applies
-        to, shown with its percentage of the file's records. Add every condition found: those
-        under QUALITY_MIN_SHARE are collapsed beneath the area's table by default.
-        Set always_show=True for a material condition that merits a visible row even
-        below that display threshold, explaining its impact in why_it_matters."""
-        rows = self._profile["rows"]
+        """One data quality condition the assessment found beyond the mechanical ones. area
+        is one of QUALITY_AREAS; field names the field involved, or ALL_FIELDS for whole-record
+        conditions; observation is a short plain-language phrase; affected is the count of
+        records the condition applies to, shown with its percentage of the file's records.
+        Conditions under QUALITY_MIN_SHARE are collapsed beneath the area's table; set
+        always_show=True for a material condition that merits a visible row regardless."""
         if area not in QUALITY_AREAS:
             raise ValueError(f"Area must be one of: {', '.join(QUALITY_AREAS)}; got {area!r}")
         if any(not str(cell).strip() for cell in (field, observation, why_it_matters)):
             raise ValueError(f"Every text cell of a {area} condition needs text.")
-        if isinstance(affected, bool) or not isinstance(affected, numbers.Integral) or not 0 <= affected <= rows:
-            raise ValueError(f"Affected records must be a record count from 0 to {rows}; got {affected!r}")
         if not isinstance(always_show, bool):
             raise ValueError("always_show must be a boolean.")
-        share = int(affected) / rows if rows else 0.0
-        affected_cell = f"{fmt(affected)} ({pct(share)})"
-        self._quality.append((area, int(affected), always_show, [field, observation, affected_cell, why_it_matters]))
+        self._check_field(field)
+        affected = self._check_count(affected, "Affected records")
+        self._quality.append((area, affected, always_show, [field, observation, self._share_cell(affected), why_it_matters]))
 
     def checked(self, area: str, note: str) -> None:
         """A check in one area that found nothing to record, stated so the reader knows it
@@ -434,32 +539,31 @@ class Report:
         self._checked[area].append(str(note))
 
     def coverage(self, field: str, start, end, records: int, why_it_matters: str) -> None:
-        """The span of one date or period field, always shown under Coverage. start and end
-        are the earliest and latest values in the words the reader should see: a date, a
-        year, or text such as "November 1911" or "Jan–Jun 2020". records is the count of
-        records carrying a valid value in the field. Record gaps within the span with
-        quality("Coverage", ...)."""
-        rows = self._profile["rows"]
+        """The span of one period field the profile could not derive, such as labels like
+        "FY24 JUL-DEC" mapped to calendar order in the driver. start and end are the earliest
+        and latest values in the words the reader should see; records is the count of records
+        carrying a valid value. Date fields' spans are mechanical: explain them instead.
+        Record gaps within any span with quality("Coverage", ...)."""
         if any(not str(cell).strip() for cell in (field, start, end, why_it_matters)):
             raise ValueError("A coverage row needs a field, a start, an end, and why it matters.")
-        if isinstance(records, bool) or not isinstance(records, numbers.Integral) or not 0 <= records <= rows:
-            raise ValueError(f"Coverage records must be a record count from 0 to {rows}; got {records!r}")
+        self._check_field(field)
+        records = self._check_count(records, "Coverage records")
         def label(value) -> str:
             if isinstance(value, dt.date):
                 return value.strftime("%d %b %Y")
             if isinstance(value, numbers.Real) and float(value).is_integer():
                 return str(int(value))  # a year, without a thousands separator
             return str(value)
-        share = int(records) / rows if rows else 0.0
-        self._quality.append(("Coverage", int(records), True, [
-            field, f"Spans {label(start)} to {label(end)}", f"{fmt(records)} with a value ({pct(share)})", why_it_matters,
-        ]))
+        self._spans.append((records, [field, f"Spans {label(start)} to {label(end)}",
+                                      self._records_cell(records), why_it_matters]))
 
     def overview(self, question: str, chart: str, *, takeaway: str, context: str) -> None:
         """One descriptive question answered by exactly one SVG chart, a takeaway, and the
         context needed to read the chart correctly. Tables and dropdowns are rejected."""
         if any(not value.strip() for value in (question, chart, takeaway, context)):
             raise ValueError("An overview needs a question, chart, takeaway, and context.")
+        if self._no_overview:
+            raise ValueError("A report has overview items or a reason there are none, not both.")
         markup = _MarkupTags()
         markup.feed(chart)
         if markup.tags.count("svg") != 1 or {"table", "details", "summary"}.intersection(markup.tags):
@@ -474,6 +578,8 @@ class Report:
         but no records. Only for a report with no overview items."""
         if not reason.strip():
             raise ValueError("Give the reason the file supports no overview.")
+        if self._overview or self._no_overview:
+            raise ValueError("A report has overview items or one reason there are none; this one already has one.")
         self._no_overview = reason
 
     def observation(self, title: str, visual: str = "", *, noticed: str, why_it_matters: str,
@@ -500,15 +606,23 @@ class Report:
     def limitation(self, note: str) -> None:
         """A material constraint on interpretation, listed once at the end of the report.
         Refer to an observation by title when it carries the full investigation."""
-        if note.strip():
-            self._limitations.append(note)
+        if not str(note).strip():
+            raise ValueError("A limitation needs text.")
+        self._limitations.append(str(note))
 
     # -- Writing -----------------------------------------------------------------------
 
     def write(self, path: str | Path | None = None) -> Path:
         """Write the complete offline report and return its path. Without a path, a fresh
         timestamped .html file in the OS temporary directory, named after the source stem.
-        The source is never written."""
+        The source is never written. Fails while any mechanical condition or span is
+        unexplained, or the overview is neither built nor declined."""
+        unexplained = [item.key for item in (*self.conditions, *self.spans) if item.key not in self._explained]
+        if unexplained:
+            listed = ", ".join(f"{field}/{kind}" for field, kind in unexplained)
+            raise ValueError(f"Explain every mechanical condition and span before writing; unexplained: {listed}")
+        if not self._overview and not self._no_overview:
+            raise ValueError("Build the data overview or call no_overview() with why the file cannot support one.")
         if path is None:
             stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
             stem = Path(self._profile["path"]).stem
@@ -534,6 +648,14 @@ class Report:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(page, encoding="utf-8")
         return path
+
+    def _share_cell(self, affected: int) -> str:
+        rows = self._profile["rows"]
+        return f"{fmt(affected)} ({pct(affected / rows if rows else 0.0)})"
+
+    def _records_cell(self, records: int) -> str:
+        rows = self._profile["rows"]
+        return f"{fmt(records)} with a value ({pct(records / rows if rows else 0.0)})"
 
     def _header(self) -> str:
         profile = self._profile
@@ -567,9 +689,6 @@ class Report:
         if source["totals_rows_excluded"]:
             rows = ", ".join(str(row) for row in source["totals_rows_excluded"])
             notes.append(f"Declared Table totals row excluded from records: {rows}.")
-        if self._profile.get("blank_records"):
-            count = self._profile["blank_records"]
-            notes.append(f"Retained {fmt(count)} entirely blank data row{'s' if count != 1 else ''}.")
         return f'<p class="muted">{esc(" ".join(notes))}</p>'
 
     def _field_profile(self) -> str:
@@ -577,13 +696,31 @@ class Report:
         rows = [[name, meaning] for name, meaning in self._meanings.items()]
         return table(["Field", "Apparent meaning"], rows, css_class="fields")
 
+    def _all_conditions(self) -> list[tuple[str, int, bool, list]]:
+        """Mechanical conditions with their explanations, then driver-recorded ones."""
+        explained = []
+        for condition in self.conditions:
+            why, always_show = self._explained[condition.key]
+            explained.append((condition.area, condition.affected, always_show,
+                              [condition.field, condition.observation, self._share_cell(condition.affected), why]))
+        return explained + self._quality
+
+    def _all_spans(self) -> list[tuple[int, list]]:
+        """Mechanical spans with their explanations, then driver-recorded ones."""
+        explained = []
+        for span in self.spans:
+            why, _ = self._explained[span.key]
+            explained.append((span.records, [span.field, f"Spans {span.start} to {span.end}",
+                                             self._records_cell(span.records), why]))
+        return explained + self._spans
+
     def _data_quality(self) -> str:
         """One subheading and table per area in QUALITY_AREAS order, rows sorted by affected
-        records, most first. Conditions under QUALITY_MIN_SHARE sit in a collapsed table
-        beneath; checks that found nothing follow. An area with neither conditions nor
-        checked notes says it was checked with nothing to report."""
+        records, most first. Coverage opens with every span, most records first. Conditions
+        under QUALITY_MIN_SHARE sit in a collapsed table beneath; checks that found nothing
+        follow. An area with nothing at all says it was checked with nothing to report."""
         by_area = {area: [] for area in QUALITY_AREAS}
-        for area, affected, always_show, row in self._quality:
+        for area, affected, always_show, row in self._all_conditions():
             by_area[area].append((affected, always_show, row))
         rows = self._profile["rows"]
         columns = ["Field", "Observation", "Affected records", "Why it matters"]
@@ -592,6 +729,10 @@ class Report:
         parts = []
         for area, area_rows in by_area.items():
             parts.append(f'<h3>{esc(area)}</h3>')
+            spans = self._all_spans() if area == "Coverage" else []
+            if spans:
+                span_rows = [row for _, row in sorted(spans, key=lambda item: item[0], reverse=True)]
+                parts.append(table(["Field", "Span", "Records with a value", "Why it matters"], span_rows, css_class="quality"))
             visible = [always_show or (affected / rows if rows else 0.0) >= QUALITY_MIN_SHARE
                        for affected, always_show, _ in area_rows]
             shown = [item for item, show in zip(area_rows, visible) if show]
@@ -606,15 +747,11 @@ class Report:
                              f'{table(columns, ranked(hidden), css_class="quality")}</details>')
             for note in self._checked[area]:
                 parts.append(f'<p class="muted">Checked: {esc(note)}</p>')
-            if not area_rows and not self._checked[area]:
+            if not area_rows and not spans and not self._checked[area]:
                 parts.append('<p class="muted">Checked; nothing to report.</p>')
         return "".join(parts)
 
     def _overview_body(self) -> str:
-        if self._overview and self._no_overview:
-            raise ValueError("A report has overview items or a reason there are none, not both.")
         if self._overview:
             return "".join(self._overview)
-        if self._no_overview:
-            return f'<p>{esc(self._no_overview)}</p>'
-        raise ValueError("Build the data overview or call no_overview() with why the file cannot support one.")
+        return f'<p>{esc(self._no_overview)}</p>'

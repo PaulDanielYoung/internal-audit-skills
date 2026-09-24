@@ -41,9 +41,9 @@ Record the observable conditions in the file that could affect how its data is i
 
 State each observation as a short plain-language phrase ("Blank", "Placeholder number instead of a resolution"), and say why it matters: what it changes for a reader who uses the data, such as a denominator that shrinks, a join that fails, or a total that needs affected records excluded.
 
-Record every condition found with `Report.quality()`, and the span of each date or period field with `Report.coverage()`. For a condition whose impact merits attention despite affecting few records, set `always_show=True` and explain that impact in `why_it_matters`; the report otherwise collapses conditions below its display threshold. Record a check that found nothing, such as a composite key tested for repeats, with `Report.checked()`.
+The Report derives the mechanical conditions and each date field's coverage span from the profile; explain every one with `Report.explain()`, including a condition expected for its field. Record each judged condition, such as a confirmed placeholder or a second identifier scheme, with `Report.quality()`, and the span of a period stored as a label with `Report.coverage()`. For a condition whose impact merits attention despite affecting few records, set `always_show=True` and explain that impact in `why_it_matters`; the report otherwise collapses conditions below its display threshold. Record a check that found nothing, such as a composite key tested for repeats, with `Report.checked()`.
 
-This step is complete when every area has been checked against the profile and the records, and each condition found is recorded with `Report.quality()` and each check that found nothing with `Report.checked()`.
+This step is complete when every area has been checked against the profile and the records, every mechanical condition and span is explained, each judged condition is recorded with `Report.quality()`, and each check that found nothing with `Report.checked()`.
 
 ## 3. Build the data overview
 
