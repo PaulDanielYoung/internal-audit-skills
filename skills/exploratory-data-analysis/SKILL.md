@@ -47,6 +47,12 @@ Help the reader understand their dataset through useful descriptive questions, u
 
 Each retained question gets one chart suited to it, a descriptive takeaway, and the context needed to read the chart correctly: the measure, population, period, units, denominators, or a limitation that applies to it, without inventing a caveat. Ordinary descriptive patterns, such as peaks over time or a category's share, belong here beside their charts. Include only questions the data supports answering with a meaningful chart.
 
+Choose the chart type from the question it answers:
+
+- **Bar chart:** compares distinct items or groups, such as departments or categories: which is bigger or smaller. At most 12 bars, including any Other.
+- **Line chart:** shows change, flow, or progression over time, such as daily traffic or monthly revenue over a year.
+- **Pie chart:** shows the parts of one whole, in at most five slices including any Other.
+
 Record exclusions and transformations in the driver, and apply unresolved limitations to the choice of measures and calculations.
 
 This step is complete when the important fields have been considered for useful descriptive questions, each retained question has a rendered chart supported by calculations, and its chart and prose agree. If the file supports no meaningful overview, say why instead.
@@ -77,6 +83,7 @@ Run the driver and check:
 
 - Counts reconcile to the source; blanks, parsing failures, and exclusions explain the denominators used.
 - Each reported number, ranking, comparison, and named example matches its calculation, and every interpretation remains distinct from what the data establishes. Read each takeaway against its rendered chart or table.
+- Each chart's type fits its question: bars compare distinct items or groups, lines show change over time, and pies show parts of one whole.
 - The report renders with readable labels, tables, and charts. Run `uv run "<skill directory>/scripts/render_report.py" "<report.html>"`: it captures the whole page with headless Chrome or Edge and prints numbered crops from top to bottom. Read every crop. The Chrome extension opens only web URLs, not local files. If the script finds no browser or cannot capture the complete page, disclose that visual verification remains outstanding.
 
 Open the report in the user's default browser: `Start-Process` on Windows, `open` on macOS, `xdg-open` on Linux. Return the report's absolute path and a short account of the dimensions explored, any stakeholder questions, and limitations. The report is temporary; rerun the skill to regenerate it.

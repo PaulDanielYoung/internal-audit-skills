@@ -5,7 +5,7 @@ add data quality conditions, overview items, observations, and limitations as th
 produces them, then write(). The Report owns section order and titles, leaves out empty
 optional sections, validates each addition, and escapes every text argument. Visuals and
 the bodies they contain are trusted HTML or inline SVG from the driver; build them with
-chart() and table(), or escape labels with esc() when generating custom SVG.
+bar_chart(), line_chart(), pie_chart(), and table().
 
 No browser, network, JavaScript, or external asset is needed to read the result.
 """
@@ -96,57 +96,227 @@ def table(columns: list[str], rows: list[list], title: str = "", *, css_class: s
     return f'<div class="scroll-table"><table{attrs}>{caption}<thead><tr>{headings}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
-def chart(labels: list, values: list, *, title: str, unit: str = "", decimals: int = 2) -> str:
-    """Horizontal SVG bars with a zero baseline, full labels, and visible values.
+# Bars are upright; past this many categories, combine the rest as Other.
+BAR_MAX_CATEGORIES = 12
+# Labels wrap beneath their bars up to this many lines; longer labels tilt instead.
+BAR_LABEL_MAX_LINES = 3
+BAR_LABEL_TILT = 40  # degrees, as Chart.js tilts tick labels that do not fit
+CHAR_WIDTH = 7.2  # approximate width of one 13px character in chart units
+# A line labels every point up to this many; beyond it, only the first, last, peak, and low.
+LINE_LABEL_ALL_MAX = 12
+PIE_MAX_SLICES = 5
+CHART_WIDTH = 820
 
-    Supply already aggregated, finite values; sort categories or keep chronological order
-    in the driver. Negative values extend to the left of zero. An empty input returns a
-    no-values message, which is not an overview chart. decimals sets display precision
-    for non-integral values in labels and tooltips, without changing bar lengths;
-    integral values keep no decimal places, as in fmt().
-    """
+
+def _chart_input(labels: list, values: list, decimals: int) -> list[float]:
+    """Validate the arguments every chart shares and return the values as floats."""
     if len(labels) != len(values):
         raise ValueError("Chart labels and values must have the same length.")
     if isinstance(decimals, bool) or not isinstance(decimals, numbers.Integral) or decimals < 0:
         raise ValueError("Chart decimals must be a non-negative integer.")
-    if not values:
-        return '<p class="muted">No values to plot.</p>'
     values = [float(value) for value in values]
     if not all(math.isfinite(value) for value in values):
         raise ValueError("Chart values must be finite; explain exclusions before plotting.")
-    low, high = min(0, min(values)), max(0, max(values))
-    span = high - low or 1
-    left, width = 330, 380
-    def x(value):
-        return left + (value - low) / span * width
-    zero = x(0)
-    wrapped_labels = [textwrap.wrap(str(label), width=44) or [""] for label in labels]
-    row_heights = [max(34, len(lines) * 16 + 10) for lines in wrapped_labels]
-    height = 48 + sum(row_heights)
-    marks = [f'<line x1="{zero:.2f}" x2="{zero:.2f}" y1="16" y2="{height - 28}" stroke="#94a3b8"/>']
-    y = 20
-    for label, value, lines, row_height in zip(labels, values, wrapped_labels, row_heights):
-        display_value = esc(fmt(value, decimals=decimals))
-        center = y + row_height / 2
-        label_y = center + 4 - (len(lines) - 1) * 8
-        label_text = "".join(
-            f'<tspan x="{left - 14}" y="{label_y + index * 16:.2f}">{esc(line)}</tspan>'
-            for index, line in enumerate(lines)
-        )
-        marks.append(
-            f'<text text-anchor="end">{label_text}</text>'
-            f'<rect x="{min(zero, x(value)):.2f}" y="{center - 12:.2f}" width="{abs(x(value) - zero):.2f}" '
-            f'height="24" rx="3" fill="#4f46e5"><title>{esc(label)}: {display_value}</title></rect>'
-            f'<text x="{left + width + 18}" y="{center + 4:.2f}">{display_value}</text>'
-        )
-        y += row_height
-    marks.append(f'<text x="{zero:.2f}" y="{height - 7}" text-anchor="middle">0</text>')
+    return values
+
+
+def _figure(title: str, unit: str, height: float, marks: list[str]) -> str:
     return (
         f'<figure><figcaption>{esc(title)}{(" · " + esc(unit)) if unit else ""}</figcaption>'
         f'<div class="scroll-chart"><svg xmlns="http://www.w3.org/2000/svg" role="img" '
-        f'aria-label="{esc(title)}" viewBox="0 0 820 {height}"><title>{esc(title)}</title>'
+        f'aria-label="{esc(title)}" viewBox="0 0 {CHART_WIDTH} {height:.0f}"><title>{esc(title)}</title>'
         f'{"".join(marks)}</svg></div></figure>'
     )
+
+
+def _tspans(lines: list[str], x: float, first_y: float) -> str:
+    return "".join(f'<tspan x="{x:.2f}" y="{first_y + index * 16:.2f}">{esc(line)}</tspan>'
+                   for index, line in enumerate(lines))
+
+
+def bar_chart(labels: list, values: list, *, title: str, unit: str = "", decimals: int = 2) -> str:
+    """Upright bars comparing distinct items or groups, with a zero baseline, full labels,
+    and visible values.
+
+    Supply at most BAR_MAX_CATEGORIES already aggregated, finite values, sorted in the
+    driver; combine the rest as Other. Labels wrap beneath their bars when every word fits
+    the bar's width in at most BAR_LABEL_MAX_LINES lines; otherwise every label tilts.
+    Negative values extend below zero. An empty input returns a no-values message, which
+    is not an overview chart. decimals sets display precision for non-integral values in
+    labels and tooltips, without changing bar heights; integral values keep no decimal
+    places, as in fmt().
+    """
+    values = _chart_input(labels, values, decimals)
+    if not values:
+        return '<p class="muted">No values to plot.</p>'
+    if len(values) > BAR_MAX_CATEGORIES:
+        raise ValueError(f"A bar chart shows at most {BAR_MAX_CATEGORIES} bars; combine the rest as Other.")
+    labels = [str(label) for label in labels]
+    low, high = min(0, min(values)), max(0, max(values))
+    span = high - low or 1
+    top, plot, right = 30, 260, CHART_WIDTH - 20
+    slot = (right - 40) / len(values)
+    chars = int(slot / CHAR_WIDTH)
+    wrapped_labels = [textwrap.wrap(label, width=chars) or [""] for label in labels]
+    tilted = any(len(word) > chars for label in labels for word in label.split()) or \
+        max(len(lines) for lines in wrapped_labels) > BAR_LABEL_MAX_LINES
+    cos, sin = math.cos(math.radians(BAR_LABEL_TILT)), math.sin(math.radians(BAR_LABEL_TILT))
+    # A tilted first label runs down and to the left of its bar; leave room for it.
+    left = max(40, cos * len(labels[0]) * CHAR_WIDTH - slot / 2 + 12) if tilted else 40
+    slot = (right - left) / len(values)
+    bar = min(64, slot * 0.7)
+    def y(value):
+        return top + (high - value) / span * plot
+    zero = y(0)
+    bottom = top + plot + (38 if low < 0 else 20)  # below the lowest bar and any value label under it
+    if tilted:
+        height = bottom + sin * max(len(label) for label in labels) * CHAR_WIDTH + 20
+    else:
+        height = bottom + max(len(lines) for lines in wrapped_labels) * 16 + 12
+    marks = [f'<line x1="{left:.2f}" x2="{right}" y1="{zero:.2f}" y2="{zero:.2f}" stroke="#94a3b8"/>',
+             f'<text x="{left - 8:.2f}" y="{zero + 4:.2f}" text-anchor="end">0</text>']
+    for index, (label, value, lines) in enumerate(zip(labels, values, wrapped_labels)):
+        display_value = esc(fmt(value, decimals=decimals))
+        center = left + slot * (index + 0.5)
+        value_y = y(value) - 8 if value >= 0 else y(value) + 18
+        if tilted:
+            axis_label = (f'<text x="{center:.2f}" y="{bottom:.2f}" text-anchor="end" '
+                          f'transform="rotate(-{BAR_LABEL_TILT} {center:.2f} {bottom:.2f})">{esc(label)}</text>')
+        else:
+            axis_label = f'<text text-anchor="middle">{_tspans(lines, center, bottom + 4)}</text>'
+        marks.append(
+            f'<rect x="{center - bar / 2:.2f}" y="{min(zero, y(value)):.2f}" width="{bar:.2f}" '
+            f'height="{abs(y(value) - zero):.2f}" rx="3" fill="#4f46e5"><title>{esc(label)}: {display_value}</title></rect>'
+            f'<text x="{center:.2f}" y="{value_y:.2f}" text-anchor="middle">{display_value}</text>{axis_label}'
+        )
+    return _figure(title, unit, height, marks)
+
+
+def _nice_ticks(low: float, high: float, count: int = 5) -> list[float]:
+    """Round axis ticks from low to high; callers include zero in the range."""
+    span = high - low or 1
+    raw = span / (count - 1)
+    magnitude = 10 ** math.floor(math.log10(raw))
+    step = next(m * magnitude for m in (1, 2, 2.5, 5, 10) if m * magnitude >= raw)
+    start, stop = math.floor(low / step) * step, math.ceil(high / step) * step
+    return [start + index * step for index in range(round((stop - start) / step) + 1)]
+
+
+def line_chart(labels: list, values: list, *, title: str, unit: str = "", decimals: int = 2,
+               partial_last: bool = False) -> str:
+    """One series changing over continuous time, left to right, on a y-axis that includes zero.
+
+    labels are the periods in chronological order, written as labels (1940s, 2022-Q3).
+    Supply every period in the range, with zero for an empty one, so the time axis stays
+    even. Every point has a marker; values are labeled on every point up to
+    LINE_LABEL_ALL_MAX points, and otherwise on the first, last, peak, and low.
+    partial_last draws the final segment dashed and marks its period "to date".
+    decimals works as in bar_chart().
+    """
+    values = _chart_input(labels, values, decimals)
+    if not values:
+        return '<p class="muted">No values to plot.</p>'
+    if len(values) < 2:
+        raise ValueError("A line chart needs at least two periods; use bar_chart() for one.")
+    labels = [str(label) for label in labels]
+    ticks = _nice_ticks(min(0, min(values)), max(0, max(values)))
+    low, high = ticks[0], ticks[-1]
+    left, right, top, plot = 80, CHART_WIDTH - 40, 24, 260
+    step = (right - left) / (len(values) - 1)
+    def y(value):
+        return top + (high - value) / (high - low or 1) * plot
+    marks = []
+    for tick in ticks:
+        marks.append(
+            f'<line x1="{left}" x2="{right}" y1="{y(tick):.2f}" y2="{y(tick):.2f}" '
+            f'stroke="{"#94a3b8" if tick == 0 else "#e2e8f0"}"/>'
+            f'<text x="{left - 10}" y="{y(tick) + 4:.2f}" text-anchor="end">{esc(fmt(tick, decimals, compact=True))}</text>'
+        )
+    points = [(left + index * step, y(value)) for index, value in enumerate(values)]
+    solid = points[:-1] if partial_last else points
+    marks.append('<polyline fill="none" stroke="#4f46e5" stroke-width="2.5" points="'
+                 + " ".join(f"{px:.2f},{py:.2f}" for px, py in solid) + '"/>')
+    if partial_last:
+        (x1, y1), (x2, y2) = points[-2:]
+        marks.append(f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" '
+                     'stroke="#4f46e5" stroke-width="2.5" stroke-dasharray="6 5"/>')
+    last = len(values) - 1
+    if len(values) <= LINE_LABEL_ALL_MAX:
+        labeled = set(range(len(values)))
+    else:
+        labeled = {0, last, values.index(max(values)), values.index(min(values))}
+    # Period labels thin to every nth so they never overlap; the last always shows.
+    every = max(1, math.ceil(max(len(label) for label in labels) * 8 / step))
+    shown = {index for index in range(len(values)) if index % every == 0 and last - index >= every} | {last}
+    axis_y = top + plot + 22
+    for index, ((px, py), label, value) in enumerate(zip(points, labels, values)):
+        display_value = esc(fmt(value, decimals=decimals))
+        hollow = partial_last and index == last
+        marks.append(f'<circle cx="{px:.2f}" cy="{py:.2f}" r="4" fill="{"#fafaf9" if hollow else "#4f46e5"}" '
+                     f'stroke="#4f46e5" stroke-width="2"><title>{esc(label)}: {display_value}</title></circle>')
+        if index in labeled:
+            marks.append(f'<text x="{px:.2f}" y="{py - 10:.2f}" text-anchor="middle">{display_value}</text>')
+        if index in shown:
+            lines = [label, "to date"] if hollow else [label]
+            marks.append(f'<text text-anchor="middle">{_tspans(lines, px, axis_y)}</text>')
+    height = axis_y + (32 if partial_last else 16) + 8
+    return _figure(title, unit, height, marks)
+
+
+def pie_chart(labels: list, values: list, *, title: str, unit: str = "", decimals: int = 2) -> str:
+    """Parts of one whole, at most PIE_MAX_SLICES slices including any Other, each labeled
+    directly with its share and value. The values must be non-negative parts that add up
+    to the whole the title names; combine small parts as Other before plotting. Slices
+    take the report's colorblind-safe palette in order. decimals works as in bar_chart().
+    """
+    values = _chart_input(labels, values, decimals)
+    if not values:
+        return '<p class="muted">No values to plot.</p>'
+    if len(values) > PIE_MAX_SLICES:
+        raise ValueError(f"A pie chart shows at most {PIE_MAX_SLICES} slices; combine the rest as Other or use bar_chart().")
+    if any(value < 0 for value in values):
+        raise ValueError("Pie slices must be non-negative parts of one whole; use bar_chart() for negative values.")
+    total = sum(values)
+    if total <= 0:
+        raise ValueError("A pie chart needs a positive total.")
+    cx, cy, radius = CHART_WIDTH / 2, 170, 130
+    marks, sides = [], {1: [], -1: []}
+    angle = -math.pi / 2  # the first slice starts at twelve o'clock and runs clockwise
+    for index, (label, value) in enumerate(zip(labels, values)):
+        share = value / total
+        sweep = share * 2 * math.pi
+        detail = f"{pct(share)} ({fmt(value, decimals=decimals)})"
+        tooltip = f'<title>{esc(label)}: {esc(detail)}</title>'
+        css = f"slice-{index + 1}"
+        if share >= 1:
+            marks.append(f'<circle class="{css}" cx="{cx}" cy="{cy}" r="{radius}">{tooltip}</circle>')
+        elif share > 0:
+            x1, y1 = cx + radius * math.cos(angle), cy + radius * math.sin(angle)
+            x2, y2 = cx + radius * math.cos(angle + sweep), cy + radius * math.sin(angle + sweep)
+            marks.append(f'<path class="{css}" stroke="#fafaf9" stroke-width="2" d="M{cx},{cy} L{x1:.2f},{y1:.2f} '
+                         f'A{radius},{radius} 0 {1 if sweep > math.pi else 0} 1 {x2:.2f},{y2:.2f} Z">{tooltip}</path>')
+        middle = angle + sweep / 2
+        side = 1 if math.cos(middle) >= 0 else -1
+        sides[side].append([cy + (radius + 22) * math.sin(middle), middle, str(label), detail])
+        angle += sweep
+    lowest = cy + radius
+    for side, items in sides.items():
+        items.sort(key=lambda item: item[0])
+        for previous, item in zip(items, items[1:]):
+            item[0] = max(item[0], previous[0] + 38)  # two text lines per label, never overlapping
+        elbow = cx + (radius + 34) * side
+        text_x = elbow + 8 * side
+        anchor = "start" if side == 1 else "end"
+        for label_y, middle, label, detail in items:
+            edge_x, edge_y = cx + radius * math.cos(middle), cy + radius * math.sin(middle)
+            marks.append(
+                f'<polyline fill="none" stroke="#94a3b8" points="{edge_x:.2f},{edge_y:.2f} {elbow:.2f},{label_y:.2f}"/>'
+                f'<text x="{text_x:.2f}" y="{label_y:.2f}" text-anchor="{anchor}">'
+                f'<tspan font-weight="600">{esc(label)}</tspan>'
+                f'<tspan x="{text_x:.2f}" dy="16">{esc(detail)}</tspan></text>'
+            )
+            lowest = max(lowest, label_y + 16)
+    return _figure(title, unit, lowest + 24, marks)
 
 
 # --- The report ------------------------------------------------------------------------
