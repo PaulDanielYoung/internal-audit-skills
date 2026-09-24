@@ -53,6 +53,7 @@ for field in profile["columns"]:
 if profile["duplicate_records"]:
     r.quality("Uniqueness", "All fields", "Exact duplicate record", profile["duplicate_records"],
               "<what the duplicates change for counts and totals>")
+# Coverage: one r.coverage("<date field>", <earliest valid>, <latest valid>, <records dated>, "<what the span means>") per date field.
 
 # Data overview: one r.overview(question, chart, takeaway=..., context=...) per descriptive question,
 # or r.no_overview(reason) when the file cannot support one (for example, headers but no records).
@@ -74,7 +75,7 @@ Numbers in prose carry their units; invented examples are $12.5M, 1.25M service 
 
 `chart()` supplies horizontal bars; it does not restrict the choice of chart. Set `decimals` to choose display precision for non-integral bar labels and tooltips (for example, `decimals=1` for service hours); the default is 2, integral values have no decimal places, and bar lengths use the supplied values without rounding. When another chart type better answers the question, generate self-contained inline SVG in the driver, with an accessible title, readable full labels, units, and values where useful, keeping the same offline and escaping guarantees. An observation's supporting table is a sample of the evidence: only the columns the prose cites, and a caption naming the selection and its share of the population, such as the invented "Longest 5 of 48 service requests awaiting assignment".
 
-For a coverage condition, count the records carrying the relevant date. State a reporting period in the header facts only when the relevant date field is understood.
+Record each date field's span with `r.coverage(field, start, end, dated, why_it_matters)`, taking start and end from the valid values and `dated` as the count of records carrying the date; record gaps within the span with `r.quality("Coverage", ...)`. State a reporting period in the header facts only when the relevant date field is understood.
 
 Identify inspected records using the profiler's one-based data-record index or a source identifier. Data-record indexes exclude the header and empty lines outside quoted fields; they are not physical line numbers when cells contain line breaks.
 

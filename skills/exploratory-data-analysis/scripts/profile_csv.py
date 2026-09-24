@@ -12,7 +12,9 @@ Both use one-based data-record indexes (not physical line numbers). Blank cells
 and failed conversions are counted separately. Inferred roles cover plain numbers,
 ISO dates, and whole-number year or month fields named as such. Other date formats
 require an explicit format; a field whose values fit one gets a date_format_hint
-listing every format that fits.
+listing every format that fits. Fields list possible_placeholders (values such as
+R-000000, 99999, --, UNKNOWN), and entity_fields names the fields that never vary
+within a repeating identifier.
 """
 from __future__ import annotations
 
@@ -50,6 +52,14 @@ DATE_HINTS = [
     ("%d.%m.%Y", r"\d{1,2}\.\d{1,2}\.\d{4}"),
     ("%Y/%m/%d", r"\d{4}/\d{1,2}/\d{1,2}"),
 ]
+# Values that often stand in for a missing one: runs of zeros or nines with an optional
+# short prefix (R-000000, 99999), dashes, question marks, and common missing-value words.
+PLACEHOLDER = re.compile(
+    r"[a-z]{0,3}[-\s]?(0{3,}|9{3,})(\.0+)?|-+|\?+|#?n/?a|null|nil|unknown|unk|tbd|tba",
+    re.I,
+)
+# An identifier describes entities when at least this share of its records repeat a key.
+ENTITY_MIN_REPEATED = 0.1
 
 
 def read_csv(path: Path, encoding: str = "utf-8-sig") -> tuple[pd.DataFrame, int]:
@@ -129,6 +139,42 @@ def infer_role(values: pd.Series, name: str) -> str:
     if present.nunique() <= 20 or present.nunique() / len(present) <= 0.1:
         return "category"
     return "text"
+
+
+def possible_placeholders(values: pd.Series) -> dict | None:
+    """Count and most frequent values that look like stand-ins for a missing value."""
+    present = values.dropna().str.strip()
+    matches = present[present.str.fullmatch(PLACEHOLDER)]
+    if matches.empty:
+        return None
+    return {
+        "count": int(len(matches)),
+        "values": [{"value": str(value), "count": int(count)} for value, count in matches.value_counts().head(5).items()],
+    }
+
+
+def entity_fields(raw: pd.DataFrame, identifiers: list[str]) -> list[dict]:
+    """For each identifier whose keys repeat, the other fields that never vary within a key.
+
+    Such fields describe the entity, not the record: they repeat on each of its records,
+    so totals across records count them once per record. Blanks count as a value, and
+    fields with one value across the whole file are left out as uninformative."""
+    varying = [name for name in raw.columns if raw[name].str.strip().nunique() > 1]
+    results = []
+    for name in identifiers:
+        keys = raw[name].str.strip()
+        rows = raw[keys.ne("")]
+        keys = keys[keys.ne("")]
+        repeated = keys.duplicated(keep=False).sum()
+        if rows.empty or keys.nunique() < 2 or repeated < ENTITY_MIN_REPEATED * len(rows):
+            continue
+        groups = rows.groupby(keys)
+        constant = [other for other in varying
+                    if other != name and (groups[other].nunique(dropna=False) <= 1).all()]
+        if constant:
+            results.append({"identifier": name, "entities": int(keys.nunique()),
+                            "records": int(len(rows)), "constant_fields": constant})
+    return results
 
 
 def scalar(value):
@@ -219,6 +265,8 @@ def profile_csv(
                 entry["duplicates"] = int(len(present) - present.nunique())
         if role != "date" and (hint := date_format_hint(values)):
             entry["date_format_hint"] = hint
+        if placeholders := possible_placeholders(values):
+            entry["possible_placeholders"] = placeholders
         columns.append(entry)
 
     profile = {
@@ -227,6 +275,7 @@ def profile_csv(
         "rows": len(raw), "fields": len(raw.columns),
         "duplicate_records": int(raw.duplicated().sum()),
         "empty_lines_skipped": skipped, "columns": columns,
+        "entity_fields": entity_fields(raw, [c["name"] for c in columns if c["role"] == "identifier"]),
         "sample": [
             {"record": int(index), "values": row.to_dict()}
             for index, row in raw.head(5).iterrows()
@@ -272,6 +321,12 @@ def main(argv: list[str] | None = None) -> int:
             print(f"    looks like dates in {hint[0]}: check the raw values, then set --date-format {field['name']}={hint[0]}")
         elif hint:
             print(f"    looks like dates, fitting {' and '.join(hint)}: resolve the order before setting --date-format")
+        if placeholders := field.get("possible_placeholders"):
+            listed = ", ".join(f"{item['value']} ({item['count']:,})" for item in placeholders["values"])
+            print(f"    possible placeholders in {placeholders['count']:,} records: {listed}")
+    for group in profile["entity_fields"]:
+        print(f"  {group['identifier']} groups {group['records']:,} records into {group['entities']:,} entities; "
+              f"constant within each: {', '.join(group['constant_fields'])}")
     print(f"Temporary profile: {output_path}")
     return 0
 

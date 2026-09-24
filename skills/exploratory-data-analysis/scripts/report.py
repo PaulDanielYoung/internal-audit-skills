@@ -235,6 +235,27 @@ class Report:
         affected_cell = f"{fmt(affected)} ({pct(share)})"
         self._quality.append((area, int(affected), always_show, [field, observation, affected_cell, why_it_matters]))
 
+    def coverage(self, field: str, start, end, dated: int, why_it_matters: str) -> None:
+        """The period one date field spans, always shown under Coverage. start and end are
+        the earliest and latest values in the words the reader should see: a date, a year,
+        or text such as "November 1911". dated is the count of records carrying the date.
+        Record gaps within the period with quality("Coverage", ...)."""
+        rows = self._profile["rows"]
+        if any(not str(cell).strip() for cell in (field, start, end, why_it_matters)):
+            raise ValueError("A coverage row needs a field, a start, an end, and why it matters.")
+        if isinstance(dated, bool) or not isinstance(dated, numbers.Integral) or not 0 <= dated <= rows:
+            raise ValueError(f"Dated records must be a record count from 0 to {rows}; got {dated!r}")
+        def label(value) -> str:
+            if isinstance(value, dt.date):
+                return value.strftime("%d %b %Y")
+            if isinstance(value, numbers.Real) and float(value).is_integer():
+                return str(int(value))  # a year, without a thousands separator
+            return str(value)
+        share = int(dated) / rows if rows else 0.0
+        self._quality.append(("Coverage", int(dated), True, [
+            field, f"Dated {label(start)} to {label(end)}", f"{fmt(dated)} dated ({pct(share)})", why_it_matters,
+        ]))
+
     def overview(self, question: str, chart: str, *, takeaway: str, context: str) -> None:
         """One descriptive question answered by exactly one SVG chart, a takeaway, and the
         context needed to read the chart correctly. Tables and dropdowns are rejected."""

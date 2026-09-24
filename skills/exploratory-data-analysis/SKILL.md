@@ -15,9 +15,11 @@ Read the CSV in place and leave its bytes unchanged. The report is throwaway: th
 
 ## 1. Orient and profile
 
-Run `uv run "<skill directory>/scripts/profile_csv.py" "<CSV path>"` and read the printed summary and the temporary JSON profile. Without uv, use Python 3.10+ with `pandas>=2.0,<4` in a virtual environment. Script paths are relative to the skill directory, not the working directory; `--help` describes the parsing overrides.
+Run `uv run "<skill directory>/scripts/profile_csv.py" "<CSV path>"` and read the printed summary and the temporary JSON profile. Without uv, use Python 3.10+ with `pandas>=2.0,<4`, plus `pillow>=10` for rendering in step 5, in a virtual environment. Script paths are relative to the skill directory, not the working directory; `--help` describes the parsing overrides.
 
 Review every field's apparent role against its name and raw values, and inspect the failure examples before using parsed values. A `date_format_hint` lists the non-ISO date formats a field's values fit; confirm one against the raw values, and treat a hint that fits both month-first and day-first as an unresolved question about the field. Correct roles and date formats by rerunning the profiler with overrides; the driver must repeat the same choices.
+
+The profile's `entity_fields` names each identifier whose keys repeat, with the fields that never vary within a key. It is evidence for the grain: those fields describe the entity rather than the record, so count or total them once per entity.
 
 When an unresolved question about a field's meaning or values would materially change a calculation or interpretation, call the Skill tool with "shared-understanding", giving it the specific ambiguity and the context already established. The user resolves it before you continue; if they cannot, flag the field as unresolved and continue with the rest of the dataset.
 
@@ -28,14 +30,14 @@ This step is complete when row and field counts, blanks, and appropriate basic f
 Record the observable conditions in the file that could affect how its data is interpreted or analyzed, one condition each, in five areas:
 
 - **Completeness:** blank cells by field, fields that are entirely blank, and fields far sparser than the rest.
-- **Validity:** values that fail to parse as their apparent type, dates or numbers outside a possible range, and malformed values.
+- **Validity:** values that fail to parse as their apparent type, dates or numbers outside a possible range, malformed values, and placeholders standing in for a missing value. The profile's `possible_placeholders` lists candidates such as `R-000000`, `99999`, `--`, and `UNKNOWN`; confirm each against the field's meaning, since a value like `000` can be a real code.
 - **Uniqueness:** exact duplicate records, and repeated values in apparent identifiers or composite keys.
 - **Consistency:** fields that contradict each other within a record, and values that vary within an apparent entity where they should stay constant.
 - **Coverage:** earliest and latest dates and obvious gaps between them. Whether the data are current depends on the expected refresh cycle, which the file does not give; an old latest date is an open question for the user.
 
 State each observation as a short plain-language phrase ("Blank", "Placeholder number instead of a resolution"), and say why it matters: what it changes for a reader who uses the data, such as a denominator that shrinks, a join that fails, or a total that needs affected records excluded.
 
-Record every condition found with `Report.quality()`. For a condition whose impact merits attention despite affecting few records, set `always_show=True` and explain that impact in `why_it_matters`; the report otherwise summarizes conditions below its display threshold in a count.
+Record every condition found with `Report.quality()`, and the span of each date field with `Report.coverage()`. For a condition whose impact merits attention despite affecting few records, set `always_show=True` and explain that impact in `why_it_matters`; the report otherwise summarizes conditions below its display threshold in a count.
 
 This step is complete when every area has been checked against the profile and the records, and each condition found is recorded, or the area is recorded as checked with nothing to report.
 
@@ -75,13 +77,7 @@ Run the driver and check:
 
 - Counts reconcile to the source; blanks, parsing failures, and exclusions explain the denominators used.
 - Each reported number, ranking, comparison, and named example matches its calculation, and every interpretation remains distinct from what the data establishes. Read each takeaway against its rendered chart or table.
-- The report renders with readable labels, tables, and charts. Render it with headless Chrome or Edge and read the screenshot; the Chrome extension opens only web URLs, not local files. Use a tall window and crop the image when the page is long:
-
-  ```text
-  "<chrome or msedge executable>" --headless=new --disable-gpu --hide-scrollbars --window-size=1280,12000 --screenshot="<temp png>" "<file URL of report.html>"
-  ```
-
-  The height above is a starting point. Check that the screenshot includes the complete final section and the page's bottom padding; if content is cut off, increase the height and render again until the whole report fits, or use a full-page capture. Inspect readable crops covering the entire page, including its bottom. If no browser can render it, disclose that visual verification remains outstanding.
+- The report renders with readable labels, tables, and charts. Run `uv run "<skill directory>/scripts/render_report.py" "<report.html>"`: it captures the whole page with headless Chrome or Edge and prints numbered crops from top to bottom. Read every crop. The Chrome extension opens only web URLs, not local files. If the script finds no browser or cannot capture the complete page, disclose that visual verification remains outstanding.
 
 Open the report in the user's default browser: `Start-Process` on Windows, `open` on macOS, `xdg-open` on Linux. Return the report's absolute path and a short account of the dimensions explored, any stakeholder questions, and limitations. The report is temporary; rerun the skill to regenerate it.
 
