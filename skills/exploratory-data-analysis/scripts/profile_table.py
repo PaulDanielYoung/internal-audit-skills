@@ -14,8 +14,11 @@ and failed conversions are counted separately. Inferred roles cover plain number
 ISO dates, and whole-number year or month fields named as such. Other date formats
 require an explicit format; a field whose values fit one gets a date_format_hint
 listing every format that fits. Fields list possible_placeholders (values such as
-R-000000, 99999, --, UNKNOWN), and entity_fields names the fields that never vary
-within a repeating identifier.
+R-000000, 99999, --, UNKNOWN); identifiers with mixed character patterns list
+value_shapes, and categories with values differing only in case or spacing list
+case_variants. entity_fields names the fields that never vary within a repeating
+identifier. The CLI also writes a temporary pickle of (raw, data, profile) for
+exploration scripts.
 """
 from __future__ import annotations
 
@@ -24,6 +27,7 @@ import csv
 import datetime as dt
 import json
 import math
+import pickle
 import re
 import tempfile
 import sys
@@ -66,6 +70,9 @@ PLACEHOLDER = re.compile(
 )
 # An identifier describes entities when at least this share of its records repeat a key.
 ENTITY_MIN_REPEATED = 0.1
+# Shapes and case-variant groups listed per field, most records first.
+SHAPES_MAX = 10
+VARIANT_GROUPS_MAX = 5
 
 
 def blank_cells(values: pd.Series) -> pd.Series:
@@ -108,52 +115,100 @@ def in_range(parsed: pd.Series, part: str) -> pd.Series:
     return (parsed.between(low, high) & parsed.eq(parsed.round())).fillna(False)
 
 
+def value_counts(values: pd.Series) -> tuple[pd.Series, pd.Series]:
+    """Record counts per distinct present value, and those values as a string Series
+    aligned with them. Checks run once per distinct value and weight by these counts."""
+    counts = values.dropna().value_counts()
+    return counts, counts.index.to_series().astype("string")
+
+
+def share(counts: pd.Series, matches: pd.Series) -> float:
+    """Share of the counted records whose distinct value matches."""
+    total = counts.sum()
+    return counts[matches.to_numpy(dtype=bool)].sum() / total if total else 0.0
+
+
 def date_format_hint(values: pd.Series) -> list[str]:
     """Every non-ISO format that parses a strong majority of the present values. More
     than one (such as month-first and day-first) means the order is unresolved."""
-    present = values.dropna().str.strip()
+    counts, distinct = value_counts(values.str.strip())
     fits = []
     for date_format, shape in DATE_HINTS:
-        matches = present.str.fullmatch(shape)
-        if present.empty or matches.mean() < PARSE_THRESHOLD:
+        matches = distinct.str.fullmatch(shape)
+        if counts.empty or share(counts, matches) < PARSE_THRESHOLD:
             continue
-        parsed = pd.to_datetime(present[matches], format=date_format, errors="coerce")
-        if parsed.notna().sum() / len(present) >= PARSE_THRESHOLD:
+        parsed = pd.to_datetime(distinct, format=date_format, errors="coerce").notna() & matches
+        if share(counts, parsed) >= PARSE_THRESHOLD:
             fits.append(date_format)
     return fits
 
 
 def infer_role(values: pd.Series, name: str) -> str:
-    present = values.dropna()
-    if present.empty:
+    counts, distinct = value_counts(values)
+    if counts.empty:
         return "empty"
     words = re.sub(r"([a-z])([A-Z])", r"\1_\2", name)
-    if ID_NAME.search(words) or present.str.fullmatch(r"0\d+").any():
+    if ID_NAME.search(words) or distinct.str.fullmatch(r"0\d+").any():
         return "identifier"
-    if present.str.fullmatch(ISO_DATE).mean() >= PARSE_THRESHOLD:
+    if share(counts, distinct.str.fullmatch(ISO_DATE)) >= PARSE_THRESHOLD:
         return "date"
-    parsed = numeric(present.str.strip())
-    if parsed.notna().mean() >= PARSE_THRESHOLD:
+    parsed = numeric(distinct.str.strip())
+    if share(counts, parsed.notna()) >= PARSE_THRESHOLD:
         name_words = set(re.split(r"[^a-z0-9]+", words.lower()))
         for part, (part_words, _) in DATE_PARTS.items():
-            if name_words & part_words and in_range(parsed, part).mean() >= PARSE_THRESHOLD:
+            if name_words & part_words and share(counts, in_range(parsed, part)) >= PARSE_THRESHOLD:
                 return part
         return "measure"
     # Low-cardinality text gets frequency summaries; this never changes its values.
-    if present.nunique() <= 20 or present.nunique() / len(present) <= 0.1:
+    if len(counts) <= 20 or len(counts) / counts.sum() <= 0.1:
         return "category"
     return "text"
 
 
 def possible_placeholders(values: pd.Series) -> dict | None:
     """Count and most frequent values that look like stand-ins for a missing value."""
-    present = values.dropna().str.strip()
-    matches = present[present.str.fullmatch(PLACEHOLDER)]
+    counts, distinct = value_counts(values.str.strip())
+    matches = counts[distinct.str.fullmatch(PLACEHOLDER).to_numpy(dtype=bool)]
     if matches.empty:
         return None
     return {
-        "count": int(len(matches)),
-        "values": [{"value": str(value), "count": int(count)} for value, count in matches.value_counts().head(5).items()],
+        "count": int(matches.sum()),
+        "values": [{"value": str(value), "count": int(count)} for value, count in matches.head(5).items()],
+    }
+
+
+def value_shapes(values: pd.Series) -> dict | None:
+    """Character patterns of an identifier's values (9 for a digit, A for a letter, other
+    characters kept) when there is more than one: mixed shapes can mean mixed schemes."""
+    counts, distinct = value_counts(values.str.strip())
+    shapes = distinct.map(lambda value: re.sub(r"[^\W\d_]", "A", re.sub(r"\d", "9", value))).to_numpy()
+    by_shape = counts.groupby(shapes, sort=False).sum().sort_values(ascending=False, kind="stable")
+    if len(by_shape) < 2:
+        return None
+    # counts is most frequent first, so the first value of each shape is its commonest.
+    examples = pd.Series(counts.index, index=shapes).groupby(level=0, sort=False).first()
+    return {
+        "count": int(len(by_shape)),
+        "shapes": [{"shape": shape, "records": int(records), "example": str(examples[shape])}
+                   for shape, records in by_shape.head(SHAPES_MAX).items()],
+    }
+
+
+def case_variants(values: pd.Series) -> dict | None:
+    """Groups of values that differ only in letter case or spacing, which split counts."""
+    counts, distinct = value_counts(values)
+    keys = distinct.map(lambda value: " ".join(value.split()).casefold()).to_numpy()
+    grouped = counts.groupby(keys, sort=False)
+    sizes = grouped.size()
+    variant_keys = sizes[sizes > 1].index
+    if variant_keys.empty:
+        return None
+    totals = grouped.sum()[variant_keys].sort_values(ascending=False, kind="stable")
+    members = pd.Series(keys, index=counts.index)
+    return {
+        "count": int(totals.sum()),
+        "groups": [[{"value": str(value), "count": int(counts[value])} for value in members[members == key].index]
+                   for key in totals.head(VARIANT_GROUPS_MAX).index],
     }
 
 
@@ -209,8 +264,9 @@ def profile_table(
     raw retains source values; detect blanks with blank_cells(raw[field]).
     data masks those blanks, typed Excel errors and failed
     conversions as missing (NA/NaN/NaT depending on dtype), so data[field].isna()
-    includes all three. The profile counts them separately. XLSX cell metadata
-    is retained in raw.attrs['cells']; addresses follow profile['source'].
+    includes all three. The profile counts them separately. For XLSX, raw.attrs['cells']
+    maps the addresses of non-empty cells whose type or number format differs from their
+    field's most common one (up to 100 per field) to that type and format.
     """
     path = Path(path).resolve()
     loaded = read_table(path, encoding=encoding, sheet=sheet, table=table, cell_range=cell_range)
@@ -225,17 +281,19 @@ def profile_table(
         raise ValueError("A field with a date format must have the date role.")
 
     data = raw.copy()
-    columns = []
+    columns, blanks, texts = [], {}, {}
     for name in raw.columns:
         original = raw[name]
-        blank = blank_cells(original)
+        blank = blanks[name] = blank_cells(original)
         errors = loaded.errors[name]
         values = original.mask(blank | errors)
-        strings = text_values(values)
+        texts[name] = text_values(original)
+        strings = texts[name].mask(blank | errors)
         inferred = infer_role(strings, name)
         present_values = values.dropna()
         if not present_values.empty and inferred != "identifier":
-            date_matches = values.map(native_date) | strings.str.fullmatch(ISO_DATE).fillna(False)
+            iso = {value for value in strings.dropna().unique() if re.fullmatch(ISO_DATE, value)}
+            date_matches = values.map(native_date) | strings.isin(iso)
             if date_matches.sum() / len(present_values) >= PARSE_THRESHOLD:
                 inferred = "date"
         role = roles.get(name, "date" if name in date_formats else inferred)
@@ -284,6 +342,10 @@ def profile_table(
             ]
             if role == "identifier":
                 entry["duplicates"] = int(len(present) - present.nunique())
+                if shapes := value_shapes(strings):
+                    entry["value_shapes"] = shapes
+            elif role == "category" and (variants := case_variants(strings)):
+                entry["case_variants"] = variants
         if role != "date" and (hint := date_format_hint(strings)):
             entry["date_format_hint"] = hint
         if placeholders := possible_placeholders(strings):
@@ -300,7 +362,7 @@ def profile_table(
                        for row, errors in zip(raw.itertuples(index=False, name=None),
                                               loaded.errors.itertuples(index=False, name=None))]
         duplicates = len(record_keys) - len(set(record_keys))
-        entity_values = raw.apply(text_values).fillna("")
+        entity_values = pd.DataFrame({name: text.fillna("") for name, text in texts.items()})
     profile = {
         "file": path.name, "path": str(path),
         "generated": dt.datetime.now().isoformat(timespec="seconds"),
@@ -308,7 +370,7 @@ def profile_table(
         "duplicate_records": duplicates,
         "empty_lines_skipped": loaded.source.get("empty_lines_skipped", 0), "columns": columns,
         "source": loaded.source,
-        "blank_records": int(raw.apply(blank_cells).all(axis=1).sum()),
+        "blank_records": int(pd.DataFrame(blanks).all(axis=1).sum()) if blanks else 0,
         "entity_fields": entity_fields(entity_values,
                                        [c["name"] for c in columns if c["role"] == "identifier"
                                         and not c["source_errors"]]),
@@ -349,7 +411,7 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError("--inspect applies to XLSX workbooks.")
             print(json.dumps(inspect_xlsx(args.file), ensure_ascii=False, indent=2))
             return 0
-        _, _, profile = profile_table(
+        raw, data, profile = profile_table(
             args.file, roles=dict(args.role), date_formats=dict(args.date_format), encoding=args.encoding,
             sheet=args.sheet, table=args.table, cell_range=args.cell_range,
         )
@@ -358,6 +420,9 @@ def main(argv: list[str] | None = None) -> int:
     with tempfile.NamedTemporaryFile(mode="w", prefix="eda-profile-", suffix=".json", encoding="utf-8", delete=False) as output:
         json.dump(profile, output, ensure_ascii=False, indent=2, allow_nan=False)
         output_path = output.name
+    with tempfile.NamedTemporaryFile(prefix="eda-profile-", suffix=".pkl", delete=False) as cache:
+        pickle.dump((raw, data, profile), cache)
+        cache_path = cache.name
     print(f"{profile['file']}: {profile['rows']:,} records, {profile['fields']} fields")
     if profile["source"]["format"] == "xlsx":
         print("  Source selection: " + json.dumps(profile["source"], ensure_ascii=False))
@@ -378,10 +443,18 @@ def main(argv: list[str] | None = None) -> int:
         if placeholders := field.get("possible_placeholders"):
             listed = ", ".join(f"{item['value']} ({item['count']:,})" for item in placeholders["values"])
             print(f"    possible placeholders in {placeholders['count']:,} records: {listed}")
+        if shapes := field.get("value_shapes"):
+            listed = ", ".join(f"{item['shape']} ({item['records']:,}, e.g. {item['example']})" for item in shapes["shapes"])
+            print(f"    {shapes['count']} value shapes: {listed}")
+        if variants := field.get("case_variants"):
+            listed = "; ".join(" / ".join(json.dumps(item["value"], ensure_ascii=False) for item in group)
+                               for group in variants["groups"])
+            print(f"    values differing only in case or spacing, in {variants['count']:,} records: {listed}")
     for group in profile["entity_fields"]:
         print(f"  {group['identifier']} groups {group['records']:,} records into {group['entities']:,} entities; "
               f"constant within each: {', '.join(group['constant_fields'])}")
     print(f"Temporary profile: {output_path}")
+    print(f"Exploration cache: {cache_path} (pandas.read_pickle gives raw, data, profile)")
     return 0
 
 

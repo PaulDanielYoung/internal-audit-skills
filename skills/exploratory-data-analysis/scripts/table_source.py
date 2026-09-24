@@ -7,6 +7,9 @@ from pathlib import Path
 
 import pandas as pd
 
+# Cells listed per field whose type or number format differs from the field's usual one.
+CELL_EXCEPTIONS_MAX = 100
+
 
 @dataclass
 class SourceTable:
@@ -179,7 +182,34 @@ def read_xlsx(path: Path, *, sheet: str | None, table: str | None,
             if _intersects(bounds, _bounds(reference)):
                 raise ValueError(f"Formula range {reference} (anchor {address}) intersects the selection; formulas are out of scope.")
         cells = list(worksheet.iter_rows(min_row=top, max_row=bottom, min_col=left, max_col=right))
-        formulas = [cell.coordinate for row in cells for cell in row if cell.data_type == "f"]
+        body = cells[1:len(cells) - totals] if totals else cells[1:]
+        # One pass over the body reads each cell's value, type and number format once.
+        width = right - left + 1
+        values, error_flags, body_formulas = [], [], []
+        types = [{} for _ in range(width)]
+        formats = [{} for _ in range(width)]
+        styles = [{} for _ in range(width)]  # (type, number format) counts of non-empty cells
+        for row in body:
+            row_values, row_errors = [], []
+            for offset, cell in enumerate(row):
+                kind, value, number_format = cell.data_type, cell.value, cell.number_format
+                if kind == "f":
+                    body_formulas.append(cell.coordinate)
+                row_values.append(value)
+                row_errors.append(kind == "e")
+                types[offset][kind] = types[offset].get(kind, 0) + 1
+                if value is not None:
+                    style = styles[offset]
+                    style[kind, number_format] = style.get((kind, number_format), 0) + 1
+                    if number_format != "General":
+                        group = formats[offset].setdefault(number_format, {"count": 0, "examples": []})
+                        group["count"] += 1
+                        if len(group["examples"]) < 5:
+                            group["examples"].append({"cell": cell.coordinate, "value": str(value)})
+            values.append(row_values)
+            error_flags.append(row_errors)
+        edge_rows = [cells[0], *cells[len(cells) - totals:]] if totals else [cells[0]]
+        formulas = [cell.coordinate for row in edge_rows for cell in row if cell.data_type == "f"] + body_formulas
         if formulas:
             raise ValueError(f"Formulas are out of scope in {worksheet.title!r}: {', '.join(formulas[:10])}. Provide values-only data.")
         if selected_table and any(column.calculatedColumnFormula is not None or column.totalsRowFormula is not None
@@ -190,32 +220,31 @@ def read_xlsx(path: Path, *, sheet: str | None, table: str | None,
                 or len({name.strip() for name in header}) != len(header)
                 or any(cell.data_type == "e" for cell in cells[0])):
             raise ValueError("The selected header must contain unique, nonblank text field names.")
-        body = cells[1:len(cells) - totals] if totals else cells[1:]
         if automatic and selected_table is None:
-            if any(all(cell.value is None for cell in row) for row in body):
+            if any(all(value is None for value in row) for row in values):
                 raise ValueError("Blank rows make table boundaries ambiguous; confirm an explicit --range.")
-            if any([cell.value for cell in row] == header for row in body):
+            if any(row == header for row in values):
                 raise ValueError("Repeated headers suggest multiple blocks; select one table with --range.")
-        raw = pd.DataFrame([[cell.value for cell in row] for row in body], columns=header, dtype=object)
+        raw = pd.DataFrame(values, columns=header, dtype=object)
         raw.index = pd.RangeIndex(1, len(raw) + 1, name="record")
-        errors = pd.DataFrame([[cell.data_type == "e" for cell in row] for row in body],
-                              index=raw.index, columns=header, dtype=bool)
-        cell_metadata = {
-            cell.coordinate: {"type": cell.data_type, "number_format": cell.number_format}
-            for row in body for cell in row
-        }
-        formats, types = {}, {}
-        for offset, name in enumerate(header):
-            groups, type_counts = {}, {}
+        errors = pd.DataFrame(error_flags, index=raw.index, columns=header, dtype=bool)
+        # Keep addresses only for non-empty cells whose type or number format differs from
+        # their column's most common one; the per-field summaries cover the rest.
+        cell_metadata = {}
+        for offset, style in enumerate(styles):
+            if len(style) < 2:
+                continue
+            usual = max(style, key=style.get)
+            listed = 0
             for row in body:
                 cell = row[offset]
-                type_counts[cell.data_type] = type_counts.get(cell.data_type, 0) + 1
-                if cell.value is not None and cell.number_format != "General":
-                    group = groups.setdefault(cell.number_format, {"count": 0, "examples": []})
-                    group["count"] += 1
-                    if len(group["examples"]) < 5:
-                        group["examples"].append({"cell": cell.coordinate, "value": str(cell.value)})
-            formats[name], types[name] = groups, type_counts
+                if cell.value is not None and (cell.data_type, cell.number_format) != usual:
+                    cell_metadata[cell.coordinate] = {"type": cell.data_type, "number_format": cell.number_format}
+                    listed += 1
+                    if listed == CELL_EXCEPTIONS_MAX:
+                        break
+        formats = dict(zip(header, formats))
+        types = dict(zip(header, types))
         hidden_rows = [row for row in range(top + 1, bottom - totals + 1)
                        if worksheet.row_dimensions.get(row) and worksheet.row_dimensions[row].hidden]
         hidden_columns = []
