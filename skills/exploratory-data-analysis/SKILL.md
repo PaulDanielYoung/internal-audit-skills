@@ -35,6 +35,8 @@ Record the observable conditions in the file that could affect how its data is i
 
 State each observation as a short plain-language phrase ("Blank", "Placeholder number instead of a resolution"), and say why it matters: what it changes for a reader who uses the data, such as a denominator that shrinks, a join that fails, or a total that needs affected records excluded.
 
+Record every condition found with `Report.quality()`. For a condition whose impact merits attention despite affecting few records, set `always_show=True` and explain that impact in `why_it_matters`; the report otherwise summarizes conditions below its display threshold in a count.
+
 This step is complete when every area has been checked against the profile and the records, and each condition found is recorded, or the area is recorded as checked with nothing to report.
 
 ## 3. Build the data overview
@@ -55,7 +57,7 @@ Follow patterns from the profile, data quality assessment, and overview that rai
 - **Why it matters:** how the pattern could affect interpretation or what it prompts the auditor to explore. Include possible explanations only when useful and clearly label them as hypotheses.
 - **Question for the data provider:** a specific question that would help explain or resolve the pattern.
 
-For example, peaks in recorded acquisitions belong in the overview; identical costs across related acquisition records may warrant asking whether the cost is allocated per record or repeated from a shared purchase price. Retain an observation only when its evidence supports a meaningful stakeholder question.
+For example, the distribution of service-request resolution times belongs in the overview; requests marked resolved before their recorded opening dates may warrant asking how those dates are defined or populated. Retain an observation only when its evidence supports a meaningful stakeholder question.
 
 When an observation also limits analysis, apply the limitation to all affected calculations and visuals, including those earlier in the report, and keep the full evidence and stakeholder question in the observation. Describe an uncertain meaning as unresolved, without treating a suspected explanation as an established error.
 
@@ -79,7 +81,7 @@ Run the driver and check:
   "<chrome or msedge executable>" --headless=new --disable-gpu --hide-scrollbars --window-size=1280,12000 --screenshot="<temp png>" "<file URL of report.html>"
   ```
 
-  If no browser can render it, disclose that visual verification remains outstanding.
+  The height above is a starting point. Check that the screenshot includes the complete final section and the page's bottom padding; if content is cut off, increase the height and render again until the whole report fits, or use a full-page capture. Inspect readable crops covering the entire page, including its bottom. If no browser can render it, disclose that visual verification remains outstanding.
 
 Open the report in the user's default browser: `Start-Process` on Windows, `open` on macOS, `xdg-open` on Linux. Return the report's absolute path and a short account of the dimensions explored, any stakeholder questions, and limitations. The report is temporary; rerun the skill to regenerate it.
 

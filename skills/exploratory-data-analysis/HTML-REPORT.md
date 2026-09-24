@@ -31,7 +31,7 @@ assert all(
 )
 rows = profile["rows"]
 
-# city_property_details_datasd.csv becomes "San Diego City Property Details", never the file stem.
+# Invented example: service_requests.csv becomes "Service Requests", never the file stem.
 r = Report(
     profile,
     "<plain-language dataset name>",
@@ -64,11 +64,15 @@ print(r.write())
 
 Run `uv run "<driver path>"`, or use the Python interpreter from the environment containing pandas. Keep filters, date formats, role overrides, and extra transformations in the driver, so every count, percentage, and period in the report follows from its calculations.
 
+`raw` preserves cell strings: empty and whitespace-only cells are blanks, detected with `raw[field].str.strip().eq("")`, not `.isna()`. In `data`, blanks and failed conversions are missing values (NA/NaN/NaT depending on dtype); `.isna()` includes both, while the profile counts them separately. For a nullable boolean selection mask, use `mask.fillna(False)` before indexing to explicitly exclude unknown matches.
+
+`Report.quality(..., always_show=True)` keeps a material condition visible even below the default 1% display threshold. Explain its impact in `why_it_matters`; it then appears in the appropriate quality table and is excluded from the hidden-condition count.
+
 ## Analytical choices
 
-Numbers in prose carry their units: $391.2M, 2.96M acres, 32.9% of records. `fmt()`, `money()`, and `pct()` format them; `compact=True` writes 2.96M or $391.2M for prose while tables keep the full figure. Build record tables from the parsed values in `data` and format each cell; raw cell strings such as `2022.0` stay out of the report. Use a number or table when it explains an observation better than a chart. For category charts, show a manageable number of groups, combining the rest as Other where appropriate and saying so. For time comparisons, retain chronological order and distinguish incomplete periods. For distributions, explain bins and any display-range exclusions; extreme values remain in the underlying analysis. Choose units from established context and state the assumption in the context of each observation that relies on it when the file does not give them.
+Numbers in prose carry their units; invented examples are $12.5M, 1.25M service hours, and 18.4% of requests. `fmt()`, `money()`, and `pct()` format them; `compact=True` writes 1.25M or $12.5M for prose while tables keep the full figure. Build record tables from the parsed values in `data` and format each cell; raw cell strings such as `2022.0` stay out of the report. Use a number or table when it explains an observation better than a chart. For category charts, show a manageable number of groups, combining the rest as Other where appropriate and saying so. For time comparisons, retain chronological order and distinguish incomplete periods. For distributions, explain bins and any display-range exclusions; extreme values remain in the underlying analysis. Choose units from established context and state the assumption in the context of each observation that relies on it when the file does not give them.
 
-`chart()` supplies horizontal bars; it does not restrict the choice of chart. When another chart type better answers the question, generate self-contained inline SVG in the driver, with an accessible title, readable full labels, units, and values where useful, keeping the same offline and escaping guarantees. An observation's supporting table is a sample of the evidence: only the columns the prose cites, and a caption naming the selection and its share of the population, such as "Largest 8 of 192 groups sharing a grantor, year, and land cost".
+`chart()` supplies horizontal bars; it does not restrict the choice of chart. Set `decimals` to choose display precision for non-integral bar labels and tooltips (for example, `decimals=1` for service hours); the default is 2, integral values have no decimal places, and bar lengths use the supplied values without rounding. When another chart type better answers the question, generate self-contained inline SVG in the driver, with an accessible title, readable full labels, units, and values where useful, keeping the same offline and escaping guarantees. An observation's supporting table is a sample of the evidence: only the columns the prose cites, and a caption naming the selection and its share of the population, such as the invented "Longest 5 of 48 service requests awaiting assignment".
 
 For a coverage condition, count the records carrying the relevant date. State a reporting period in the header facts only when the relevant date field is understood.
 

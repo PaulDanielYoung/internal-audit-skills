@@ -23,7 +23,7 @@ from pathlib import Path
 TEMPLATE = Path(__file__).resolve().parent.parent / "assets" / "template.html"
 NA = "n/a"
 QUALITY_AREAS = ("Completeness", "Validity", "Uniqueness", "Consistency", "Coverage")
-# Conditions affecting a smaller share of records are left out of the data quality tables.
+# Default display threshold; a material condition can opt in with always_show=True.
 QUALITY_MIN_SHARE = 0.01
 # A table supporting an observation is a sample of the evidence, not a data dump.
 OBSERVATION_MAX_ROWS = 10
@@ -45,7 +45,7 @@ def _compact(number: float, decimals: int) -> str | None:
 
 
 def fmt(value, decimals: int = 2, *, compact: bool = False) -> str:
-    """Plain number. compact=True writes 2.96M in prose; tables keep the full figure."""
+    """Plain number. compact=True writes 1.25M in prose; tables keep the full figure."""
     if value is None:
         return NA
     number = float(value)
@@ -57,7 +57,7 @@ def fmt(value, decimals: int = 2, *, compact: bool = False) -> str:
 
 
 def money(value, *, compact: bool = False) -> str:
-    """Dollar amount. compact=True writes $391.2M in prose; tables keep the full figure."""
+    """Dollar amount. compact=True writes $12.5M in prose; tables keep the full figure."""
     if value is None:
         return NA
     number = float(value)
@@ -89,15 +89,19 @@ def table(columns: list[str], rows: list[list], title: str = "", *, css_class: s
     return f'<div class="scroll-table"><table{attrs}>{caption}<thead><tr>{headings}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
-def chart(labels: list, values: list, *, title: str, unit: str = "") -> str:
+def chart(labels: list, values: list, *, title: str, unit: str = "", decimals: int = 2) -> str:
     """Horizontal SVG bars with a zero baseline, full labels, and visible values.
 
     Supply already aggregated, finite values; sort categories or keep chronological order
     in the driver. Negative values extend to the left of zero. An empty input returns a
-    no-values message, which is not an overview chart.
+    no-values message, which is not an overview chart. decimals sets display precision
+    for non-integral values in labels and tooltips, without changing bar lengths;
+    integral values keep no decimal places, as in fmt().
     """
     if len(labels) != len(values):
         raise ValueError("Chart labels and values must have the same length.")
+    if isinstance(decimals, bool) or not isinstance(decimals, numbers.Integral) or decimals < 0:
+        raise ValueError("Chart decimals must be a non-negative integer.")
     if not values:
         return '<p class="muted">No values to plot.</p>'
     values = [float(value) for value in values]
@@ -115,6 +119,7 @@ def chart(labels: list, values: list, *, title: str, unit: str = "") -> str:
     marks = [f'<line x1="{zero:.2f}" x2="{zero:.2f}" y1="16" y2="{height - 28}" stroke="#94a3b8"/>']
     y = 20
     for label, value, lines, row_height in zip(labels, values, wrapped_labels, row_heights):
+        display_value = esc(fmt(value, decimals=decimals))
         center = y + row_height / 2
         label_y = center + 4 - (len(lines) - 1) * 8
         label_text = "".join(
@@ -124,8 +129,8 @@ def chart(labels: list, values: list, *, title: str, unit: str = "") -> str:
         marks.append(
             f'<text text-anchor="end">{label_text}</text>'
             f'<rect x="{min(zero, x(value)):.2f}" y="{center - 12:.2f}" width="{abs(x(value) - zero):.2f}" '
-            f'height="24" rx="3" fill="#4f46e5"><title>{esc(label)}: {esc(fmt(value))}</title></rect>'
-            f'<text x="{left + width + 18}" y="{center + 4:.2f}">{esc(fmt(value))}</text>'
+            f'height="24" rx="3" fill="#4f46e5"><title>{esc(label)}: {display_value}</title></rect>'
+            f'<text x="{left + width + 18}" y="{center + 4:.2f}">{display_value}</text>'
         )
         y += row_height
     marks.append(f'<text x="{zero:.2f}" y="{height - 7}" text-anchor="middle">0</text>')
@@ -174,7 +179,7 @@ class Report:
     title: the dataset's name in plain words, never the file stem.
     description: one or two sentences on what the data is and what one record represents.
     meanings: one sentence per field on what it appears to hold; every field is required.
-    facts: optional key figures shown beside the record and field counts, e.g. "1,668 sites".
+    facts: optional key figures shown beside the record and field counts, e.g. "240 service teams".
     """
 
     def __init__(self, profile: dict, title: str, *, description: str,
@@ -193,7 +198,7 @@ class Report:
         self._description = str(description)
         self._meanings = {name: meanings[name] for name in names}
         self._facts = tuple(facts)
-        self._quality: list[tuple[str, int, list]] = []
+        self._quality: list[tuple[str, int, bool, list]] = []
         self._overview: list[str] = []
         self._no_overview = ""
         self._observations: list[str] = []
@@ -201,12 +206,15 @@ class Report:
 
     # -- Adding content ----------------------------------------------------------------
 
-    def quality(self, area: str, field: str, observation: str, affected: int, why_it_matters: str) -> None:
+    def quality(self, area: str, field: str, observation: str, affected: int, why_it_matters: str,
+                *, always_show: bool = False) -> None:
         """One data quality condition. area is one of QUALITY_AREAS; field names the field
         or fields involved, or "All fields" for whole-record conditions; observation is a
         short plain-language phrase; affected is the count of records the condition applies
         to, shown as a percentage of the file's records. Add every condition found: those
-        under QUALITY_MIN_SHARE are counted in a note rather than listed."""
+        under QUALITY_MIN_SHARE are counted in a note rather than listed by default.
+        Set always_show=True for a material condition that merits a visible row even
+        below that display threshold, explaining its impact in why_it_matters."""
         rows = self._profile["rows"]
         if area not in QUALITY_AREAS:
             raise ValueError(f"Area must be one of: {', '.join(QUALITY_AREAS)}; got {area!r}")
@@ -214,8 +222,10 @@ class Report:
             raise ValueError(f"Every text cell of a {area} condition needs text.")
         if isinstance(affected, bool) or not isinstance(affected, numbers.Integral) or not 0 <= affected <= rows:
             raise ValueError(f"Affected records must be a record count from 0 to {rows}; got {affected!r}")
+        if not isinstance(always_show, bool):
+            raise ValueError("always_show must be a boolean.")
         share = int(affected) / rows if rows else 0.0
-        self._quality.append((area, int(affected), [field, observation, pct(share), why_it_matters]))
+        self._quality.append((area, int(affected), always_show, [field, observation, pct(share), why_it_matters]))
 
     def overview(self, question: str, chart: str, *, takeaway: str, context: str) -> None:
         """One descriptive question answered by exactly one SVG chart, a takeaway, and the
@@ -314,16 +324,17 @@ class Report:
         """One subheading and table per area in QUALITY_AREAS order, rows sorted by affected
         records, most first. An area with no condition says so under its heading."""
         by_area = {area: [] for area in QUALITY_AREAS}
-        for area, affected, row in self._quality:
-            by_area[area].append((affected, row))
+        for area, affected, always_show, row in self._quality:
+            by_area[area].append((affected, always_show, row))
         rows = self._profile["rows"]
         parts = []
         for area, area_rows in by_area.items():
             parts.append(f'<h3>{esc(area)}</h3>')
-            shown = [item for item in area_rows if (item[0] / rows if rows else 0.0) >= QUALITY_MIN_SHARE]
+            shown = [item for item in area_rows
+                     if item[1] or (item[0] / rows if rows else 0.0) >= QUALITY_MIN_SHARE]
             hidden = len(area_rows) - len(shown)
             if shown:
-                ranked = [row for _, row in sorted(shown, key=lambda item: item[0], reverse=True)]
+                ranked = [row for _, _, row in sorted(shown, key=lambda item: item[0], reverse=True)]
                 # Same fixed column widths in every area, so the tables line up down the section.
                 parts.append(table(["Field", "Observation", "Affected records", "Why it matters"], ranked, css_class="quality"))
             elif not hidden:

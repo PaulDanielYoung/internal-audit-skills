@@ -105,6 +105,11 @@ def profile_csv(
 
     Date formats use strptime syntax, e.g. %d/%m/%Y. Supplying a date format also
     assigns the date role. Numeric parsing does not infer currency or locale rules.
+
+    raw retains strings, including empty strings and whitespace-only cells; detect
+    blanks with raw[field].str.strip().eq(""). data masks those blanks and failed
+    conversions as missing (NA/NaN/NaT depending on dtype), so data[field].isna()
+    includes both. The profile counts blanks and parse failures separately.
     """
     path = Path(path).resolve()
     raw, skipped = read_csv(path, encoding)
