@@ -352,7 +352,7 @@ class Report:
     Sections, in order: header; What the file contains; Data quality; Data overview;
     Observations, only when one was added; Analysis limitations, only when one was added.
 
-    profile: the dict returned by profile_csv().
+    profile: the dict returned by profile_table().
     title: the dataset's name in plain words, never the file stem.
     description: one or two sentences on what the data is and what one record represents.
     meanings: one sentence per field on what it appears to hold; every field is required.
@@ -478,12 +478,14 @@ class Report:
 
     def write(self, path: str | Path | None = None) -> Path:
         """Write the complete offline report and return its path. Without a path, a fresh
-        timestamped .html file in the OS temporary directory, named after the CSV stem.
-        The CSV is never written."""
+        timestamped .html file in the OS temporary directory, named after the source stem.
+        The source is never written."""
         if path is None:
             stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
             stem = Path(self._profile["path"]).stem
-            path = Path(tempfile.gettempdir()) / f"{stem}-exploratory-data-analysis-{stamp}.html"
+            with tempfile.NamedTemporaryFile(prefix=f"{stem}-exploratory-data-analysis-{stamp}-",
+                                             suffix=".html", delete=False) as output:
+                path = Path(output.name)
         path = Path(path).resolve()
         if path.suffix.lower() != ".html":
             raise ValueError("Report output must have an .html extension.")
@@ -511,8 +513,35 @@ class Report:
             f'<header><p class="eyebrow">Exploratory data analysis</p><h1>{esc(self._title)}</h1>'
             f'<p class="lede">{esc(self._description)}</p>'
             f'<p class="facts">{" · ".join(esc(item) for item in items)}</p>'
+            f'{self._source_context()}'
             '</header>'
         )
+
+    def _source_context(self) -> str:
+        source = self._profile.get("source", {})
+        if source.get("format") != "xlsx":
+            return ""
+        notes = [f"Source: {self._profile['file']}, worksheet {source['sheet']}, range {source['range']}."]
+        if source.get("table"):
+            notes.append(f"Excel Table: {source['table']}.")
+        notes.append("All rows and columns in the selected data range are included, regardless of visibility or filters.")
+        if source["sheet_state"] != "visible":
+            notes.append("The selected worksheet is hidden.")
+        if source["hidden_rows_included"] or source["hidden_columns_included"]:
+            rows, columns = len(source["hidden_rows_included"]), len(source["hidden_columns_included"])
+            notes.append(f"Included {rows} hidden data row{'s' if rows != 1 else ''} and "
+                         f"{columns} hidden column{'s' if columns != 1 else ''}.")
+        if source["filters"]:
+            active = any(item["criteria_present"] for item in source["filters"])
+            notes.append("Saved filter criteria overlap the selection." if active
+                         else "Filter controls are present without saved criteria.")
+        if source["totals_rows_excluded"]:
+            rows = ", ".join(str(row) for row in source["totals_rows_excluded"])
+            notes.append(f"Declared Table totals row excluded from records: {rows}.")
+        if self._profile.get("blank_records"):
+            count = self._profile["blank_records"]
+            notes.append(f"Retained {fmt(count)} entirely blank data row{'s' if count != 1 else ''}.")
+        return f'<p class="muted">{esc(" ".join(notes))}</p>'
 
     def _field_profile(self) -> str:
         """Every field in file order with its apparent meaning."""

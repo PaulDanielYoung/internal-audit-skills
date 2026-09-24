@@ -13,7 +13,7 @@ The `GLOSSARY.md` in the user's working directory, holding the organization's ow
 _Avoid_: project glossary, engagement glossary
 
 **Driver**:
-The throwaway Python script the `exploratory-data-analysis` skill writes to the OS temporary directory for one CSV. It holds the interpretation choices and every calculation behind the report, and builds the report through the **Report** module.
+The throwaway Python script the `exploratory-data-analysis` skill writes to the OS temporary directory for one selected source table. It holds the source selection, interpretation choices, and every calculation behind the report, and builds the report through the **Report** module.
 _Avoid_: analysis script, notebook
 
 **Report**:

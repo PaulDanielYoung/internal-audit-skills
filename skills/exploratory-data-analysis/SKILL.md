@@ -1,23 +1,25 @@
 ---
 name: exploratory-data-analysis
-description: Explores one CSV an auditor has received and opens a temporary offline HTML report of its contents, structure, quality, and patterns. Use for a first look at a dataset before audit testing. Supports one table with a header row.
+description: Explores one CSV or one selected XLSX table and opens a temporary offline HTML report of its contents, structure, quality, and patterns. Use for a first look at a dataset before audit testing. Supports one header row and values-only XLSX data.
 ---
 
 # Exploratory Data Analysis
 
-Turn an unfamiliar CSV into an understanding of what it contains and what deserves closer examination. Exploration generates observations and hypotheses, not conclusions. An unusual value or relationship is a reason to look closer.
+Turn an unfamiliar table into an understanding of what it contains and what deserves closer examination. Exploration generates observations and hypotheses, not conclusions. An unusual value or relationship is a reason to look closer.
 
 ## Scope and files
 
-Analyze exactly one comma-delimited CSV, with one table and field names in the first record. If several files are offered, establish which one to explore. For an unsupported structure, explain what is needed rather than silently choosing a table or changing the source.
+Analyze one table from one CSV or XLSX file. CSV files must be comma-delimited with field names in the first record. For XLSX, read [XLSX.md](XLSX.md) before selecting or loading data; it defines selection, formula restrictions, and cell interpretation. If several files or plausible tables are offered, establish which one to explore. For an unsupported structure, explain what is needed rather than silently choosing a table or changing the source.
 
-Read the CSV in place and leave its bytes unchanged. The report is throwaway: the driver, the report, and every intermediate file go in the OS temporary directory, and each run writes a fresh report.
+Read the source in place and leave its bytes unchanged. The report is throwaway: the driver, the report, and every intermediate file go in the OS temporary directory, and each run writes a fresh report.
+
+Read the working glossary (`GLOSSARY.md` in the user's working directory) if present; proceed without it otherwise. Use the `glossary` skill for missing or contested terms; only that skill edits the working glossary.
 
 ## 1. Orient and profile
 
-Run `uv run "<skill directory>/scripts/profile_csv.py" "<CSV path>"` and read the printed summary and the temporary JSON profile. Without uv, use Python 3.10+ with `pandas>=2.0,<4`, plus `pillow>=10` for rendering in step 5, in a virtual environment. Script paths are relative to the skill directory, not the working directory; `--help` describes the parsing overrides.
+Run `uv run "<skill directory>/scripts/profile_table.py" "<source path>"` with any XLSX selection options, and read the printed summary and the temporary JSON profile. Without uv, use Python 3.10+ with `pandas>=2.0,<4` and `openpyxl>=3.1.5,<4`, plus `pillow>=10` for rendering in step 5, in a virtual environment. Script paths are relative to the skill directory, not the working directory; `--help` describes selection and parsing overrides.
 
-Review every field's apparent role against its name and raw values, and inspect the failure examples before using parsed values. A `date_format_hint` lists the non-ISO date formats a field's values fit; confirm one against the raw values, and treat a hint that fits both month-first and day-first as an unresolved question about the field. Correct roles and date formats by rerunning the profiler with overrides; the driver must repeat the same choices.
+Review every field's apparent role against its name and raw values, and inspect the failure and source-error examples before using parsed values. A `date_format_hint` lists the non-ISO date formats a field's values fit; confirm one against the raw values, and treat a hint that fits both month-first and day-first as an unresolved question about the field. Correct roles and date formats by rerunning the profiler with overrides; the driver must repeat the same source selection and interpretation choices.
 
 The profile's `entity_fields` names each identifier whose keys repeat, with the fields that never vary within a key. It is evidence for the grain: those fields describe the entity rather than the record, so count or total them once per entity.
 
@@ -29,8 +31,8 @@ This step is complete when row and field counts, blanks, and appropriate basic f
 
 Record the observable conditions in the file that could affect how its data is interpreted or analyzed, one condition each, in five areas:
 
-- **Completeness:** blank cells by field, fields that are entirely blank, and fields far sparser than the rest.
-- **Validity:** values that fail to parse as their apparent type, dates or numbers outside a possible range, malformed values, and placeholders standing in for a missing value. The profile's `possible_placeholders` lists candidates such as `R-000000`, `99999`, `--`, and `UNKNOWN`; confirm each against the field's meaning, since a value like `000` can be a real code.
+- **Completeness:** blank cells by field, entirely blank records, fields that are entirely blank, and fields far sparser than the rest.
+- **Validity:** values that fail to parse as their apparent type, typed Excel errors, dates or numbers outside a possible range, malformed values, and placeholders standing in for a missing value. The profile's `possible_placeholders` lists candidates such as `R-000000`, `99999`, `--`, and `UNKNOWN`; confirm each against the field's meaning, since a value like `000` can be a real code.
 - **Uniqueness:** exact duplicate records, and repeated values in apparent identifiers or composite keys.
 - **Consistency:** fields that contradict each other within a record, and values that vary within an apparent entity where they should stay constant.
 - **Coverage:** earliest and latest dates and obvious gaps between them. Whether the data are current depends on the expected refresh cycle, which the file does not give; an old latest date is an open question for the user.
@@ -81,7 +83,7 @@ Write for an auditor who has not opened the file: name the dataset in plain word
 
 Run the driver and check:
 
-- Counts reconcile to the source; blanks, parsing failures, and exclusions explain the denominators used.
+- Counts reconcile to the selected source table; blanks, source errors, parsing failures, and exclusions explain the denominators used.
 - Each reported number, ranking, comparison, and named example matches its calculation, and every interpretation remains distinct from what the data establishes. Read each takeaway against its rendered chart or table.
 - Each chart's type fits its question: bars compare distinct items or groups, lines show change over time, and pies show parts of one whole.
 - The report renders with readable labels, tables, and charts. Run `uv run "<skill directory>/scripts/render_report.py" "<report.html>"`: it captures the whole page with headless Chrome or Edge and prints numbered crops from top to bottom. Read every crop. The Chrome extension opens only web URLs, not local files. If the script finds no browser or cannot capture the complete page, disclose that visual verification remains outstanding.
