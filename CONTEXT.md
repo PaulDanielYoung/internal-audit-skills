@@ -25,6 +25,10 @@ _Avoid_: analysis script, notebook
 The `Report` module in `exploratory-data-analysis/scripts/report.py`. It takes the driver's content (framing, data quality conditions, overview items, observations, limitations) and owns section order, section titles, omission of empty sections, validation, and escaping when it writes the offline HTML file.
 _Avoid_: helpers, template
 
+**Visual**:
+One chart or table the **Driver** hands to the **Report**: a value from the charts module that knows its kind, what it drew, and any groups it folded into Other. The Report accepts nothing else as a chart or table.
+_Avoid_: markup, SVG string, figure
+
 **Condition**:
 One row of the report's data quality assessment: a field, what was observed in it, how many records it affects, and why it matters to a reader of the data.
 _Avoid_: finding, issue, data quality row
@@ -40,6 +44,7 @@ _Avoid_: date range, period coverage
 ## Relationships
 
 - A **Driver** builds exactly one **Report**
+- A **Driver** builds every **Visual** through the charts module and passes it to its **Report**
 - A **Report** derives every **Mechanical condition** and date-field **Coverage span** from the profile, and the **Driver** explains each one
 - Each **Context template** supplies the starting structure for one document in **Shared context**
 - An **Auditor workspace** holds **Shared context**, including one **Working glossary**

@@ -53,11 +53,11 @@ Each retained question gets one chart suited to it, a descriptive takeaway, and 
 
 Choose the chart type from the question it answers:
 
-- **Bar chart:** compares distinct items or groups, such as departments or categories: which is bigger or smaller. At most 12 bars, including any Other.
+- **Bar chart:** compares distinct items or groups, such as departments or categories: which is bigger or smaller.
 - **Line chart:** shows change, flow, or progression over time, such as daily traffic or monthly revenue over a year.
-- **Pie chart:** shows the parts of one whole, in at most five slices including any Other.
+- **Pie chart:** shows the parts of one whole.
 
-Record exclusions and transformations in the driver, and apply unresolved limitations to the choice of measures and calculations.
+Bar and pie charts fold a long tail of groups into Other themselves and report what they folded; say so in the chart's context, and when Other outweighs the largest group shown, say in the takeaway that the field is spread thinly. Record exclusions and transformations in the driver, and apply unresolved limitations to the choice of measures and calculations.
 
 This step is complete when the important fields have been considered for useful descriptive questions, each retained question has a rendered chart supported by calculations, and its chart and prose agree. If the file supports no meaningful overview, say why instead.
 
