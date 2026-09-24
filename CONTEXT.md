@@ -17,6 +17,14 @@ An unpopulated starting structure shipped inside `audit-context` for one shared 
 The `GLOSSARY.md` at the auditor workspace root, holding the organization's own definitions. Every skill reads it when present; only the `audit-context` skill edits it.
 _Avoid_: project glossary, engagement glossary
 
+**Source table**:
+The one selected table the `exploratory-data-analysis` skill reads in place, with its values, error cells, locations, and reader disclosures. CSV and XLSX differ behind it; the profile, the **Driver**, and the **Report** never ask which they hold.
+_Avoid_: source file, workbook, input
+
+**Choices**:
+The selection and interpretation overrides one profiling run applied: worksheet, Table or range, field roles, date formats, and encoding. The profile records them and the **Driver** repeats them unchanged.
+_Avoid_: options, settings, overrides
+
 **Driver**:
 The throwaway Python script the `exploratory-data-analysis` skill writes to the OS temporary directory for one selected source table. It holds the source selection, interpretation choices, and every calculation behind the report, and builds the report through the **Report** module.
 _Avoid_: analysis script, notebook
@@ -43,6 +51,7 @@ _Avoid_: date range, period coverage
 
 ## Relationships
 
+- A **Driver** profiles exactly one **Source table** with the **Choices** its profiling run recorded
 - A **Driver** builds exactly one **Report**
 - A **Driver** builds every **Visual** through the charts module and passes it to its **Report**
 - A **Report** derives every **Mechanical condition** and date-field **Coverage span** from the profile, and the **Driver** explains each one

@@ -335,26 +335,10 @@ class Report:
         )
 
     def _source_context(self) -> str:
-        source = self._profile.get("source", {})
-        if source.get("format") != "xlsx":
+        """What the source adapter disclosed about the selection, as it wrote it."""
+        notes = list(self._profile.get("source", {}).get("disclosures", []))
+        if not notes:
             return ""
-        notes = [f"Source: {self._profile['file']}, worksheet {source['sheet']}, range {source['range']}."]
-        if source.get("table"):
-            notes.append(f"Excel Table: {source['table']}.")
-        notes.append("All rows and columns in the selected data range are included, regardless of visibility or filters.")
-        if source["sheet_state"] != "visible":
-            notes.append("The selected worksheet is hidden.")
-        if source["hidden_rows_included"] or source["hidden_columns_included"]:
-            rows, columns = len(source["hidden_rows_included"]), len(source["hidden_columns_included"])
-            notes.append(f"Included {rows} hidden data row{'s' if rows != 1 else ''} and "
-                         f"{columns} hidden column{'s' if columns != 1 else ''}.")
-        if source["filters"]:
-            active = any(item["criteria_present"] for item in source["filters"])
-            notes.append("Saved filter criteria overlap the selection." if active
-                         else "Filter controls are present without saved criteria.")
-        if source["totals_rows_excluded"]:
-            rows = ", ".join(str(row) for row in source["totals_rows_excluded"])
-            notes.append(f"Declared Table totals row excluded from records: {rows}.")
         return f'<p class="muted">{esc(" ".join(notes))}</p>'
 
     def _field_profile(self) -> str:

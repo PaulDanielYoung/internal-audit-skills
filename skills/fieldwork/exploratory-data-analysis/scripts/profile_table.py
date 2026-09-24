@@ -43,7 +43,7 @@ from table_source import read_table, inspect_xlsx
 # A strong majority can suggest a type without hiding the remaining bad values.
 # These are profiling heuristics, not audit thresholds; explicit roles override them.
 PARSE_THRESHOLD = 0.95
-ROLES = {"identifier", "measure", "category", "date", "year", "month", "text"}
+ROLES = {"identifier", "measure", "category", "date", "year", "month", "text", "empty"}
 ID_NAME = re.compile(r"(^|[^a-z])(id|key|code|number|no|ref|reference)$", re.I)
 ISO_DATE = r"\d{4}-\d{2}-\d{2}"
 # Date parts are labels, not quantities: name words that suggest one, and its expected
@@ -294,7 +294,7 @@ def profile_table(
     *,
     roles: dict[str, str] | None = None,
     date_formats: dict[str, str] | None = None,
-    encoding: str = "utf-8-sig",
+    encoding: str | None = None,
     sheet: str | None = None,
     table: str | None = None,
     cell_range: str | None = None,
@@ -307,9 +307,9 @@ def profile_table(
     raw retains source values; detect blanks with blank_cells(raw[field]).
     data masks those blanks, typed Excel errors and failed
     conversions as missing (NA/NaN/NaT depending on dtype), so data[field].isna()
-    includes all three. The profile counts them separately. For XLSX, raw.attrs['cells']
-    maps the addresses of non-empty cells whose type or number format differs from their
-    field's most common one (up to 100 per field) to that type and format.
+    includes all three. The profile counts them separately, records the choices this
+    call applied under "choices", and carries the source's reader disclosures under
+    source["disclosures"].
     """
     path = Path(path).resolve()
     loaded = read_table(path, encoding=encoding, sheet=sheet, table=table, cell_range=cell_range)
@@ -324,6 +324,7 @@ def profile_table(
         raise ValueError("A field with a date format must have the date role.")
 
     data = raw.copy()
+    all_texts = loaded.texts()
     columns, blanks, texts = [], {}, {}
     shaped, groupings = {}, {}  # identifiers with mixed shapes; fields to locate those shapes by
     for name in raw.columns:
@@ -331,7 +332,7 @@ def profile_table(
         blank = blanks[name] = blank_cells(original)
         errors = loaded.errors[name]
         values = original.mask(blank | errors)
-        texts[name] = text_values(original)
+        texts[name] = all_texts[name]
         strings = texts[name].mask(blank | errors)
         inferred = infer_role(strings, name)
         present_values = values.dropna()
@@ -361,9 +362,7 @@ def profile_table(
             "error_examples": [{**loaded.location(index, name), "value": scalar(value)}
                                for index, value in original[errors].head(5).items()],
         }
-        if loaded.source["format"] == "xlsx":
-            entry["number_formats"] = loaded.formats[name]
-            entry["cell_types"] = loaded.cell_types[name]
+        entry.update(loaded.field_facts(name))
         if role == "measure" and not present.empty:
             entry.update({key: scalar(value) for key, value in {
                 "min": present.min(), "p05": present.quantile(0.05),
@@ -406,26 +405,21 @@ def profile_table(
     for name, (strings, shapes) in shaped.items():
         shape_concentrations(strings, shapes, {other: values for other, values in groupings.items() if other != name})
 
-    # Cell errors and literal error-looking text are distinct source records.
-    if loaded.source["format"] == "csv":
-        duplicates = int(raw.duplicated().sum())
-        entity_values = raw
-    else:
-        record_keys = [tuple((type(value).__name__, scalar(value), bool(error))
-                            for value, error in zip(row, errors))
-                       for row, errors in zip(raw.itertuples(index=False, name=None),
-                                              loaded.errors.itertuples(index=False, name=None))]
-        duplicates = len(record_keys) - len(set(record_keys))
-        entity_values = pd.DataFrame({name: text.fillna("") for name, text in texts.items()})
+    choices = {key: value for key, value in (("sheet", sheet), ("table", table), ("cell_range", cell_range))
+               if value is not None}
+    choices.update(roles=dict(roles), date_formats=dict(date_formats))
+    if "encoding" in loaded.source:
+        choices["encoding"] = loaded.source["encoding"]
     profile = {
         "file": path.name, "path": str(path),
         "generated": dt.datetime.now().isoformat(timespec="seconds"),
         "rows": len(raw), "fields": len(raw.columns),
-        "duplicate_records": duplicates,
-        "empty_lines_skipped": loaded.source.get("empty_lines_skipped", 0), "columns": columns,
+        "duplicate_records": loaded.duplicate_records(),
+        "columns": columns,
         "source": loaded.source,
+        "choices": choices,
         "blank_records": int(pd.DataFrame(blanks).all(axis=1).sum()) if blanks else 0,
-        "entity_fields": entity_fields(entity_values,
+        "entity_fields": entity_fields(loaded.entity_values(),
                                        [c["name"] for c in columns if c["role"] == "identifier"
                                         and not c["source_errors"]]),
         "sample": [
@@ -433,10 +427,6 @@ def profile_table(
             for index, row in raw.head(5).iterrows()
         ],
     }
-    # Attach evidence after calculations so pandas does not repeatedly deep-copy
-    # per-cell metadata while slicing/parsing the frame.
-    if loaded.source["format"] == "xlsx":
-        raw.attrs["cells"] = loaded.cell_metadata
     return raw, data, profile
 
 
@@ -457,7 +447,7 @@ def main(argv: list[str] | None = None) -> int:
     selection.add_argument("--range", dest="cell_range", help="Bounded range including its header, e.g. B5:H800")
     parser.add_argument("--role", action="append", type=assignment, default=[], metavar="FIELD=ROLE")
     parser.add_argument("--date-format", action="append", type=assignment, default=[], metavar="FIELD=FORMAT")
-    parser.add_argument("--encoding", default="utf-8-sig", help="Explicit input encoding (default: utf-8-sig)")
+    parser.add_argument("--encoding", help="CSV input encoding (default: utf-8-sig)")
     args = parser.parse_args(argv)
     try:
         if args.inspect:
@@ -478,10 +468,8 @@ def main(argv: list[str] | None = None) -> int:
         pickle.dump((raw, data, profile), cache)
         cache_path = cache.name
     print(f"{profile['file']}: {profile['rows']:,} records, {profile['fields']} fields")
-    if profile["source"]["format"] == "xlsx":
-        print("  Source selection: " + json.dumps(profile["source"], ensure_ascii=False))
-    if profile["empty_lines_skipped"]:
-        print(f"  {profile['empty_lines_skipped']} empty lines outside quoted fields skipped")
+    for note in profile["source"]["disclosures"]:
+        print(f"  {note}")
     for field in profile["columns"]:
         extra = ""
         if "outside_range" in field:

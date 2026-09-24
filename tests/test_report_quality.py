@@ -254,20 +254,14 @@ def test_write_needs_an_overview_or_a_reason(tmp_path):
         r.write(tmp_path / "report.html")
 
 
-def test_header_shows_counts_facts_and_xlsx_source_context(tmp_path):
-    source = {
-        "format": "xlsx", "sheet": "Data", "sheet_state": "visible", "range": "A1:C101", "table": "Orders",
-        "header_row": 1, "first_column": 1, "last_data_row": 101, "totals_rows_excluded": [102],
-        "hidden_rows_included": [5], "hidden_columns_included": [], "filters": [], "date_epoch": "1899-12-30T00:00:00",
-    }
+def test_header_shows_counts_facts_and_source_disclosures(tmp_path):
+    source = {"format": "xlsx", "disclosures": ["Source: orders.xlsx, worksheet Data, range A1:C101.",
+                                                 "Included 1 hidden data row and 0 hidden columns."]}
     prof = profile([column("amount", "measure")], source=source, path="/data/orders.xlsx", blank_records=1)
     r = report(prof, facts=["12 customers"])
     r.explain(ALL_FIELDS, "blank_record", "One blank row inside the selected range.")
     r.no_overview("Nothing to chart.")
     html = page(r, tmp_path)
     assert "100 records · 1 fields · 12 customers" in html
-    assert "worksheet Data, range A1:C101" in html
-    assert "Excel Table: Orders." in html
-    assert "Included 1 hidden data row and 0 hidden columns." in html
-    assert "totals row excluded from records: 102." in html
+    assert "worksheet Data, range A1:C101. Included 1 hidden data row and 0 hidden columns." in html
     assert "Retained" not in html  # the blank-record condition carries this now
