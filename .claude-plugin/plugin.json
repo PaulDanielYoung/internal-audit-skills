@@ -1,7 +1,7 @@
 {
   "name": "internal-audit-skills",
   "version": "0.1.1",
-  "description": "Agent skills for internal auditors: glossary, shared understanding, risk statements, and exploratory data analysis.",
+  "description": "Agent skills for internal auditors: workspace setup, audit context, shared understanding, risk statements, and exploratory data analysis.",
   "author": {
     "name": "Paul Young"
   },
@@ -9,7 +9,8 @@
   "license": "MIT",
   "keywords": ["internal-audit", "audit", "risk", "skills", "data-analysis"],
   "skills": [
-    "./skills/foundations/glossary",
+    "./skills/foundations/setup-internal-audit-skills",
+    "./skills/foundations/audit-context",
     "./skills/foundations/shared-understanding",
     "./skills/planning/risk-statements",
     "./skills/fieldwork/exploratory-data-analysis"

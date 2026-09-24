@@ -1,15 +1,20 @@
 # Internal Audit Skills
 
-A set of agent skills for internal auditors. This file defines the vocabulary the skills and their docs use about themselves; the audit vocabulary the skills hand to auditors lives in the seed glossary.
+A set of agent skills for internal auditors. This file defines the vocabulary the skills and their docs use about themselves; the organization's audit vocabulary lives in its working glossary.
 
 ## Language
 
-**Seed glossary**:
-The general internal audit definitions the skills assume, shipped inside the `glossary` skill as `SEED-GLOSSARY.md`. The starting point offered when a project has no working glossary yet.
-_Avoid_: default glossary, template glossary
+**Auditor workspace**:
+The user's working folder for one organization's audit work. Its root holds shared context; individual audit material lives under `engagements/`.
+
+**Shared context**:
+The working glossary, documented methodology captured in `METHODOLOGY.md`, and organizational overview in `ORGANIZATION.md` at the auditor workspace root. The `audit-context` skill maintains these files for other skills to read.
+
+**Context template**:
+An unpopulated starting structure shipped inside `audit-context` for one shared context document. It supplies headings and prompts, not definitions, requirements, or facts.
 
 **Working glossary**:
-The `GLOSSARY.md` in the user's working directory, holding the organization's own definitions. Every skill reads it; only the `glossary` skill edits it.
+The `GLOSSARY.md` at the auditor workspace root, holding the organization's own definitions. Every skill reads it when present; only the `audit-context` skill edits it.
 _Avoid_: project glossary, engagement glossary
 
 **Driver**:
@@ -23,4 +28,5 @@ _Avoid_: helpers, template
 ## Relationships
 
 - A **Driver** builds exactly one **Report**
-- The **Seed glossary** is the offered starting point for a **Working glossary**
+- Each **Context template** supplies the starting structure for one document in **Shared context**
+- An **Auditor workspace** holds **Shared context**, including one **Working glossary**

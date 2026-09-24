@@ -15,13 +15,15 @@ Split it into two sentences when it runs long:
 
 Adapt the wording to the context. The statement is complete when a reader can point to the event, the cause, and the consequence, and can name the objective the consequence affects.
 
-## Terminology
+## Shared context
 
-Read `GLOSSARY.md` in the working directory, if it exists, and use its definitions for **risk**, **objective**, **event**, **cause**, and **consequence**. Without one, the meanings in the opening paragraph apply.
+Use the auditor's chosen workspace root, otherwise the parent of `engagements/` when working beneath it, otherwise the working directory. Read `GLOSSARY.md` there if present and use its definitions for **risk**, **objective**, **event**, **cause**, and **consequence**. Without one, the meanings in the opening paragraph apply.
+
+Read relevant requirements in `METHODOLOGY.md` and relevant facts in `ORGANIZATION.md` when present, consulting referenced sources when needed. Documented methodology governs the wording; the pattern above is a starting point. Proceed without absent context files unless a material question needs resolving.
 
 ## When to pause
 
-Before drafting, call the Skill tool with "glossary" when a term you need is missing from the glossary, the user's material uses different terminology, or its intended meaning is unclear.
+Before drafting, use `audit-context` when a needed term is missing from an existing working glossary, the user's material uses conflicting terminology, or its intended meaning is unclear. Also use it when methodology or organizational context needs updating or clarification; only that skill edits the shared context files. Pass the specific question and available evidence.
 
 Call the Skill tool with "shared-understanding" when material ambiguity about the objective, event, causes, consequences, or intended use of the statement could meaningfully change what you write.
 
