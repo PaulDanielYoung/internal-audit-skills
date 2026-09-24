@@ -72,7 +72,14 @@ def money(value, *, compact: bool = False) -> str:
 
 
 def pct(share: float | None) -> str:
-    return NA if share is None else f"{share:.1%}"
+    """Share to one decimal place; a non-zero share never reads as 0.0% or 100.0%."""
+    if share is None:
+        return NA
+    if 0 < share < 0.0005:
+        return "<0.1%"
+    if 0.9995 <= share < 1:
+        return ">99.9%"
+    return f"{share:.1%}"
 
 
 # --- Visual vocabulary -----------------------------------------------------------------
@@ -211,7 +218,7 @@ class Report:
         """One data quality condition. area is one of QUALITY_AREAS; field names the field
         or fields involved, or "All fields" for whole-record conditions; observation is a
         short plain-language phrase; affected is the count of records the condition applies
-        to, shown as a percentage of the file's records. Add every condition found: those
+        to, shown with its percentage of the file's records. Add every condition found: those
         under QUALITY_MIN_SHARE are counted in a note rather than listed by default.
         Set always_show=True for a material condition that merits a visible row even
         below that display threshold, explaining its impact in why_it_matters."""
@@ -225,7 +232,8 @@ class Report:
         if not isinstance(always_show, bool):
             raise ValueError("always_show must be a boolean.")
         share = int(affected) / rows if rows else 0.0
-        self._quality.append((area, int(affected), always_show, [field, observation, pct(share), why_it_matters]))
+        affected_cell = f"{fmt(affected)} ({pct(share)})"
+        self._quality.append((area, int(affected), always_show, [field, observation, affected_cell, why_it_matters]))
 
     def overview(self, question: str, chart: str, *, takeaway: str, context: str) -> None:
         """One descriptive question answered by exactly one SVG chart, a takeaway, and the

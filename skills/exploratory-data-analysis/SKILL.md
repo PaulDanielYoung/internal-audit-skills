@@ -17,7 +17,7 @@ Read the CSV in place and leave its bytes unchanged. The report is throwaway: th
 
 Run `uv run "<skill directory>/scripts/profile_csv.py" "<CSV path>"` and read the printed summary and the temporary JSON profile. Without uv, use Python 3.10+ with `pandas>=2.0,<4` in a virtual environment. Script paths are relative to the skill directory, not the working directory; `--help` describes the parsing overrides.
 
-Review every field's apparent role against its name and raw values, and inspect the failure examples before using parsed values. Correct roles and date formats by rerunning the profiler with overrides; the driver must repeat the same choices.
+Review every field's apparent role against its name and raw values, and inspect the failure examples before using parsed values. A `date_format_hint` lists the non-ISO date formats a field's values fit; confirm one against the raw values, and treat a hint that fits both month-first and day-first as an unresolved question about the field. Correct roles and date formats by rerunning the profiler with overrides; the driver must repeat the same choices.
 
 When an unresolved question about a field's meaning or values would materially change a calculation or interpretation, call the Skill tool with "shared-understanding", giving it the specific ambiguity and the context already established. The user resolves it before you continue; if they cannot, flag the field as unresolved and continue with the rest of the dataset.
 
@@ -74,7 +74,7 @@ Write for an auditor who has not opened the file: name the dataset in plain word
 Run the driver and check:
 
 - Counts reconcile to the source; blanks, parsing failures, and exclusions explain the denominators used.
-- Each reported number matches its calculation, and every interpretation remains distinct from what the data establishes.
+- Each reported number, ranking, comparison, and named example matches its calculation, and every interpretation remains distinct from what the data establishes. Read each takeaway against its rendered chart or table.
 - The report renders with readable labels, tables, and charts. Render it with headless Chrome or Edge and read the screenshot; the Chrome extension opens only web URLs, not local files. Use a tall window and crop the image when the page is long:
 
   ```text

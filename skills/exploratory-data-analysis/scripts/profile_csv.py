@@ -9,8 +9,10 @@ Library: raw, data, profile = profile_csv(path, roles=..., date_formats=...)
 
 raw retains cell strings; data contains the interpreted values used in statistics.
 Both use one-based data-record indexes (not physical line numbers). Blank cells
-and failed conversions are counted separately. Only plain numbers and ISO dates
-are inferred; other date formats require an explicit format.
+and failed conversions are counted separately. Inferred roles cover plain numbers,
+ISO dates, and whole-number year or month fields named as such. Other date formats
+require an explicit format; a field whose values fit one gets a date_format_hint
+listing every format that fits.
 """
 from __future__ import annotations
 
@@ -28,9 +30,26 @@ import pandas as pd
 # A strong majority can suggest a type without hiding the remaining bad values.
 # These are profiling heuristics, not audit thresholds; explicit roles override them.
 PARSE_THRESHOLD = 0.95
-ROLES = {"identifier", "measure", "category", "date", "text"}
+ROLES = {"identifier", "measure", "category", "date", "year", "month", "text"}
 ID_NAME = re.compile(r"(^|[^a-z])(id|key|code|number|no|ref|reference)$", re.I)
 ISO_DATE = r"\d{4}-\d{2}-\d{2}"
+# Date parts are labels, not quantities: name words that suggest one, and its expected
+# range. Values outside the range are counted in the profile, not rejected.
+DATE_PARTS = {
+    "year": ({"year", "yr", "fy"}, (1800, 2100)),
+    "month": ({"month", "mon", "mo"}, (1, 12)),
+}
+# Non-ISO date formats offered as hints, each with the shape its values must have.
+DATE_HINTS = [
+    ("%m/%d/%Y", r"\d{1,2}/\d{1,2}/\d{4}"),
+    ("%d/%m/%Y", r"\d{1,2}/\d{1,2}/\d{4}"),
+    ("%m/%d/%y", r"\d{1,2}/\d{1,2}/\d{2}"),
+    ("%d/%m/%y", r"\d{1,2}/\d{1,2}/\d{2}"),
+    ("%m-%d-%Y", r"\d{1,2}-\d{1,2}-\d{4}"),
+    ("%d-%m-%Y", r"\d{1,2}-\d{1,2}-\d{4}"),
+    ("%d.%m.%Y", r"\d{1,2}\.\d{1,2}\.\d{4}"),
+    ("%Y/%m/%d", r"\d{4}/\d{1,2}/\d{1,2}"),
+]
 
 
 def read_csv(path: Path, encoding: str = "utf-8-sig") -> tuple[pd.DataFrame, int]:
@@ -69,6 +88,27 @@ def numeric(values: pd.Series) -> pd.Series:
     return parsed.where(finite)
 
 
+def in_range(parsed: pd.Series, part: str) -> pd.Series:
+    """Whole numbers within the date part's expected range; missing values are False."""
+    low, high = DATE_PARTS[part][1]
+    return (parsed.between(low, high) & parsed.eq(parsed.round())).fillna(False)
+
+
+def date_format_hint(values: pd.Series) -> list[str]:
+    """Every non-ISO format that parses a strong majority of the present values. More
+    than one (such as month-first and day-first) means the order is unresolved."""
+    present = values.dropna().str.strip()
+    fits = []
+    for date_format, shape in DATE_HINTS:
+        matches = present.str.fullmatch(shape)
+        if present.empty or matches.mean() < PARSE_THRESHOLD:
+            continue
+        parsed = pd.to_datetime(present[matches], format=date_format, errors="coerce")
+        if parsed.notna().sum() / len(present) >= PARSE_THRESHOLD:
+            fits.append(date_format)
+    return fits
+
+
 def infer_role(values: pd.Series, name: str) -> str:
     present = values.dropna()
     if present.empty:
@@ -78,7 +118,12 @@ def infer_role(values: pd.Series, name: str) -> str:
         return "identifier"
     if present.str.fullmatch(ISO_DATE).mean() >= PARSE_THRESHOLD:
         return "date"
-    if numeric(present).notna().mean() >= PARSE_THRESHOLD:
+    parsed = numeric(present.str.strip())
+    if parsed.notna().mean() >= PARSE_THRESHOLD:
+        name_words = set(re.split(r"[^a-z0-9]+", words.lower()))
+        for part, (part_words, _) in DATE_PARTS.items():
+            if name_words & part_words and in_range(parsed, part).mean() >= PARSE_THRESHOLD:
+                return part
         return "measure"
     # Low-cardinality text gets frequency summaries; this never changes its values.
     if present.nunique() <= 20 or present.nunique() / len(present) <= 0.1:
@@ -131,7 +176,7 @@ def profile_csv(
         inferred = infer_role(values, name)
         role = roles.get(name, "date" if name in date_formats else inferred)
         parsed = values
-        if role == "measure":
+        if role in {"measure", *DATE_PARTS}:
             parsed = numeric(values.str.strip())
         elif role == "date":
             date_format = date_formats.get(name, "%Y-%m-%d")
@@ -157,6 +202,10 @@ def profile_csv(
                 "max": present.max(), "mean": present.mean(),
             }.items()})
             entry.update(zeros=int(present.eq(0).sum()), negatives=int(present.lt(0).sum()))
+        elif role in DATE_PARTS and not present.empty:
+            entry.update(min=scalar(present.min()), max=scalar(present.max()),
+                         expected_range=list(DATE_PARTS[role][1]),
+                         outside_range=int((~in_range(present, role)).sum()))
         elif role == "date" and not present.empty:
             style = "%Y-%m-%d" if (present.dt.normalize() == present).all() else "%Y-%m-%d %H:%M:%S"
             entry.update(start=present.min().strftime(style), end=present.max().strftime(style))
@@ -168,6 +217,8 @@ def profile_csv(
             ]
             if role == "identifier":
                 entry["duplicates"] = int(len(present) - present.nunique())
+        if role != "date" and (hint := date_format_hint(values)):
+            entry["date_format_hint"] = hint
         columns.append(entry)
 
     profile = {
@@ -211,7 +262,16 @@ def main(argv: list[str] | None = None) -> int:
     if profile["empty_lines_skipped"]:
         print(f"  {profile['empty_lines_skipped']} empty lines outside quoted fields skipped")
     for field in profile["columns"]:
-        print(f"  {field['name']}: {field['role']}; {field['blank']} blank, {field['parse_failures']} unparsed")
+        extra = ""
+        if "outside_range" in field:
+            low, high = field["expected_range"]
+            extra = f", {field['outside_range']} outside {low}-{high}"
+        print(f"  {field['name']}: {field['role']}; {field['blank']} blank, {field['parse_failures']} unparsed{extra}")
+        hint = field.get("date_format_hint", [])
+        if len(hint) == 1:
+            print(f"    looks like dates in {hint[0]}: check the raw values, then set --date-format {field['name']}={hint[0]}")
+        elif hint:
+            print(f"    looks like dates, fitting {' and '.join(hint)}: resolve the order before setting --date-format")
     print(f"Temporary profile: {output_path}")
     return 0
 
