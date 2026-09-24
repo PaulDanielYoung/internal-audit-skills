@@ -1,39 +1,60 @@
 ---
 name: shared-understanding
-description: Resolve ambiguity with the user before making a judgment or producing work. Use when missing context, assumptions, preferences, or decisions could change the result.
+description: Resolve material ambiguity with the user before making a judgment or producing work. Use when missing context, assumptions, preferences, or decisions could materially change the result.
 ---
 
-Interview the user until you reach a shared understanding.
+# Shared Understanding
 
-Find the facts yourself first: read the available files, tools, policies, and other evidence before asking the user for anything you can determine on your own. The **decisions** are the user's; put each to them.
+Reach a shared understanding before proceeding with work that depends on unresolved decisions or assumptions.
 
-Identify the unresolved questions and ask them one at a time. Ask **foundational** questions first: a question whose answer depends on another still-open question waits until that one is settled.
+Find the **facts** yourself first. Read the available files, tools, policies, procedures, prior work, and other evidence before asking the user for anything you can determine on your own. The **decisions** are the user's; put each material decision to them.
 
-For each question, give a recommended answer and briefly explain your reasoning. Make the recommendation specific enough that the user can accept it, modify it, or choose another option.
+If additional material only the user can provide would materially improve the answer, name the specific kind that would help—for example a methodology, policy, procedure, spreadsheet, report, prior workpaper, or meeting notes. Let the user answer the underlying question directly instead if they prefer.
 
-Format each question like so:
+## Work the decision tree
 
+Map the unresolved **questions** as a **decision tree**. A question may depend on facts or on other decisions that must be settled first.
+
+The **frontier** is the set of material unresolved questions whose prerequisites are already settled: the questions that can be answered now without guessing about another unresolved fact or decision.
+
+Ask the frontier in **rounds**.
+
+If the frontier is reasonably small, ask all of its questions in the same round. If it is large, ask the highest-leverage questions first in a manageable group while preserving dependency order.
+
+Do not ask a question whose answer depends on another unresolved question in the same round.
+
+For each question, give a recommended answer and briefly explain the reasoning. Make the recommendation specific enough that the user can accept it, modify it, or choose another option.
+
+Format each round and question like so:
+
+```
 ❓ **Q1** - **{question title}**
 
-{question body, might be multiple paragraphs, including multiple choices}
+{question body, including choices where useful}
 
 ➡️ **Recommended answer**
 
-{your recommended answer, keep it brief and explain your reasoning}
+{recommended answer and brief reasoning}
+---
+❓ Q2 - {question title}
 
-After each answer, reassess what remains unresolved. The user's answer may settle other questions, introduce new ones, or change which question should come next.
+{question body, including choices where useful}
 
-When supporting material would settle a question or remove an important assumption, name the specific kind that would help (a methodology, policy, procedure, spreadsheet, report, prior workpaper, meeting notes) and invite the user to share it. Let them answer the underlying question directly instead if they prefer.
+➡️ Recommended answer
 
-The session is done when every row of the following table is either stated by the user or written down as an assumption they have confirmed. Then summarize the shared understanding in this two-column Markdown table:
+{recommended answer and brief reasoning}
+```
 
-| Area                | Shared understanding |
-| ------------------- | -------------------- |
-| **Objective**       | {the objective of the work} |
-| **Context**         | {the relevant context} |
-| **Decisions**       | {the key decisions} |
-| **Assumptions**     | {the assumptions you are relying on} |
-| **Constraints**     | {the constraints} |
-| **Expected output** | {the expected output} |
+After each round, reassess the decision tree. The user's answers may settle other questions, introduce new ones, change assumptions, or move the frontier.
 
-Keep each cell concise but specific enough to capture what was agreed. Separate multiple items in a cell with semicolons. After the table, ask the user to confirm the shared understanding before proceeding.
+## Know when to stop
+
+Continue until no **material** unresolved question, decision, or assumption remains that could change the work.
+
+When the frontier is empty, summarize the resulting shared understanding in the two-column table above.
+
+Do **not** ask for a separate confirmation by default. Reaching an empty frontier means the shared understanding has been established from the user's answers and the available evidence.
+
+If this skill was invoked by another skill, return the shared understanding and allow the invoking skill to continue.
+
+If this skill was invoked directly as part of work the user already requested, continue with that work after presenting the shared understanding.
