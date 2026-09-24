@@ -6,7 +6,7 @@
 
 CLI: uv run render_report.py REPORT.html [--browser PATH] [--out-dir DIR]
 
-Captures the whole page at a fixed width, growing the window until the page ends in
+Captures the whole page, with collapsed sections expanded, at a fixed width, growing the window until the page ends in
 background padding, then writes numbered crops covering the page from top to bottom.
 Prints each crop's path; read every one. Exits 1 when no browser is found or the page
 cannot be captured completely.
@@ -91,9 +91,12 @@ def main(argv: list[str] | None = None) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     with tempfile.TemporaryDirectory(prefix="eda-browser-") as profile:
+        # Capture a copy with every collapsed section open, so its contents are verified too.
+        expanded = Path(profile, "expanded.html")
+        expanded.write_text(report.read_text(encoding="utf-8").replace("<details>", "<details open>"), encoding="utf-8")
         height = FIRST_HEIGHT
         while True:
-            image = capture(browser, report, height, out_dir / "page.png", Path(profile))
+            image = capture(browser, expanded, height, out_dir / "page.png", Path(profile))
             bottom = content_bottom(image)
             if height - bottom >= BOTTOM_PADDING:
                 break

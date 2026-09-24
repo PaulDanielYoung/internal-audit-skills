@@ -104,6 +104,8 @@ BAR_LABEL_TILT = 40  # degrees, as Chart.js tilts tick labels that do not fit
 CHAR_WIDTH = 7.2  # approximate width of one 13px character in chart units
 # A line labels every point up to this many; beyond it, only the first, last, peak, and low.
 LINE_LABEL_ALL_MAX = 12
+# Period labels wrap beneath their points up to this many lines; longer ones thin out.
+LINE_LABEL_MAX_LINES = 2
 PIE_MAX_SLICES = 5
 CHART_WIDTH = 820
 
@@ -209,8 +211,9 @@ def line_chart(labels: list, values: list, *, title: str, unit: str = "", decima
     labels are the periods in chronological order, written as labels (1940s, 2022-Q3).
     Supply every period in the range, with zero for an empty one, so the time axis stays
     even. Every point has a marker; values are labeled on every point up to
-    LINE_LABEL_ALL_MAX points, and otherwise on the first, last, peak, and low.
-    partial_last draws the final segment dashed and marks its period "to date".
+    LINE_LABEL_ALL_MAX points, and otherwise on the first, last, peak, and low. Period
+    labels wrap beneath their points, or thin to every nth, counted back from the last,
+    when a word is too long for its slot. partial_last draws the final segment dashed and marks its period "to date".
     decimals works as in bar_chart().
     """
     values = _chart_input(labels, values, decimals)
@@ -245,9 +248,17 @@ def line_chart(labels: list, values: list, *, title: str, unit: str = "", decima
         labeled = set(range(len(values)))
     else:
         labeled = {0, last, values.index(max(values)), values.index(min(values))}
-    # Period labels thin to every nth so they never overlap; the last always shows.
-    every = max(1, math.ceil(max(len(label) for label in labels) * 8 / step))
-    shown = {index for index in range(len(values)) if index % every == 0 and last - index >= every} | {last}
+    # Every period label shows when each wraps to fit its slot in LINE_LABEL_MAX_LINES lines;
+    # otherwise labels thin to every nth, counted back from the last so the spacing stays even.
+    chars = max(1, int((step - 6) / CHAR_WIDTH))
+    wrapped = [textwrap.wrap(label, width=chars) or [""] for label in labels]
+    if all(len(word) <= chars for label in labels for word in label.split()) and \
+            max(len(lines) for lines in wrapped) <= LINE_LABEL_MAX_LINES:
+        shown, axis_lines = set(range(len(values))), wrapped
+    else:
+        every = max(1, math.ceil(max(len(label) for label in labels) * 8 / step))
+        shown = {index for index in range(len(values)) if (last - index) % every == 0}
+        axis_lines = [[label] for label in labels]
     axis_y = top + plot + 22
     for index, ((px, py), label, value) in enumerate(zip(points, labels, values)):
         display_value = esc(fmt(value, decimals=decimals))
@@ -263,9 +274,10 @@ def line_chart(labels: list, values: list, *, title: str, unit: str = "", decima
                     label_y = py + 20
             marks.append(f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{anchor}">{display_value}</text>')
         if index in shown:
-            lines = [label, "to date"] if hollow else [label]
+            lines = [*axis_lines[index], "to date"] if hollow else axis_lines[index]
             marks.append(f'<text text-anchor="middle">{_tspans(lines, px, axis_y)}</text>')
-    height = axis_y + (32 if partial_last else 16) + 8
+    label_lines = max(len(axis_lines[index]) for index in shown) + (1 if partial_last else 0)
+    height = axis_y + label_lines * 16 + 8
     return _figure(title, unit, height, marks)
 
 
@@ -382,6 +394,7 @@ class Report:
         self._meanings = {name: meanings[name] for name in names}
         self._facts = tuple(facts)
         self._quality: list[tuple[str, int, bool, list]] = []
+        self._checked: dict[str, list[str]] = {area: [] for area in QUALITY_AREAS}
         self._overview: list[str] = []
         self._no_overview = ""
         self._observations: list[str] = []
@@ -395,7 +408,7 @@ class Report:
         or fields involved, or "All fields" for whole-record conditions; observation is a
         short plain-language phrase; affected is the count of records the condition applies
         to, shown with its percentage of the file's records. Add every condition found: those
-        under QUALITY_MIN_SHARE are counted in a note rather than listed by default.
+        under QUALITY_MIN_SHARE are collapsed beneath the area's table by default.
         Set always_show=True for a material condition that merits a visible row even
         below that display threshold, explaining its impact in why_it_matters."""
         rows = self._profile["rows"]
@@ -411,25 +424,35 @@ class Report:
         affected_cell = f"{fmt(affected)} ({pct(share)})"
         self._quality.append((area, int(affected), always_show, [field, observation, affected_cell, why_it_matters]))
 
-    def coverage(self, field: str, start, end, dated: int, why_it_matters: str) -> None:
-        """The period one date field spans, always shown under Coverage. start and end are
-        the earliest and latest values in the words the reader should see: a date, a year,
-        or text such as "November 1911". dated is the count of records carrying the date.
-        Record gaps within the period with quality("Coverage", ...)."""
+    def checked(self, area: str, note: str) -> None:
+        """A check in one area that found nothing to record, stated so the reader knows it
+        was made, such as "No two records share an order number and line number"."""
+        if area not in QUALITY_AREAS:
+            raise ValueError(f"Area must be one of: {', '.join(QUALITY_AREAS)}; got {area!r}")
+        if not str(note).strip():
+            raise ValueError("A checked note needs text.")
+        self._checked[area].append(str(note))
+
+    def coverage(self, field: str, start, end, records: int, why_it_matters: str) -> None:
+        """The span of one date or period field, always shown under Coverage. start and end
+        are the earliest and latest values in the words the reader should see: a date, a
+        year, or text such as "November 1911" or "Jan–Jun 2020". records is the count of
+        records carrying a valid value in the field. Record gaps within the span with
+        quality("Coverage", ...)."""
         rows = self._profile["rows"]
         if any(not str(cell).strip() for cell in (field, start, end, why_it_matters)):
             raise ValueError("A coverage row needs a field, a start, an end, and why it matters.")
-        if isinstance(dated, bool) or not isinstance(dated, numbers.Integral) or not 0 <= dated <= rows:
-            raise ValueError(f"Dated records must be a record count from 0 to {rows}; got {dated!r}")
+        if isinstance(records, bool) or not isinstance(records, numbers.Integral) or not 0 <= records <= rows:
+            raise ValueError(f"Coverage records must be a record count from 0 to {rows}; got {records!r}")
         def label(value) -> str:
             if isinstance(value, dt.date):
                 return value.strftime("%d %b %Y")
             if isinstance(value, numbers.Real) and float(value).is_integer():
                 return str(int(value))  # a year, without a thousands separator
             return str(value)
-        share = int(dated) / rows if rows else 0.0
-        self._quality.append(("Coverage", int(dated), True, [
-            field, f"Dated {label(start)} to {label(end)}", f"{fmt(dated)} dated ({pct(share)})", why_it_matters,
+        share = int(records) / rows if rows else 0.0
+        self._quality.append(("Coverage", int(records), True, [
+            field, f"Spans {label(start)} to {label(end)}", f"{fmt(records)} with a value ({pct(share)})", why_it_matters,
         ]))
 
     def overview(self, question: str, chart: str, *, takeaway: str, context: str) -> None:
@@ -556,26 +579,35 @@ class Report:
 
     def _data_quality(self) -> str:
         """One subheading and table per area in QUALITY_AREAS order, rows sorted by affected
-        records, most first. An area with no condition says so under its heading."""
+        records, most first. Conditions under QUALITY_MIN_SHARE sit in a collapsed table
+        beneath; checks that found nothing follow. An area with neither conditions nor
+        checked notes says it was checked with nothing to report."""
         by_area = {area: [] for area in QUALITY_AREAS}
         for area, affected, always_show, row in self._quality:
             by_area[area].append((affected, always_show, row))
         rows = self._profile["rows"]
+        columns = ["Field", "Observation", "Affected records", "Why it matters"]
+        def ranked(items):
+            return [row for _, _, row in sorted(items, key=lambda item: item[0], reverse=True)]
         parts = []
         for area, area_rows in by_area.items():
             parts.append(f'<h3>{esc(area)}</h3>')
-            shown = [item for item in area_rows
-                     if item[1] or (item[0] / rows if rows else 0.0) >= QUALITY_MIN_SHARE]
-            hidden = len(area_rows) - len(shown)
+            visible = [always_show or (affected / rows if rows else 0.0) >= QUALITY_MIN_SHARE
+                       for affected, always_show, _ in area_rows]
+            shown = [item for item, show in zip(area_rows, visible) if show]
+            hidden = [item for item, show in zip(area_rows, visible) if not show]
             if shown:
-                ranked = [row for _, _, row in sorted(shown, key=lambda item: item[0], reverse=True)]
                 # Same fixed column widths in every area, so the tables line up down the section.
-                parts.append(table(["Field", "Observation", "Affected records", "Why it matters"], ranked, css_class="quality"))
-            elif not hidden:
-                parts.append('<p class="muted">Checked; nothing to report.</p>')
+                parts.append(table(columns, ranked(shown), css_class="quality"))
             if hidden:
-                noun = "condition" if hidden == 1 else "conditions"
-                parts.append(f'<p class="muted">{hidden} {noun} affecting less than {QUALITY_MIN_SHARE:.0%} of records not shown.</p>')
+                noun = "condition" if len(hidden) == 1 else "conditions"
+                parts.append(f'<details><summary>{len(hidden)} {noun} affecting less than '
+                             f'{QUALITY_MIN_SHARE:.0%} of records</summary>'
+                             f'{table(columns, ranked(hidden), css_class="quality")}</details>')
+            for note in self._checked[area]:
+                parts.append(f'<p class="muted">Checked: {esc(note)}</p>')
+            if not area_rows and not self._checked[area]:
+                parts.append('<p class="muted">Checked; nothing to report.</p>')
         return "".join(parts)
 
     def _overview_body(self) -> str:

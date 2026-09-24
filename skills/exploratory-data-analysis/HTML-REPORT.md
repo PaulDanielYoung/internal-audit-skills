@@ -56,9 +56,6 @@ for field in profile["columns"]:
     if field["source_errors"]:
         r.quality("Validity", field["name"], "Excel error value", field["source_errors"],
                   "<what the invalid values are excluded from>")
-    if shapes := field.get("value_shapes"):
-        r.quality("Consistency", field["name"], "Mixed identifier formats", field["parsed"] - shapes["shapes"][0]["records"],
-                  "<where the less common shapes occur and what they change for joins and distinct counts>")
     if variants := field.get("case_variants"):
         r.quality("Consistency", field["name"], "Same value in different case or spacing", variants["count"],
                   "<which counts the variants split>")
@@ -68,7 +65,9 @@ if profile["blank_records"]:
 if profile["duplicate_records"]:
     r.quality("Uniqueness", "All fields", "Exact duplicate record", profile["duplicate_records"],
               "<what the duplicates change for counts and totals>")
-# Coverage: one r.coverage("<date field>", <earliest valid>, <latest valid>, <records dated>, "<what the span means>") per date field.
+# Mixed identifier formats: one r.quality("Consistency", ...) per value shape confirmed as a second scheme, counting its records only.
+# Checks that found nothing: r.checked("<area>", "<what was tested>"), such as a composite key with no repeats.
+# Coverage: one r.coverage("<date or period field>", <earliest valid>, <latest valid>, <records with a valid value>, "<what the span means>") per field.
 
 # Data overview: one r.overview(question, chart, takeaway=..., context=...) per descriptive question,
 # or r.no_overview(reason) when the file cannot support one (for example, headers but no records).
@@ -82,15 +81,15 @@ Run `uv run "<driver path>"`, or use the Python interpreter from the environment
 
 `raw` preserves CSV strings or typed XLSX values. Use `blank_cells(raw[field])` to detect blanks in either format. In `data`, blanks, source errors, and failed conversions are missing values (NA/NaN/NaT depending on dtype); `.isna()` includes all three, while the profile counts them separately. For XLSX interpretation and source metadata, use [XLSX.md](XLSX.md). For a nullable boolean selection mask, use `mask.fillna(False)` before indexing to explicitly exclude unknown matches.
 
-`Report.quality(..., always_show=True)` keeps a material condition visible even below the default 1% display threshold. Explain its impact in `why_it_matters`; it then appears in the appropriate quality table and is excluded from the hidden-condition count.
+`Report.quality(..., always_show=True)` keeps a material condition in its area's main table even below the default 1% display threshold; explain its impact in `why_it_matters`. Other conditions below the threshold appear in a collapsed table beneath it. `Report.checked(area, note)` states a check that found nothing, so an area reads as tested rather than merely empty.
 
 ## Analytical choices
 
-Numbers in prose carry their units; invented examples are $12.5M, 1.25M service hours, and 18.4% of requests. `fmt()`, `money()`, and `pct()` format them; `compact=True` writes 1.25M or $12.5M for prose while tables keep the full figure. Numeric years, months, and record numbers are labels: write them as `str(int(value))` so they carry no thousands separator (1912, not 1,912). Preserve text identifiers exactly, including leading zeros. Build record tables from the parsed values in `data` and format each cell. Use a number or table when it explains an observation better than a chart. For bar and pie charts, combine the groups beyond the chart's limit as Other and say so in the chart's context. For distributions, explain bins and any display-range exclusions; extreme values remain in the underlying analysis. Choose units from established context and state the assumption in the context of each observation that relies on it when the file does not give them.
+Numbers in prose carry their units; invented examples are $12.5M, 1.25M service hours, and 18.4% of requests. `fmt()`, `money()`, and `pct()` format them; `compact=True` writes 1.25M or $12.5M for prose while tables keep the full figure. Numeric years, months, and record numbers are labels: write them as `str(int(value))` so they carry no thousands separator (1912, not 1,912). Preserve text identifiers exactly, including leading zeros. Build record tables from the parsed values in `data` and format each cell. Use a number or table when it explains an observation better than a chart. For bar and pie charts, combine the groups beyond the chart's limit as Other and say so in the chart's context. When Other or a similar catch-all group outweighs the largest group shown, say so in the takeaway: the field is spread thinly, and how concentrated it is may answer the question better than which groups lead. For distributions, explain bins and any display-range exclusions; extreme values remain in the underlying analysis. Choose units from established context and state the assumption in the context of each observation that relies on it when the file does not give them.
 
 `bar_chart()`, `line_chart()`, and `pie_chart()` draw the chart types that step 3 of [SKILL.md](SKILL.md) chooses between; each docstring states its limits. `bar_chart()` takes at most 12 bars; labels wrap beneath their bars, or tilt when a word is too long to fit. `line_chart()` takes every period in the range, in chronological order, with zero for an empty one, and `partial_last=True` draws an incomplete final period dashed and marked "to date". `pie_chart()` takes at most five non-negative parts of one whole and rejects more. Set `decimals` to choose display precision for non-integral value labels and tooltips (for example, `decimals=1` for service hours); the default is 2, integral values have no decimal places, and the marks use the supplied values without rounding. An observation's supporting table is a sample of the evidence: only the columns the prose cites, and a caption naming the selection and its share of the population, such as the invented "Longest 5 of 48 service requests awaiting assignment".
 
-Record each date field's span with `r.coverage(field, start, end, dated, why_it_matters)`, taking start and end from the valid values and `dated` as the count of records carrying the date; record gaps within the span with `r.quality("Coverage", ...)`. State a reporting period in the header facts only when the relevant date field is understood. A period stored as a label, such as `FY24 JUL-DEC` or `2023-Q3`, profiles as a category: map each label to its calendar start in the driver, order and gap-check the periods from that mapping, and state the fiscal-year convention the mapping assumes, with its basis.
+Record each date or period field's span with `r.coverage(field, start, end, records, why_it_matters)`, taking start and end from the valid values and `records` as the count of records carrying a valid value; record gaps within the span with `r.quality("Coverage", ...)`. State a reporting period in the header facts only when the relevant date field is understood. A period stored as a label, such as `FY24 JUL-DEC` or `2023-Q3`, profiles as a category: map each label to its calendar start in the driver, order and gap-check the periods from that mapping, pass the labels to `line_chart()` in that calendar order, and state the fiscal-year convention the mapping assumes, with its basis.
 
 Identify inspected CSV records using the profiler's one-based data-record index or a source identifier. CSV record indexes exclude the header and empty lines outside quoted fields; they are not physical line numbers when cells contain line breaks. For XLSX, use the worksheet row or cell address from source metadata; the Report automatically displays the selected worksheet/range and visibility and totals exclusions.
 

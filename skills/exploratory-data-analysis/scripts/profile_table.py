@@ -15,7 +15,8 @@ ISO dates, and whole-number year or month fields named as such. Other date forma
 require an explicit format; a field whose values fit one gets a date_format_hint
 listing every format that fits. Fields list possible_placeholders (values such as
 R-000000, 99999, --, UNKNOWN); identifiers with mixed character patterns list
-value_shapes, and categories with values differing only in case or spacing list
+value_shapes, each less common shape noting any grouping value (a category or a
+date's year) its records are concentrated_in, and categories with values differing only in case or spacing list
 case_variants. entity_fields names the fields that never vary within a repeating
 identifier. The CLI also writes a temporary pickle of (raw, data, profile) for
 exploration scripts.
@@ -73,6 +74,14 @@ ENTITY_MIN_REPEATED = 0.1
 # Shapes and case-variant groups listed per field, most records first.
 SHAPES_MAX = 10
 VARIANT_GROUPS_MAX = 5
+# A less common identifier shape is concentrated when at least this share of its records
+# share one value of a grouping field (a category with few values, or a date's year) that
+# holds at most CONCENTRATION_MAX_BASE of all records. Shapes rarer than
+# CONCENTRATION_MIN_RECORDS are left out, since a handful of records always concentrates.
+CONCENTRATION_MIN_SHARE = 0.9
+CONCENTRATION_MAX_BASE = 0.25
+CONCENTRATION_MIN_RECORDS = 5
+GROUPING_MAX_VALUES = 50
 
 
 def blank_cells(values: pd.Series) -> pd.Series:
@@ -177,11 +186,16 @@ def possible_placeholders(values: pd.Series) -> dict | None:
     }
 
 
+def shape_of(value: str) -> str:
+    """9 for a digit, A for a letter, other characters kept."""
+    return re.sub(r"[^\W\d_]", "A", re.sub(r"\d", "9", value))
+
+
 def value_shapes(values: pd.Series) -> dict | None:
-    """Character patterns of an identifier's values (9 for a digit, A for a letter, other
-    characters kept) when there is more than one: mixed shapes can mean mixed schemes."""
+    """Character patterns of an identifier's values when there is more than one: mixed
+    shapes can mean mixed schemes."""
     counts, distinct = value_counts(values.str.strip())
-    shapes = distinct.map(lambda value: re.sub(r"[^\W\d_]", "A", re.sub(r"\d", "9", value))).to_numpy()
+    shapes = distinct.map(shape_of).to_numpy()
     by_shape = counts.groupby(shapes, sort=False).sum().sort_values(ascending=False, kind="stable")
     if len(by_shape) < 2:
         return None
@@ -192,6 +206,35 @@ def value_shapes(values: pd.Series) -> dict | None:
         "shapes": [{"shape": shape, "records": int(records), "example": str(examples[shape])}
                    for shape, records in by_shape.head(SHAPES_MAX).items()],
     }
+
+
+def shape_concentrations(values: pd.Series, shapes: dict, groupings: dict[str, pd.Series]) -> None:
+    """Add concentrated_in to each less common shape whose records gather in one value of
+    a grouping field, such as a period, source system, or year: evidence of where a scheme
+    change or second source begins. Picks the grouping with the highest share, then the
+    smallest base."""
+    stripped = values.str.strip()
+    distinct = stripped.dropna().unique()
+    record_shapes = stripped.map(dict(zip(distinct, map(shape_of, distinct))))
+    for item in shapes["shapes"][1:]:
+        in_shape = record_shapes.eq(item["shape"]).fillna(False)
+        if item["records"] < CONCENTRATION_MIN_RECORDS:
+            continue
+        best = None
+        for name, grouping in groupings.items():
+            counts = grouping[in_shape].value_counts()
+            if counts.empty:
+                continue
+            value, records = counts.index[0], int(counts.iloc[0])
+            share_of_shape = records / item["records"]
+            share_of_all = float(grouping.eq(value).mean())
+            candidate = (share_of_shape, -share_of_all)
+            if (share_of_shape >= CONCENTRATION_MIN_SHARE and share_of_all <= CONCENTRATION_MAX_BASE
+                    and (best is None or candidate > best[0])):
+                best = (candidate, {"field": name, "value": str(value), "share_of_shape": round(share_of_shape, 4),
+                                    "share_of_all": round(share_of_all, 4)})
+        if best:
+            item["concentrated_in"] = best[1]
 
 
 def case_variants(values: pd.Series) -> dict | None:
@@ -282,6 +325,7 @@ def profile_table(
 
     data = raw.copy()
     columns, blanks, texts = [], {}, {}
+    shaped, groupings = {}, {}  # identifiers with mixed shapes; fields to locate those shapes by
     for name in raw.columns:
         original = raw[name]
         blank = blanks[name] = blank_cells(original)
@@ -344,13 +388,23 @@ def profile_table(
                 entry["duplicates"] = int(len(present) - present.nunique())
                 if shapes := value_shapes(strings):
                     entry["value_shapes"] = shapes
-            elif role == "category" and (variants := case_variants(strings)):
-                entry["case_variants"] = variants
+                    shaped[name] = (strings, shapes)
+            elif role == "category":
+                if variants := case_variants(strings):
+                    entry["case_variants"] = variants
+                if 1 < entry["distinct"] <= GROUPING_MAX_VALUES:
+                    groupings[name] = strings
+        if role == "date" and not present.empty:
+            groupings[name] = parsed.dt.year.astype("Int64").astype("string")
+        elif role == "year" and not present.empty:
+            groupings[name] = parsed.where(in_range(parsed, "year")).astype("Int64").astype("string")
         if role != "date" and (hint := date_format_hint(strings)):
             entry["date_format_hint"] = hint
         if placeholders := possible_placeholders(strings):
             entry["possible_placeholders"] = placeholders
         columns.append(entry)
+    for name, (strings, shapes) in shaped.items():
+        shape_concentrations(strings, shapes, {other: values for other, values in groupings.items() if other != name})
 
     # Cell errors and literal error-looking text are distinct source records.
     if loaded.source["format"] == "csv":
@@ -446,6 +500,11 @@ def main(argv: list[str] | None = None) -> int:
         if shapes := field.get("value_shapes"):
             listed = ", ".join(f"{item['shape']} ({item['records']:,}, e.g. {item['example']})" for item in shapes["shapes"])
             print(f"    {shapes['count']} value shapes: {listed}")
+            for item in shapes["shapes"]:
+                if where := item.get("concentrated_in"):
+                    print(f"      {item['shape']}: {where['share_of_shape']:.0%} of its records have "
+                          f"{where['field']} = {json.dumps(where['value'], ensure_ascii=False)} "
+                          f"({where['share_of_all']:.0%} of all records)")
         if variants := field.get("case_variants"):
             listed = "; ".join(" / ".join(json.dumps(item["value"], ensure_ascii=False) for item in group)
                                for group in variants["groups"])
