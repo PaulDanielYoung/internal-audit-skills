@@ -29,6 +29,20 @@ QUALITY_MIN_SHARE = 0.01
 OBSERVATION_MAX_ROWS = 10
 
 
+_ROLE_WORDS = {"identifier": "an identifier", "measure": "numbers", "category": "categories", "date": "dates",
+               "year": "years", "month": "months", "text": "free text", "empty": "empty"}
+_FORMAT_WORDS = {"%d": "day", "%m": "month", "%Y": "year", "%y": "two-digit year", "%b": "month name",
+                 "%B": "month name", "%H": "hour", "%M": "minute", "%S": "second", "%j": "day of year"}
+
+
+def _format_words(date_format: str) -> str:
+    """A strptime format in the reader's words: %d/%m/%Y becomes day/month/year."""
+    text = date_format
+    for code, words in _FORMAT_WORDS.items():
+        text = text.replace(code, words)
+    return text
+
+
 def _section(title: str, body: str) -> str:
     return f'<section><h2>{esc(title)}</h2>{body}</section>'
 
@@ -335,8 +349,14 @@ class Report:
         )
 
     def _source_context(self) -> str:
-        """What the source adapter disclosed about the selection, as it wrote it."""
+        """What the source adapter disclosed about the selection, as it wrote it, then the
+        roles and date formats the driver chose over the profiler's inference."""
         notes = list(self._profile.get("source", {}).get("disclosures", []))
+        choices = self._profile.get("choices", {})
+        for field, role in choices.get("roles", {}).items():
+            notes.append(f"{field} read as {_ROLE_WORDS.get(role, role)}.")
+        for field, date_format in choices.get("date_formats", {}).items():
+            notes.append(f"{field} read as dates written {_format_words(date_format)}.")
         if not notes:
             return ""
         return f'<p class="muted">{esc(" ".join(notes))}</p>'

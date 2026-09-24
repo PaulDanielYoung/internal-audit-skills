@@ -18,21 +18,11 @@ SKILL_DIR = Path(r"<absolute skill directory>")
 SOURCE = Path(r"<absolute CSV or XLSX path>")
 sys.dont_write_bytecode = True  # keep __pycache__ out of the skill folder
 sys.path.insert(0, str(SKILL_DIR / "scripts"))
-from profile_table import profile_table, blank_cells
-from charts import bar_chart, line_chart, pie_chart, table
-from report import ALL_FIELDS, Report, fmt, money, pct
+from eda import profile_table, locate, Report, ALL_FIELDS, bar_chart, line_chart, pie_chart, table, fmt, money, pct
 
-# Persist selection and interpretation choices; overrides recompute statistics.
-# CSV: selection = {}. XLSX: use the exact sheet and range or Table from profiling.
-# Examples: {"sheet": "Transactions", "cell_range": "B5:H800"}, {"table": "Transactions"}
-selection = {}
-# Example syntax: roles={"account": "identifier"}, date_formats={"date": "%d/%m/%Y"}
-raw, data, profile = profile_table(SOURCE, **selection, roles={}, date_formats={})
-assert len(raw) == len(data) == profile["rows"]
-assert all(
-    field["blank"] + field["source_errors"] + field["parse_failures"] + field["parsed"] == len(raw)
-    for field in profile["columns"]
-)
+# The choices line the profiler printed, pasted unchanged: selection, roles, date formats, encoding.
+choices = {}
+raw, data, profile = profile_table(SOURCE, **choices)
 rows = profile["rows"]
 
 # Invented example: service_requests.csv becomes "Service Requests", never the file stem.
@@ -70,9 +60,9 @@ for item in (*r.conditions, *r.spans):
 print(r.write())
 ```
 
-Run `uv run "<driver path>"`, or use the Python interpreter from the environment containing the profiler's dependencies. Keep source selection, analytical filters, date formats, role overrides, and extra transformations in the driver, so every count, percentage, period, ranking ("next", "largest"), and named example in the report follows from its calculations. This includes figures and record numbers in `why_it_matters` text and limitations: interpolate them from calculated values.
+Run `uv run "<driver path>"`, or use the Python interpreter from the environment containing the profiler's dependencies. The driver's `choices` are the line the profiler printed for the run that was reviewed; rerun the profiler and paste again after changing a role or date format. Keep analytical filters and extra transformations in the driver too, so every count, percentage, period, ranking ("next", "largest"), and named example in the report follows from its calculations. This includes figures and record numbers in `why_it_matters` text and limitations: interpolate them from calculated values.
 
-`raw` preserves CSV strings or typed XLSX values. Use `blank_cells(raw[field])` to detect blanks in either format. In `data`, blanks, source errors, and failed conversions are missing values (NA/NaN/NaT depending on dtype); `.isna()` includes all three, while the profile counts them separately. For XLSX interpretation and source metadata, use [XLSX.md](XLSX.md). For a nullable boolean selection mask, use `mask.fillna(False)` before indexing to explicitly exclude unknown matches.
+`raw` preserves CSV strings or typed XLSX values. Use `blank_cells(raw[field])`, importable from `eda`, to detect blanks in either format. In `data`, blanks, source errors, and failed conversions are missing values (NA/NaN/NaT depending on dtype); `.isna()` includes all three, while the profile counts them separately. For XLSX interpretation and source metadata, use [XLSX.md](XLSX.md). For a nullable boolean selection mask, use `mask.fillna(False)` before indexing to explicitly exclude unknown matches.
 
 The Report collapses conditions below its display threshold; `always_show=True` on `explain()` or `quality()` keeps a material one visible, with its impact in `why_it_matters`. `Report.checked(area, note)` states a check that found nothing, so an area reads as tested rather than merely empty.
 

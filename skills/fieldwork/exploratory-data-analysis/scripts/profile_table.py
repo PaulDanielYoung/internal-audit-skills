@@ -18,8 +18,8 @@ R-000000, 99999, --, UNKNOWN); identifiers with mixed character patterns list
 value_shapes, each less common shape noting any grouping value (a category or a
 date's year) its records are concentrated_in, and categories with values differing only in case or spacing list
 case_variants. entity_fields names the fields that never vary within a repeating
-identifier. The CLI also writes a temporary pickle of (raw, data, profile) for
-exploration scripts.
+identifier. The CLI prints the choices it applied as one line for the driver to
+paste, and writes a temporary pickle of (raw, data, profile) for exploration scripts.
 """
 from __future__ import annotations
 
@@ -500,6 +500,7 @@ def main(argv: list[str] | None = None) -> int:
     for group in profile["entity_fields"]:
         print(f"  {group['identifier']} groups {group['records']:,} records into {group['entities']:,} entities; "
               f"constant within each: {', '.join(group['constant_fields'])}")
+    print(f"choices = {profile['choices']!r}")
     print(f"Temporary profile: {output_path}")
     print(f"Exploration cache: {cache_path} (pandas.read_pickle gives raw, data, profile)")
     return 0
