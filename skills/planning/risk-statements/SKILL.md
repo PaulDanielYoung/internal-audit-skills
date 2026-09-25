@@ -17,13 +17,11 @@ Adapt the wording to the context. The statement is complete when a reader can po
 
 ## Shared context
 
-Use the auditor's chosen workspace root, otherwise the parent of `engagements/` when working beneath it, otherwise the working directory. Read `GLOSSARY.md` there if present and use its definitions for **risk**, **objective**, **event**, **cause**, and **consequence**. Without one, the meanings in the opening paragraph apply.
-
-Read relevant requirements in `METHODOLOGY.md` and relevant facts in `ORGANIZATION.md` when present, consulting referenced sources when needed. Documented methodology governs the wording; the pattern above is a starting point. Proceed without absent context files unless a material question needs resolving.
+Read the workspace glossary, if present, and use its definitions for **risk**, **objective**, **event**, **cause**, and **consequence**. Without one, the meanings in the opening paragraph apply. Read the relevant methodology and organization context too; documented methodology governs the wording, and the pattern above is a starting point.
 
 ## When to pause
 
-Before drafting, use `audit-context` when a needed term is missing from an existing glossary, the user's material uses conflicting terminology, or its intended meaning is unclear. Also use it when methodology or organizational context needs updating or clarification; only that skill edits the shared context files. Pass the specific question and available evidence.
+Before drafting, use `audit-context` when a needed term is missing from an existing glossary, the user's material uses conflicting terminology, or its intended meaning is unclear. Also use it when methodology or organizational context needs updating or clarification. Pass the specific question and available evidence.
 
 Call the Skill tool with "shared-understanding" when material ambiguity about the objective, event, causes, consequences, or intended use of the statement could meaningfully change what you write.
 

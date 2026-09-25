@@ -14,4 +14,4 @@ Organize the document around the supplied methodology. Prioritize rules needed f
 
 ## Maintenance
 
-A missing rule is a gap to ask about, not evidence that no requirement applies. Request the governing source or clarification rather than filling gaps with generic audit practice. Update the summary and its source references when a governing document changes.
+When audit work clarifies a requirement against its source, offer the update in one line during the work, then write it on acceptance. Don't hold proposals for later. A missing rule is a gap to ask about, not evidence that no requirement applies. Request the governing source or clarification rather than filling gaps with generic audit practice. Update the summary and its source references when a governing document changes.

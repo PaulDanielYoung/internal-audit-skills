@@ -8,7 +8,7 @@ Copy [GLOSSARY-TEMPLATE.md](GLOSSARY-TEMPLATE.md) during explicit workspace setu
 
 - **Challenge against the glossary.** When the user's material uses a term in a way that conflicts with its definition, say so at once and ask which meaning holds.
 - **Sharpen fuzzy language.** When a word carries more than one meaning, propose a precise canonical term using the organization's established terminology.
-- **Put changes to the user.** New or revised definitions are the user's decision. Use supplied material and the organization's established usage to recommend wording, and write it once they accept or amend it.
+- **Put changes to the user.** New or revised definitions are the user's decision. Use supplied material and the organization's established usage to recommend wording. Offer the entry in one line during the work, then write it on acceptance. Don't hold proposals for later.
 - **Update inline.** Record a resolved term immediately, in the session where it was settled. A task-specific exception or temporary interpretation stays in the conversation.
 - **Definitions belong here.** Audit methodology belongs in `METHODOLOGY.md`, organizational facts in `ORGANIZATION.md`, and engagement material under `engagements/`. Keep unresolved terminology questions in the conversation until a definition is settled.
 

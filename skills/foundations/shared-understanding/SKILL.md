@@ -7,7 +7,7 @@ description: Resolve material ambiguity with the user before making a judgment o
 
 Reach a shared understanding before proceeding with work that depends on unresolved decisions or assumptions.
 
-Use the auditor's chosen workspace root, otherwise the parent of `engagements/` when working beneath it, otherwise the working directory. Read the glossary (`GLOSSARY.md`) and relevant requirements in `METHODOLOGY.md` and facts in `ORGANIZATION.md` there when present. Documented methodology governs audit work; consult its sources when needed. Absent context files only need attention when the missing information is material. Use `audit-context` to record settled changes to shared context or resolve missing or contested terms; only that skill edits these files. If `audit-context` called this skill, return the resolved decisions to it for recording.
+Read the workspace glossary and the relevant methodology and organization context, if present. Use `audit-context` for missing or contested terms and to record settled changes to shared context. If `audit-context` called this skill, return the resolved decisions to it for recording.
 
 Find the **facts** yourself first. Read the available files, tools, policies, procedures, prior work, and other evidence before asking the user for anything you can determine on your own. The **decisions** are the user's; put each material decision to them.
 

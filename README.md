@@ -75,7 +75,7 @@ Setup delegates the context documents to `audit-context`, which creates any that
 
 > Use audit-context to capture the organizational material at the path I provide.
 
-Definitions are agreed with you, methodology comes from documented sources, and organizational facts come from your material or explicit statements. Other skills read the context and call `audit-context` when it needs updating. Individual audit material belongs under `engagements/`; an engagement planning skill is not yet included.
+Definitions are agreed with you, methodology comes from documented sources, and organizational facts come from your material or explicit statements. As you work, Claude offers to record terms, methodology points, and organizational facts that get settled, and writes each one when you accept. Other skills read the context when present; `audit-context` needs setup to have run and asks you to run it if not. Individual audit material belongs under `engagements/`; an engagement planning skill is not yet included.
 
 ## License
 

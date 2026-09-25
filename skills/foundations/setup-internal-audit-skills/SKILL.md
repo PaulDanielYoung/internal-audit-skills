@@ -14,7 +14,7 @@ Use the target folder supplied by the user, resolving a relative path from the c
 
 Inspect existing `CLAUDE.md`, `AGENTS.md`, shared context files, and `engagements/` in the target. Preserve existing content. If the folder already describes a different organization or has conflicting workspace instructions, resolve that conflict before making changes. Create the target directory if needed.
 
-Locate the available `audit-context` skill, including its plugin-qualified name when installed through a plugin. If it is unavailable, explain that setup requires it and stop before writing workspace files. Do not substitute a copy of its document rules.
+Confirm the `audit-context` skill is available. If it is not, explain that setup requires it and stop before writing workspace files. Do not substitute a copy of its document rules.
 
 This step is complete when the target is unambiguous, existing workspace conventions have been inspected, and `audit-context` is available.
 
@@ -30,12 +30,12 @@ This step is complete when all three context documents and `engagements/` exist.
 
 Read [WORKSPACE-INSTRUCTIONS.md](WORKSPACE-INSTRUCTIONS.md). Add its block to the target's `CLAUDE.md`, creating the file if absent. When a block headed `## Internal audit skills` already exists, merge necessary changes into that block, preserving user additions and all unrelated instructions. Respect any existing `CLAUDE.md` pointer to `AGENTS.md`; add the block to the referenced project instruction file rather than replacing the pointer. Resolve conflicting instructions with the user.
 
-The block's root is the selected auditor workspace. If the instruction file is outside that root, adjust the root sentence to name the actual workspace path. Use the installed skill's callable name in the block, including a plugin prefix when needed. Avoid machine-specific source-repository paths in ordinary workspace instructions.
+The block locates the context files beside the instruction file. If the instruction file is outside the selected workspace, change its first sentence to name the actual workspace path. Avoid machine-specific source-repository paths in ordinary workspace instructions.
 
-This step is complete when Claude Code can find the workspace root, context ownership, and reading rules from its project instructions without duplicate or conflicting setup blocks.
+This step is complete when Claude Code can find the context files, their ownership, and the reading and capture rules from its project instructions without duplicate or conflicting setup blocks.
 
 ## 4. Verify and hand off
 
-Check that the context documents are readable, `engagements/` exists, and the project instructions point to the correct workspace and skill. Report the absolute workspace path and the files created or retained.
+Check that the context documents are readable, `engagements/` exists, and the project instructions point to the correct workspace. Report the absolute workspace path and the files created or retained.
 
 Tell the user to start a local Claude Code session in the workspace. Give one next prompt of the form "Use audit-context to capture <material>", with organizational material as the example. Setup is complete without generating an engagement plan or requiring another confirmation.

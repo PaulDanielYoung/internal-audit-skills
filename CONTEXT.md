@@ -10,6 +10,10 @@ The user's working folder for one organization's audit work. Its root holds shar
 **Shared context**:
 The glossary, documented methodology captured in `METHODOLOGY.md`, and organizational overview in `ORGANIZATION.md` at the auditor workspace root. The `audit-context` skill maintains these files for other skills to read.
 
+**Workspace instructions**:
+The `## Internal audit skills` block that `setup-internal-audit-skills` adds to the auditor workspace's `CLAUDE.md`. It locates the shared context files, sets the reading and capture rules, and marks the workspace as set up.
+_Avoid_: setup block, instruction block
+
 **Context template**:
 The starting file shipped inside `audit-context` for one shared context document: a title, a one-sentence description, and any fixed heading.
 
@@ -57,3 +61,4 @@ _Avoid_: date range, period coverage
 - A **Report** derives every **Mechanical condition** and date-field **Coverage span** from the profile, and the **Driver** explains each one
 - Each **Context template** is the starting file for one document in **Shared context**
 - An **Auditor workspace** holds **Shared context**, including one **Glossary**
+- **Workspace instructions** locate the **Shared context** of one **Auditor workspace**

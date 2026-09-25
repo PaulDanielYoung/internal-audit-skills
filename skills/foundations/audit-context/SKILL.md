@@ -1,6 +1,6 @@
 ---
 name: audit-context
-description: Maintain shared audit context in GLOSSARY.md, METHODOLOGY.md, and ORGANIZATION.md. Use when establishing or updating this context, resolving missing or contested terms, clarifying documented methodology, or capturing organizational facts useful across engagements.
+description: Maintain shared audit context in GLOSSARY.md, METHODOLOGY.md, and ORGANIZATION.md. Use when audit terminology is discussed, defined, or used inconsistently, when documented methodology needs clarifying, or when audit work settles a term or surfaces an organizational fact useful across engagements.
 ---
 
 # Audit Context
@@ -9,13 +9,13 @@ Maintain the context other audit skills use. Capture existing terminology, docum
 
 ## Workspace and ownership
 
-Use the auditor's explicitly chosen workspace root. Otherwise, when working beneath `engagements/`, use its parent; outside an engagement, use the working directory. Resolve an ambiguous workspace with the user before writing. Keep these files at that root, separate from the installed skill:
+The workspace instructions should have been provided to you. If not, tell the user to run `setup-internal-audit-skills`. The files sit at the workspace root those instructions name, separate from the installed skill; when setup calls this skill, use the absolute root it passes instead:
 
 - `GLOSSARY.md`: the organization's own definitions.
 - `METHODOLOGY.md`: a concise, source-linked account of documented audit requirements.
 - `ORGANIZATION.md`: an organizational overview useful across engagements.
 
-This skill owns edits to all three files. Other skills read the glossary and relevant methodology and organizational context when present, and proceed without absent files unless missing information materially affects their work. They call this skill when persistent context needs to change, passing the specific fact, term, or conflict and its evidence. Update only the relevant file or files, then return to the calling task.
+This skill owns edits to all three files. Other skills read them when present and call this skill when persistent context needs to change, passing the specific fact, term, or conflict and its evidence. Update only the relevant file or files, then return to the calling task.
 
 Engagement scope, process and control detail, evidence, findings, and planning artifacts belong under `engagements/`.
 

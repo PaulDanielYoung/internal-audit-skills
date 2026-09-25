@@ -10,4 +10,4 @@ Use supplied organizational material or explicit user statements. Keep lightweig
 
 ## Maintenance
 
-Clarify conflicting facts before replacing settled context. Update changing facts in place with their current basis and effective period. Keep definitions in the glossary and use its terms here.
+When audit work surfaces a supported fact useful across engagements, offer it in one line during the work, then write it on acceptance. Don't hold proposals for later. Clarify conflicting facts before replacing settled context. Update changing facts in place with their current basis and effective period. Keep definitions in the glossary and use its terms here.
