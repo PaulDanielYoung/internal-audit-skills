@@ -7,6 +7,10 @@ A set of agent skills for internal auditors. This file defines the vocabulary th
 **Auditor workspace**:
 The user's working folder for one organization's audit work. Its root holds shared context; individual audit material lives under `engagements/`.
 
+**Engagement**:
+One planned piece of internal audit work on a defined subject, carried from assignment through reporting. "Audit" is an acceptable informal synonym in conversation; skills and docs say engagement.
+_Avoid_: project, review
+
 **Shared context**:
 The glossary, documented methodology captured in `METHODOLOGY.md`, and organizational overview in `ORGANIZATION.md` at the auditor workspace root. The `audit-context` skill maintains these files for other skills to read.
 
@@ -61,4 +65,5 @@ _Avoid_: date range, period coverage
 - A **Report** derives every **Mechanical condition** and date-field **Coverage span** from the profile, and the **Driver** explains each one
 - Each **Context template** is the starting file for one document in **Shared context**
 - An **Auditor workspace** holds **Shared context**, including one **Glossary**
+- An **Auditor workspace** holds many **Engagements**, each in its own folder under `engagements/`
 - **Workspace instructions** locate the **Shared context** of one **Auditor workspace**

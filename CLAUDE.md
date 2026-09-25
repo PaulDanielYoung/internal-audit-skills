@@ -9,3 +9,17 @@ Context templates and their guides live inside `skills/foundations/audit-context
 Validate plugin packaging with `claude plugin validate . --strict`. Users install through the plugin or `npx skills add`, as the README documents. For maintainers only, `./scripts/link-skills.ps1` in PowerShell links every skill into `~/.claude/skills/` so edits are live in the next session without reinstalling; re-run it after adding, moving, or removing a skill, and remove the links before testing an npx or plugin install.
 
 `setup-internal-audit-skills` prepares an auditor workspace and its project instructions; it delegates context initialization to `audit-context`. Explicit setup creates missing glossary, methodology, and organization documents from the context templates. Ordinary maintenance records settled content and preserves existing workspace files.
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked in this repo's GitHub Issues via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five canonical triage roles use their default label names. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
