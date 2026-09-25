@@ -1,7 +1,5 @@
-# Working Glossary
+# Glossary
 
-**Status:** Unpopulated starting structure. No definitions have been agreed. The prompt below describes how to record terms as they are resolved.
+The organization's own audit vocabulary: each term's agreed meaning and the synonyms it displaces. Every skill reads it; only `audit-context` edits it.
 
-## Terms
-
-<!-- Add each agreed term in bold, followed by a one- or two-sentence definition. Where useful, add an _Avoid_ line for synonyms the organization does not use. Group terms under headings when natural clusters emerge. -->
+## Language

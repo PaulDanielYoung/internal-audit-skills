@@ -1,6 +1,6 @@
 # Internal Audit Skills
 
-A set of agent skills for internal auditors. This file defines the vocabulary the skills and their docs use about themselves; the organization's audit vocabulary lives in its working glossary.
+A set of agent skills for internal auditors. This file defines the vocabulary the skills and their docs use about themselves; the organization's audit vocabulary lives in its glossary.
 
 ## Language
 
@@ -8,14 +8,14 @@ A set of agent skills for internal auditors. This file defines the vocabulary th
 The user's working folder for one organization's audit work. Its root holds shared context; individual audit material lives under `engagements/`.
 
 **Shared context**:
-The working glossary, documented methodology captured in `METHODOLOGY.md`, and organizational overview in `ORGANIZATION.md` at the auditor workspace root. The `audit-context` skill maintains these files for other skills to read.
+The glossary, documented methodology captured in `METHODOLOGY.md`, and organizational overview in `ORGANIZATION.md` at the auditor workspace root. The `audit-context` skill maintains these files for other skills to read.
 
 **Context template**:
-An unpopulated starting structure shipped inside `audit-context` for one shared context document. It supplies headings and prompts, not definitions, requirements, or facts.
+The starting file shipped inside `audit-context` for one shared context document: a title, a one-sentence description, and any fixed heading.
 
-**Working glossary**:
+**Glossary**:
 The `GLOSSARY.md` at the auditor workspace root, holding the organization's own definitions. Every skill reads it when present; only the `audit-context` skill edits it.
-_Avoid_: project glossary, engagement glossary
+_Avoid_: working glossary, project glossary, engagement glossary
 
 **Source table**:
 The one selected table the `exploratory-data-analysis` skill reads in place, with its values, error cells, locations, and reader disclosures. CSV and XLSX differ behind it; the profile, the **Driver**, and the **Report** never ask which they hold.
@@ -55,5 +55,5 @@ _Avoid_: date range, period coverage
 - A **Driver** builds exactly one **Report**
 - A **Driver** builds every **Visual** through the charts module and passes it to its **Report**
 - A **Report** derives every **Mechanical condition** and date-field **Coverage span** from the profile, and the **Driver** explains each one
-- Each **Context template** supplies the starting structure for one document in **Shared context**
-- An **Auditor workspace** holds **Shared context**, including one **Working glossary**
+- Each **Context template** is the starting file for one document in **Shared context**
+- An **Auditor workspace** holds **Shared context**, including one **Glossary**

@@ -23,7 +23,7 @@ Read relevant requirements in `METHODOLOGY.md` and relevant facts in `ORGANIZATI
 
 ## When to pause
 
-Before drafting, use `audit-context` when a needed term is missing from an existing working glossary, the user's material uses conflicting terminology, or its intended meaning is unclear. Also use it when methodology or organizational context needs updating or clarification; only that skill edits the shared context files. Pass the specific question and available evidence.
+Before drafting, use `audit-context` when a needed term is missing from an existing glossary, the user's material uses conflicting terminology, or its intended meaning is unclear. Also use it when methodology or organizational context needs updating or clarification; only that skill edits the shared context files. Pass the specific question and available evidence.
 
 Call the Skill tool with "shared-understanding" when material ambiguity about the objective, event, causes, consequences, or intended use of the statement could meaningfully change what you write.
 

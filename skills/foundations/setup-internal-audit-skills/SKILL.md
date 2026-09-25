@@ -6,11 +6,11 @@ disable-model-invocation: true
 
 # Setup Internal Audit Skills
 
-Prepare a new or existing auditor workspace. The skills must already be available through local development links or the installed plugin; this skill configures a workspace, not the user's skill installation.
+Prepare a new or existing auditor workspace. The skills must already be installed; this skill configures a workspace, not the user's skill installation.
 
 ## 1. Establish the workspace
 
-Use the target folder supplied by the user, resolving a relative path from the current working directory. If no target was supplied, use the current directory when it is clearly an auditor workspace or an empty folder. Otherwise, ask for the intended folder. In the skills source repository, ask for a separate auditor workspace path rather than treating the source repository as an organization.
+Use the target folder supplied by the user, resolving a relative path from the current working directory. If no target was supplied, use the current directory when it is clearly an auditor workspace or an empty folder, apart from Claude Code configuration in `.claude/`. Otherwise, ask for the intended folder. In the skills source repository, ask for a separate auditor workspace path rather than treating the source repository as an organization.
 
 Inspect existing `CLAUDE.md`, `AGENTS.md`, shared context files, and `engagements/` in the target. Preserve existing content. If the folder already describes a different organization or has conflicting workspace instructions, resolve that conflict before making changes. Create the target directory if needed.
 
@@ -24,7 +24,7 @@ Invoke `audit-context` with the absolute workspace root and an explicit request 
 
 Ensure `engagements/` exists. Leave individual engagement folders and planning artifacts for the audit work that needs them. Keep existing files intact; rerunning setup fills missing pieces rather than resetting the workspace.
 
-This step is complete when all three context documents and `engagements/` exist. Any of the documents may still be marked unpopulated; gathering sources and agreeing definitions are not prerequisites for setting up the workspace.
+This step is complete when all three context documents and `engagements/` exist. Sources and definitions come later through `audit-context`.
 
 ## 3. Add project instructions
 
@@ -36,6 +36,6 @@ This step is complete when Claude Code can find the workspace root, context owne
 
 ## 4. Verify and hand off
 
-Check that the context documents are readable, template status is explicit where sources are missing, `engagements/` exists, and the project instructions point to the correct workspace and skill. Report the absolute workspace path, files created or retained, and any remaining context gaps.
+Check that the context documents are readable, `engagements/` exists, and the project instructions point to the correct workspace and skill. Report the absolute workspace path and the files created or retained.
 
-Tell the user to start a local Claude Code session in the workspace. Give one next prompt using `audit-context` to capture their audit manual or organizational material. Setup is complete without generating an engagement plan or requiring another confirmation.
+Tell the user to start a local Claude Code session in the workspace. Give one next prompt of the form "Use audit-context to capture <material>", with organizational material as the example. Setup is complete without generating an engagement plan or requiring another confirmation.

@@ -13,7 +13,7 @@ Analyze one table from one CSV or XLSX file. CSV files must be comma-delimited w
 
 Read the source in place and leave its bytes unchanged. The report is throwaway: the driver, the report, and every intermediate file go in the OS temporary directory, and each run writes a fresh report.
 
-Use the auditor's chosen workspace root, otherwise the parent of `engagements/` when working beneath it, otherwise the working directory. Read the working glossary (`GLOSSARY.md`) and relevant requirements in `METHODOLOGY.md` and facts in `ORGANIZATION.md` there when present, consulting referenced sources when needed. Proceed without absent files unless missing context materially affects the analysis. Use `audit-context` for missing or contested terms and updates or conflicts in persistent context; only that skill edits those files. Documented methodology governs audit work; surface any conflict with this skill's exploratory scope or temporary outputs before proceeding with affected work.
+Use the auditor's chosen workspace root, otherwise the parent of `engagements/` when working beneath it, otherwise the working directory. Read the glossary (`GLOSSARY.md`) and relevant requirements in `METHODOLOGY.md` and facts in `ORGANIZATION.md` there when present, consulting referenced sources when needed. Proceed without absent files unless missing context materially affects the analysis. Use `audit-context` for missing or contested terms and updates or conflicts in persistent context; only that skill edits those files. Documented methodology governs audit work; surface any conflict with this skill's exploratory scope or temporary outputs before proceeding with affected work.
 
 ## 1. Orient and profile
 

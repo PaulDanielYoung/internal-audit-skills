@@ -1,10 +1,8 @@
-# Working Glossary
+# Glossary
 
-## Starting structure
+## Creating the file
 
-Read [GLOSSARY-TEMPLATE.md](GLOSSARY-TEMPLATE.md) when creating the working glossary. During explicit workspace setup, copy its unpopulated structure even if no terms have been resolved. Otherwise, create the file when there is a definition to record. Preserve an existing working glossary; setup supplies a structure, not default definitions.
-
-As definitions are agreed, replace the prompt with those entries and update the status to describe the terms captured so far. An unpopulated or partial working glossary leaves other terms unresolved.
+Copy [GLOSSARY-TEMPLATE.md](GLOSSARY-TEMPLATE.md) during explicit workspace setup, or when the first definition is ready to record. Preserve an existing glossary.
 
 ## During the session
 
@@ -16,10 +14,12 @@ As definitions are agreed, replace the prompt with those entries and update the 
 
 ## Format
 
+Add each entry under `## Language`:
+
 ```md
-**Term**
+**Term**:
 One or two sentences stating what it is, not what it does.
-_Avoid_: synonyms the project does not use
+_Avoid_: synonyms the organization does not use
 ```
 
 - **Be opinionated.** When several words exist for one concept, pick one and list the others under `_Avoid_`.
