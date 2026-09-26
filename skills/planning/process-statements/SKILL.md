@@ -22,8 +22,6 @@ Adapt the wording to the context. Write one present-tense paragraph, roughly two
 - **Systems:** what systems the roles use.
 - **Key inputs and outputs:** what enters and leaves the flow, where these clarify the boundaries.
 
-Describe operation as the sources show it. When a source describes intended design and another shows divergent practice, state both and attribute each to its source without resolving between them. Describe approvals, reconciliations, and reviews as plain activities, without labelling them controls or adding adequacy, risk, or weakness judgements. Control wording belongs to `control-statements`; risk wording belongs to `risk-statements`.
-
 ## Shared context and gaps
 
 Read the workspace glossary for process, activity, and role names, and relevant methodology and organization context for canonical role and system names, if present. Proceed silently when absent. Documented methodology governs the wording; the pattern above is a starting point.
