@@ -8,5 +8,5 @@ Skills for defining the audit's focus.
 - [`planning-memo`](planning-memo/SKILL.md) records auditor-agreed objectives and scope, sourced criteria and approach, and the team, budget, and timeline for the RCM handoff.
 - [`risk-statements`](risk-statements/SKILL.md) turns a risk, concern, or vague topic into a clear risk statement.
 - [`process-statements`](process-statements/SKILL.md) writes and reviews process titles and descriptions, including purpose, boundaries, roles, and systems.
-- [`control-statements`](control-statements/SKILL.md) writes and reviews control titles and descriptions, including roles, timing, precision, and exception handling.
-- [`test-steps`](test-steps/SKILL.md) writes and reviews planned operating effectiveness procedures, including population, period, sampling, and satisfactory-result criteria.
+- [`control-statements`](control-statements/SKILL.md) writes and reviews intended-design control titles and descriptions, preserving inline sources and separately referring contrary practice.
+- [`planned-procedures`](planned-procedures/SKILL.md) writes and reviews planned design, walkthrough, operating-effectiveness, risk-gap, and auditor-selected direct examination procedures.

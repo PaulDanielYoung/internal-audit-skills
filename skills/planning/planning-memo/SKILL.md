@@ -5,7 +5,7 @@ description: Write or update an engagement planning memo, set engagement objecti
 
 # Planning Memo
 
-Own the internal workpaper at `planning/planning-memo.md` in the selected engagement: engagement objectives, process and risk scope, criteria, summary approach, team, budget, and timeline. Draft nothing for management. Preserve the survey's process list and the assessment's risks, wording, ratings, and IDs; flag needed changes to their owning skills. Control scope, Test Steps, and sample sizes belong to `risk-and-control-matrix`.
+Own the internal workpaper at `planning/planning-memo.md` in the selected engagement: engagement objectives, process and risk scope, criteria, summary approach, team, budget, and timeline. Draft nothing for management. Preserve the survey's process list and the assessment's risks, wording, ratings, and IDs; flag needed changes to their owning skills. Detailed Planned Procedures and sample sizes belong in the preliminary RCM maintained by `risk-and-control-matrix`, using `planned-procedures` for wording.
 
 ## Establish the basis
 
@@ -59,7 +59,7 @@ Include independence or conflict declarations only when methodology requires the
 
 On updates, compare current upstream processes, risks, ratings, objective links, and sources with the versions supporting the memo. Mark affected scoping rows “needs re-decision”, retaining the old decision, reason, and date visibly as history. Keep unaffected current decisions. Add new risks undecided; show retired risks with replacement IDs or “no replacement”, preserving history. Recheck affected engagement objectives, criteria, and coverage with the auditor; an old decision awaiting re-decision does not satisfy readiness.
 
-Memo changes flag the RCM for revision, identifying affected scope, objectives, criteria, and other references. Search existing engagement artifacts for affected Process IDs, Risk IDs, and objective references; name pending handoffs when the downstream artifact does not exist. Refresh only this memo. When the RCM flags an in-scope risk with no in-scope control, bring its scope back to the auditor without deciding or editing control scope.
+Memo changes flag the RCM for revision, identifying affected scope, objectives, criteria, and other references. Search existing engagement artifacts for affected Process IDs, Risk IDs, and objective references; name pending handoffs when the downstream artifact does not exist. Refresh only this memo. A risk without an identified control remains available for planned assessment in the RCM under the agreed approach. Return material changes to engagement objectives or process/risk scope to the auditor here; the missing control alone does not require a new scope decision.
 
 ## Route information needs and responses
 
