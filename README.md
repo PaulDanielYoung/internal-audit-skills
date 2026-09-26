@@ -34,6 +34,7 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 
 - [`risk-statements`](skills/planning/risk-statements/SKILL.md) turns a risk, concern, or vague topic into a clear risk statement.
 - [`process-statements`](skills/planning/process-statements/SKILL.md) writes and reviews process titles and descriptions, including purpose, boundaries, roles, and systems.
+- [`control-statements`](skills/planning/control-statements/SKILL.md) writes and reviews control titles and descriptions, including roles, timing, precision, and exception handling.
 
 ### [Walkthroughs](skills/walkthroughs/README.md)
 

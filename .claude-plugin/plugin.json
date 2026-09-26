@@ -1,7 +1,7 @@
 {
   "name": "internal-audit-skills",
   "version": "0.2.0",
-  "description": "Agent skills for internal auditors: workspace setup, audit context, shared understanding, engagement creation, risk and process statements, and exploratory data analysis.",
+  "description": "Agent skills for internal auditors: workspace setup, audit context, shared understanding, engagement creation, risk, process, and control statements, and exploratory data analysis.",
   "author": {
     "name": "Paul Young"
   },
@@ -15,6 +15,7 @@
     "./skills/foundations/create-engagement",
     "./skills/planning/risk-statements",
     "./skills/planning/process-statements",
+    "./skills/planning/control-statements",
     "./skills/fieldwork/exploratory-data-analysis"
   ]
 }
