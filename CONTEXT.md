@@ -34,6 +34,12 @@ Missing or unresolved information relevant to an engagement's work. In a communi
 **Stated readiness**:
 The skill's report of whether its work meets its completion criteria and which gaps remain. Readiness is distinct from approval or sending a communication.
 
+**Judgement point**:
+A decision reserved for the auditor, presented with sourced considerations and recorded with its date and stated reason. The drafting skill supplies no proposed decision.
+
+**Flag**:
+A notice that a change may require an artifact's owning skill and the auditor to revisit earlier work or decisions. A flag identifies affected references without changing the downstream artifact.
+
 **Engagement**:
 One planned piece of internal audit work on a defined subject, carried from assignment through reporting, with its material in `engagements/<year>/<name>/`. "Audit" is an acceptable informal synonym in conversation; skills and docs say engagement.
 _Avoid_: project, review
