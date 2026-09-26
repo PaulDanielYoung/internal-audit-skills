@@ -1,9 +1,9 @@
 ---
 name: control-statements
-description: Write a clear control title and description that says who does what, when, how precisely, and what happens to exceptions. Use when writing, reviewing, improving, or diagnosing control descriptions.
+description: Write a control title and intended-design description with roles, timing, precision, exception handling, and inline sources. Use when writing, reviewing, improving, or diagnosing control descriptions.
 ---
 
-A control is any action taken by management, the board, and other parties to manage risk and increase the likelihood that established goals are achieved. Write or review its **title** and **description**, returning wording to the auditor or calling skill.
+A control is any action taken by management, the board, and other parties to manage risk and increase the likelihood that established goals are achieved. Write or review its **title** and **intended-design description**, returning wording to the auditor or calling skill.
 
 ## Starting pattern and completeness
 
@@ -23,7 +23,7 @@ Adapt the wording to the context. A description is complete when a reader can po
 - **Exception handling:** how exceptions are followed up and by whom.
 - **Purpose:** what the control itself prevents or detects, without a Risk ID or risk-specific wording, so a shared control reads correctly on every row where it appears.
 
-Evidence of performance is optional; include it only when a source states it. Evidence examination belongs to `test-steps`.
+Evidence of performance is optional; include it only when a source states it. Evidence examination belongs to `planned-procedures`.
 
 ## Shared context and gaps
 
@@ -31,15 +31,17 @@ Read the workspace glossary, if present, and use its definitions for control and
 
 Use `audit-context` when a needed term is missing from an existing glossary, terminology is contested or unclear, or persistent methodology or organization context needs updating or clarification. Pass the specific question and available evidence.
 
-Call the Skill tool with `shared-understanding` when material ambiguity about the control activity, its status, or whether activities form one control could change the wording. Mark missing facts in place with bracketed gaps, such as `[frequency not identified]` or `[exception handling not established]`; use only details supported by local material or the auditor. Preserve the caller's gap markers, source links, and basis labels. Source retention and artifact sourcing rules stay with the calling stage skill.
+Call the Skill tool with `shared-understanding` when material ambiguity about intended design, its governing source, or whether activities form one control could change the wording. Mark missing facts in place with bracketed gaps, such as `[frequency not identified]` or `[exception handling not established]`; use only details supported by local material or the auditor. Preserve the caller's gap markers, short inline retained-source references, and basis labels. Source retention and artifact sourcing rules stay with the calling stage skill.
 
-## Status and boundaries
+## Intended design and boundaries
 
-Describe sourced controls as the sources show them. When intended design and observed practice differ, state both and attribute each to its source.
+Describe intended design and intended frequency from applicable policy or procedure, or an attributed management or auditor account when those documents are silent. Identify the supported activity rather than inferring one from a requirement alone. Keep short source references beside the details they support.
 
-Write an expected control only on the auditor's explicit request. Open its description with **Expected control (auditor-added; not confirmed):** and use conditional voice, such as "would review" and "exceptions would be followed up". Keep proposed details visibly conditional and unknown elements marked as gaps. Never propose an expected control unprompted. For a not-yet-identified control, write no title or description; the row marker and clarification question belong to `risk-and-control-matrix`.
+Keep known contrary practice outside the baseline description: return a separately attributed note and retained-source reference linked by Control ID for the caller to retain for walkthroughs or fieldwork. A monthly policy activity remains monthly when quarterly practice is reported. The departure is material for later examination, not an automatic final finding.
 
-Judge clarity, completeness, and testability. Design adequacy, recommended improvements, and control scope stay with walkthroughs and the auditor. Owner, Frequency, Type, and Nature fields belong to the caller; flag any supplied attribute that contradicts the description and leave the fields unchanged.
+For a risk without an identified control, leave the title and description empty; return the gap to the caller and route gap-confirmation or assessment wording to `planned-procedures`.
+
+Judge clarity, completeness, and testability. Design adequacy and recommended improvements stay with walkthroughs and the auditor. Owner, Frequency, Type, and Nature fields belong to the caller; flag any supplied attribute that contradicts intended design and leave the fields unchanged.
 
 ## Faults
 
@@ -55,14 +57,14 @@ Use these when reviewing, improving, or diagnosing. Each fault names what sound 
 - **A purpose missing or tied to one risk.** State what the control itself prevents or detects in wording that works across every linked risk and process.
 - **A policy, requirement, or objective stated as a control.** Describe the activity that implements it when supported; a requirement such as "All payments must be approved" alone does not establish a control.
 - **Several controls combined in one description.** Describe one control activity and recommend a split where separate activities need their own descriptions.
-- **An expected control presented as established, or intended design presented as operating practice.** Carry the expected-not-confirmed marker and conditional voice for requested expected controls; attribute design and practice separately when they differ.
-- **Invented or guessed details.** Use supported facts for sourced controls and bracketed gaps for unknowns; keep requested expected wording explicitly conditional.
+- **Operating practice substituted for intended design.** Keep the supported design and intended frequency in the description, with contrary practice separately attributed and linked by Control ID.
+- **Invented or guessed details.** Use supported intended-design facts and bracketed gaps for unknowns; an account of design does not establish performance or evidence.
 - **An adequacy judgement or recommended improvement in the description.** State what the control does, leaving adequacy and improvements to walkthroughs and the auditor.
-- **Test procedure or evidence-examination detail in the description.** Describe control performance; leave planned examination to `test-steps`.
+- **Procedure or evidence-examination detail in the description.** Describe intended control activity; leave planned examination to `planned-procedures`.
 - **A description that contradicts a supplied attribute field.** Flag the conflict and propose source-supported wording or a gap while leaving the attribute unchanged; use `shared-understanding` when the governing fact is materially ambiguous.
 
 ## Review output
 
-Check the title, status, and every completeness element as well as the faults. For several controls, also compare pairs for duplicates (the same activity under different titles or Control IDs) and combined controls.
+Check the title, intended-design basis, inline references, and every completeness element as well as the faults. Check that any contrary practice has a separate attributed handoff linked by Control ID. For several controls, also compare pairs for duplicates (the same activity under different titles or Control IDs) and combined controls.
 
 Name each fault found using the names above, explicitly identify duplicates, explain any other unmet requirement, and propose a revised title and description for affected wording. Preserve gap markers, source links, and basis labels in the revisions. Keep any split or merge as a recommendation for the caller rather than changing the control list or IDs. Confirm sound wording and leave it unchanged, without rewriting for style.
