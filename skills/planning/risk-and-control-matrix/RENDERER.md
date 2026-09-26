@@ -1,17 +1,5 @@
 # Markdown RCM contract
 
-This renderer is the implementation for issue #34. The planning stage skill ships separately in #40; this folder is not yet a listed skill. That skill should read this contract before writing or regenerating the preliminary RCM.
-
-Run with Python 3.10+ (standard library only):
-
-```text
-python "<skill directory>/scripts/render_rcm.py" "<engagement>/planning/risk-and-control-matrix.md"
-```
-
-The script validates the whole document, atomically replaces the sibling `risk-and-control-matrix.html`, and opens it using `Start-Process` on Windows, `open` on macOS, or `xdg-open` on Linux, following exploratory-data-analysis. `--no-open` writes without launching a browser. Validation errors name their category and location, return exit code 1, and leave any existing HTML unchanged. A browser launch failure returns exit code 2 and reports the saved HTML path. Screenshot verification is outside this renderer's contract.
-
-Markdown governs. Edit it and regenerate; the offline HTML is a viewer. Keep these two artifacts in `planning/`. There is no JSON record or entity register. Structural validation does not establish substantive readiness for walkthroughs; the stage skill owns that judgement.
-
 ## One matrix
 
 Use exactly one pipe table, with this header, a separator row, and at least one data row. All 18 columns are required in this order:
