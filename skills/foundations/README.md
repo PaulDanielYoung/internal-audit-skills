@@ -6,3 +6,4 @@ Skills used across audit phases.
 - [`audit-context`](audit-context/SKILL.md) maintains the glossary, documented methodology, and organizational context shared across engagements. It includes a guide and template for each document.
 - [`shared-understanding`](shared-understanding/SKILL.md) resolves material ambiguity with the user before work depends on an assumption.
 - [`create-engagement`](create-engagement/SKILL.md) creates the engagement record from an engagement name and audit objective statement. Every later engagement skill starts from it.
+- [`request-list`](request-list/SKILL.md) maintains the shared engagement information-request list across audit phases and drafts request messages and reminders on demand.

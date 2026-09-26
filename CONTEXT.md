@@ -19,6 +19,15 @@ The initial communication from internal audit to management about an engagement,
 **Engagement sources**:
 The retained supplied material and its provenance shared across an engagement's phases, distinct from the work products derived from it.
 
+**Shared engagement request list**:
+The cross-phase artifact owned by `request-list` that records external information requests and their lifecycle for one engagement. It is distinct from planning artifacts and from the information gaps those requests may help resolve.
+
+**Request item**:
+One deliverable requested from a party outside the engagement team, with its own stable RQ ID and history. Closing an item does not necessarily resolve the underlying information gap.
+
+**Stable ID**:
+A persistent reference to an item whose identity survives updates. An allocated ID is never renumbered or reused, including when the item is withdrawn.
+
 **Information gap**:
 Missing or unresolved information relevant to an engagement's work. In a communication draft, a minor gap appears as a visible placeholder with its explanation outside the communication.
 
@@ -89,6 +98,8 @@ _Avoid_: date range, period coverage
 - A **Planning stage skill** owns a **Planning artifact** for one **Engagement**
 - An **Engagement notification** is a **Planning artifact** that preserves the **Audit objective statement**
 - **Engagement sources** support work across one **Engagement**; **Stated readiness** identifies remaining **Information gaps**
+- A **Shared engagement request list** holds **Request items** across one **Engagement**; each item has a **Stable ID**
+- A **Request item** can support several artifacts or workstreams, and several items can address one **Information gap**
 - A **Driver** profiles exactly one **Source table** with the **Choices** its profiling run recorded
 - A **Driver** builds exactly one **Report**
 - A **Driver** builds every **Visual** through the charts module and passes it to its **Report**
