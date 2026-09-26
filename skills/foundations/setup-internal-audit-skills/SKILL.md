@@ -22,7 +22,7 @@ This step is complete when the target is unambiguous, existing workspace convent
 
 Invoke `audit-context` with the absolute workspace root and an explicit request to initialize missing context files using its glossary, methodology, and organization templates. Pass any supplied sources and established decisions. That skill owns all edits to `GLOSSARY.md`, `METHODOLOGY.md`, and `ORGANIZATION.md`.
 
-Ensure `engagements/` exists. Leave individual engagement folders and planning artifacts for the audit work that needs them. Keep existing files intact; rerunning setup fills missing pieces rather than resetting the workspace.
+Ensure `engagements/` exists. Leave individual engagement folders to `create-engagement` and planning artifacts to the audit work that needs them. Keep existing files intact; rerunning setup fills missing pieces rather than resetting the workspace.
 
 This step is complete when all three context documents and `engagements/` exist. Sources and definitions come later through `audit-context`.
 
@@ -32,7 +32,7 @@ Read [WORKSPACE-INSTRUCTIONS.md](WORKSPACE-INSTRUCTIONS.md). Add its block to th
 
 The block locates the context files beside the instruction file. If the instruction file is outside the selected workspace, change its first sentence to name the actual workspace path. Avoid machine-specific source-repository paths in ordinary workspace instructions.
 
-This step is complete when Claude Code can find the context files, their ownership, and the reading and capture rules from its project instructions without duplicate or conflicting setup blocks.
+This step is complete when Claude Code can find the context files, their ownership, the reading and capture rules, and the engagement selection rules from its project instructions without duplicate or conflicting setup blocks.
 
 ## 4. Verify and hand off
 

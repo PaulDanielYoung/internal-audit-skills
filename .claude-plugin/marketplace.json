@@ -8,7 +8,7 @@
     {
       "name": "internal-audit-skills",
       "source": "./",
-      "description": "Agent skills for internal auditors: workspace setup, audit context, shared understanding, risk statements, and exploratory data analysis."
+      "description": "Agent skills for internal auditors: workspace setup, audit context, shared understanding, engagement creation, risk statements, and exploratory data analysis."
     }
   ]
 }
