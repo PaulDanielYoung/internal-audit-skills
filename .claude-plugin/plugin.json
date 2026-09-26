@@ -17,6 +17,7 @@
     "./skills/planning/engagement-notification",
     "./skills/planning/preliminary-survey",
     "./skills/planning/risk-assessment",
+    "./skills/planning/planning-memo",
     "./skills/planning/risk-statements",
     "./skills/planning/process-statements",
     "./skills/planning/control-statements",
