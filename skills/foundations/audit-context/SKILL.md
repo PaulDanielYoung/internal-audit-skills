@@ -35,7 +35,7 @@ Read the guide for each document being created or changed:
 - [METHODOLOGY-GUIDE.md](METHODOLOGY-GUIDE.md): documented requirements and source references.
 - [ORGANIZATION-GUIDE.md](ORGANIZATION-GUIDE.md): shared organizational facts and their evidence.
 
-Ask about material ambiguity; when it spans several decisions, use `shared-understanding` if available.
+Ask about material ambiguity; when it spans several decisions, call the Skill tool with `shared-understanding` if available.
 
 This step is complete when each proposed update has the basis required by its guide and material conflicts are resolved or identified as open questions. Continue with settled updates while dependent work waits for unresolved answers.
 

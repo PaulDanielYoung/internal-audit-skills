@@ -15,7 +15,7 @@ Require an engagement name and an auditor-supplied **audit objective statement**
 
 Use an engagement name already established by the conversation when it is unambiguous. When no name has been supplied, propose a concise name from the auditor's description and ask the auditor to confirm or revise it.
 
-When the objective statement is missing, or so unclear that planning could read it several ways, call the Skill tool with "shared-understanding" to establish it. Ask what the engagement is about and what it is intended to accomplish and record the statement the auditor settles.
+When the objective statement is missing, or so unclear that planning could read it several ways, call the Skill tool with `shared-understanding` to establish it. Ask what the engagement is about and what it is intended to accomplish and record the statement the auditor settles.
 
 This step is complete when the record could quote both the name and the objective statement as the auditor's own.
 

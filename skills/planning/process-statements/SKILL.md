@@ -3,13 +3,13 @@ name: process-statements
 description: Write a clear process title and description that says what the process achieves, where it starts and ends, and who does what with which systems. Use when writing, reviewing, improving, or diagnosing process descriptions.
 ---
 
-A process is one coherent flow from a start trigger to an end point. Write or review its **Process Title** and **Process Description**, returning wording to the auditor or calling skill. This planning writing skill owns no artifact, process list, or IDs.
+A process is one coherent flow from a start trigger to an end point. Write or review its **title** and **description**, returning wording to the auditor or calling skill. This planning writing skill owns no artifact, process list, or IDs.
 
 ## Starting pattern and completeness
 
-The **Process Title** is a noun phrase of two to five words naming the flow by what it does, such as "Vendor onboarding". It is unique within the activity and contains no organization unit, system, or control.
+The **title** is a noun phrase of two to five words naming the flow by what it does, such as "Vendor onboarding". It is unique within the activity and names no organization unit, system, or control.
 
-A useful starting point for the **Process Description** is:
+A useful starting point for the **description** is:
 
 > [Roles] [main activities] in [systems], starting when [trigger] and ending when [end point], so that [purpose].
 
@@ -24,11 +24,11 @@ Adapt the wording to the context. Write one present-tense paragraph, roughly two
 
 ## Shared context and gaps
 
-Read the workspace glossary for process, activity, and role names, and relevant methodology and organization context for canonical role and system names, if present. Proceed silently when absent. Documented methodology governs the wording; the pattern above is a starting point.
+Read the workspace glossary, if present, and use its definitions for process, activity, and role; without one, the meanings above apply. Read the relevant methodology and organization context too, using their canonical role and system names, and proceed silently when absent. Documented methodology governs the wording; the pattern above is a starting point.
 
 Use `audit-context` when a needed term is missing from an existing glossary, terminology is contested or unclear, or persistent methodology or organization context needs updating or clarification. Pass the specific question and available evidence.
 
-Use `shared-understanding` for material ambiguity that could change the wording, particularly a process boundary or whether two flows are one process. Mark missing facts in place with bracketed gaps, such as `[system not identified]` or `[end point not established]`; never invent an actor, system, step, or boundary. Preserve the caller's gap markers, source links, and basis labels. Source retention and artifact sourcing rules stay with the calling stage skill.
+Call the Skill tool with `shared-understanding` when material ambiguity about a process boundary, or whether two flows are one process, could change the wording. Mark missing facts in place with bracketed gaps, such as `[system not identified]` or `[end point not established]`; use only actors, systems, steps, and boundaries the sources support. Preserve the caller's gap markers, source links, and basis labels. Source retention and artifact sourcing rules stay with the calling stage skill.
 
 ## Single process layer
 
