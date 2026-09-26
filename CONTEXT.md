@@ -20,7 +20,10 @@ The initial communication from internal audit to management about an engagement,
 The planning artifact that maps the engagement's scoped processes and risks to intended controls and planned audit procedures. It carries the engagement work program, including procedures to investigate risks without identified controls, for the handoff to walkthroughs.
 
 **Engagement sources**:
-The retained supplied material and its provenance shared across an engagement's phases, distinct from the work products derived from it.
+The retained supplied material and its provenance shared across an engagement's phases, maintained by `engagement-sources` and distinct from the work products derived from it.
+
+**Receipt event**:
+One occasion on which supplied material is received, with its original location and receipt date. Identical material can have several receipt events sharing one retained copy; recording an event does not confirm a request match or establish source sufficiency.
 
 **Shared engagement request list**:
 The cross-phase artifact owned by `request-list` that records external information requests and their lifecycle for one engagement. It is distinct from planning artifacts and from the information gaps those requests may help resolve.
@@ -108,6 +111,7 @@ _Avoid_: date range, period coverage
 - An **Engagement notification** is a **Planning artifact** that preserves the **Audit objective statement**
 - A **Preliminary RCM** is a **Planning artifact** that carries planned procedures for one **Engagement**
 - **Engagement sources** support work across one **Engagement**; **Stated readiness** identifies remaining **Information gaps**
+- **Engagement sources** preserve **Receipt events** independently of confirmed **Request item** matches
 - A **Shared engagement request list** holds **Request items** across one **Engagement**; each item has a **Stable ID**
 - A **Request item** can support several artifacts or workstreams, and several items can address one **Information gap**
 - A **Driver** profiles exactly one **Source table** with the **Choices** its profiling run recorded

@@ -15,7 +15,7 @@ Each step names what to examine, what to do, and the observable criterion for ev
 
 Read the workspace glossary and relevant methodology and organization context when present, using their role, system, report, and technique names; proceed silently when absent. Documented methodology governs the procedures; follow relevant longer sources it points to. Use `audit-context` for a needed term missing from an existing glossary, contested terminology, or persistent context needing update or clarification, passing the question and available evidence.
 
-Use only local material and auditor-supplied facts. Mark unsupported criteria, evidence, reports, periods, or other necessary details in place, carrying gaps in the control description into the matching steps. Preserve the caller's gap markers, short inline retained-source references, and basis labels. Source retention and artifact sourcing rules stay with the calling stage skill. Use `shared-understanding` when ambiguity about the agreed approach, control, evidence, criteria, or applicable sampling could materially change the procedure.
+Use only local material and auditor-supplied facts. Mark unsupported criteria, evidence, reports, periods, or other necessary details in place, carrying gaps in the control description into the matching steps. Preserve the caller's gap markers, short inline retained-source references, and basis labels. The calling stage skill arranges retention through `engagement-sources` and owns artifact sourcing. Use `shared-understanding` when ambiguity about the agreed approach, control, evidence, criteria, or applicable sampling could materially change the procedure.
 
 ## Completeness by purpose
 

@@ -28,7 +28,7 @@ Read the workspace glossary, if present, and use its definitions for process, ac
 
 Use `audit-context` when a needed term is missing from an existing glossary, terminology is contested or unclear, or persistent methodology or organization context needs updating or clarification. Pass the specific question and available evidence.
 
-Call the Skill tool with `shared-understanding` when material ambiguity about a process boundary, or whether two flows are one process, could change the wording. Mark missing facts in place with bracketed gaps, such as `[system not identified]` or `[end point not established]`; use only actors, systems, steps, and boundaries the sources support. Preserve the caller's gap markers, source links, and basis labels. Source retention and artifact sourcing rules stay with the calling stage skill.
+Call the Skill tool with `shared-understanding` when material ambiguity about a process boundary, or whether two flows are one process, could change the wording. Mark missing facts in place with bracketed gaps, such as `[system not identified]` or `[end point not established]`; use only actors, systems, steps, and boundaries the sources support. Preserve the caller's gap markers, source links, and basis labels. The calling stage skill arranges retention through `engagement-sources` and owns artifact sourcing.
 
 ## Single process layer
 

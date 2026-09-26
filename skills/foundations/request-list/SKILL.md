@@ -19,7 +19,7 @@ Read [LIST-RULES.md](LIST-RULES.md) before interpreting or changing rows. Accept
 
 - **Create, seed, add, or reconcile:** check retained engagement sources and existing rows using the matching rules in LIST-RULES.md before allocating an ID. Resolve each need to sufficient retained material, a matching row, a new Proposed row, or an explicit unresolved decision.
 - **Update, withdraw, or record sending:** apply the lifecycle rules in LIST-RULES.md while preserving wording and history. Report missing confirmations or dates as outstanding, without inferring a state change.
-- **Receive material:** read [RECEIPT.md](RECEIPT.md) for retention, auditor-confirmed matching, partial responses, and provenance handoff.
+- **Receive material or finish receipt provenance:** read [RECEIPT.md](RECEIPT.md) for delegation to `engagement-sources`, auditor-confirmed matching, partial responses, and recovery of unfinished provenance updates.
 - **Draft an initial/additional request or reminder, or record a reminder sent:** read [MESSAGES.md](MESSAGES.md). Produce messages on demand in the reply only.
 
 For combined requests, complete authorized list changes before rendering messages from those rows. Management notification is a workflow default: when management has not been notified, briefly note that initial requests normally follow or accompany notification, then proceed. Request preparation and use of this skill are independent of `engagement-notification`.
@@ -32,7 +32,7 @@ If any artifacts cannot be inspected, return the known references and identify w
 
 The substantive skill uses the returned references without repeating the RQ search, interprets the information for additional substantive impacts, flags other owners' work, and refreshes only its own artifact. It can continue supported work while keeping potentially affected work unresolved where search limitations remain. This skill neither edits another skill's workpaper nor decides its readiness. Closing a row does not establish that its substantive information gap is resolved.
 
-Completion means each supplied need or requested change has an accounted-for outcome under the rules, the authorized changes are saved, and outstanding decisions or confirmations are explicit. State the list path, changes made (or that none were made), and what remains unresolved. Keep internal assumptions, sources, methodology basis, and gaps outside any communication.
+Completion means each supplied need or requested change has an accounted-for outcome under the rules, the authorized changes and required receipt provenance updates are saved, and outstanding decisions or confirmations are explicit. State the list path, changes made (or that none were made), and what remains unresolved, including unfinished retention or provenance updates. Keep internal assumptions, sources, methodology basis, and gaps outside any communication.
 
 ## Contract for calling skills
 

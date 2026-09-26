@@ -31,7 +31,7 @@ Read the workspace glossary, if present, and use its definitions for control and
 
 Use `audit-context` when a needed term is missing from an existing glossary, terminology is contested or unclear, or persistent methodology or organization context needs updating or clarification. Pass the specific question and available evidence.
 
-Call the Skill tool with `shared-understanding` when material ambiguity about intended design, its governing source, or whether activities form one control could change the wording. Mark missing facts in place with bracketed gaps, such as `[frequency not identified]` or `[exception handling not established]`; use only details supported by local material or the auditor. Preserve the caller's gap markers, short inline retained-source references, and basis labels. Source retention and artifact sourcing rules stay with the calling stage skill.
+Call the Skill tool with `shared-understanding` when material ambiguity about intended design, its governing source, or whether activities form one control could change the wording. Mark missing facts in place with bracketed gaps, such as `[frequency not identified]` or `[exception handling not established]`; use only details supported by local material or the auditor. Preserve the caller's gap markers, short inline retained-source references, and basis labels. The calling stage skill arranges retention through `engagement-sources` and owns artifact sourcing.
 
 ## Intended design and boundaries
 
