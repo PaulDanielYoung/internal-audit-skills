@@ -32,6 +32,7 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 
 ### [Planning](skills/planning/README.md)
 
+- [`engagement-notification`](skills/planning/engagement-notification/SKILL.md) drafts the initial communication to management and, on demand, an entrance meeting agenda; request work routes to `request-list` when available.
 - [`risk-statements`](skills/planning/risk-statements/SKILL.md) turns a risk, concern, or vague topic into a clear risk statement.
 - [`process-statements`](skills/planning/process-statements/SKILL.md) writes and reviews process titles and descriptions, including purpose, boundaries, roles, and systems.
 - [`control-statements`](skills/planning/control-statements/SKILL.md) writes and reviews control titles and descriptions, including roles, timing, precision, and exception handling.
@@ -84,7 +85,7 @@ Setup delegates the context documents to `audit-context`, which creates any that
 
 Definitions are agreed with you, methodology comes from documented sources, and organizational facts come from your material or explicit statements. As you work, Claude offers to record terms, methodology points, and organizational facts that get settled, and writes each one when you accept. Other skills read the context when present; `audit-context` needs setup to have run and asks you to run it if not.
 
-Individual audit material belongs under `engagements/`. Start an engagement with `create-engagement`, giving its name and audit objective statement; it writes the engagement record under the annual-plan year. In later conversations, name the engagement you are working on and the engagement skills use its record and folder. Planning stage skills are not yet included.
+Individual audit material belongs under `engagements/`. Start an engagement with `create-engagement`, giving its name and audit objective statement; it writes the engagement record under the annual-plan year. In later conversations, name the engagement you are working on and the engagement skills use its record and folder. Use `engagement-notification` to draft the initial communication to management.
 
 ## License
 
