@@ -10,32 +10,34 @@ Prepare a new or existing auditor workspace. The skills must already be installe
 
 ## 1. Establish the workspace
 
-Use the target folder supplied by the user, resolving a relative path from the current working directory. If no target was supplied, use the current directory when it is clearly an auditor workspace or an empty folder, apart from Claude Code configuration in `.claude/`. Otherwise, ask for the intended folder. In the skills source repository, ask for a separate auditor workspace path rather than treating the source repository as an organization.
+The current directory is used as the default workspace if no target folder is supplied by the user.
 
-Inspect existing `CLAUDE.md`, `AGENTS.md`, shared context files, and `engagements/` in the target. Preserve existing content. If the folder already describes a different organization or has conflicting workspace instructions, resolve that conflict before making changes. Create the target directory if needed.
+Inspect existing workspace files relevant to setup before making changes. Preserve existing content and reuse existing configuration where possible. If existing context or instructions conflict with the new setup, resolve the conflict before writing.
 
-Confirm the `audit-context` skill is available. If it is not, explain that setup requires it and stop before writing workspace files. Do not substitute a copy of its document rules.
-
-This step is complete when the target is unambiguous, existing workspace conventions have been inspected, and `audit-context` is available.
+Confirm that `audit-context` is available; setup cannot continue without it.
 
 ## 2. Initialize context and folders
 
-Invoke `audit-context` with the absolute workspace root and an explicit request to initialize missing context files using its glossary, methodology, and organization templates. Pass any supplied sources and established decisions. That skill owns all edits to `GLOSSARY.md`, `METHODOLOGY.md`, and `ORGANIZATION.md`.
+Invoke `audit-context` with the absolute workspace root to initialize any missing `GLOSSARY.md`, `METHODOLOGY.md`, and `ORGANIZATION.md` files from its templates. Pass any supplied sources or established decisions.
 
-Ensure `engagements/` exists. Leave individual engagement folders to `create-engagement` and planning artifacts to the audit work that needs them. Keep existing files intact; rerunning setup fills missing pieces rather than resetting the workspace.
+Ensure `engagements/` exists. Leave individual engagement folders to `create-engagement` and other engagement artifacts to the skills that create them.
 
-This step is complete when all three context documents and `engagements/` exist. Sources and definitions come later through `audit-context`.
+Preserve existing files and configuration. Rerunning setup should add missing components rather than reset the workspace.
 
 ## 3. Add project instructions
 
-Read [WORKSPACE-INSTRUCTIONS.md](WORKSPACE-INSTRUCTIONS.md). Add its block to the target's `CLAUDE.md`, creating the file if absent. When a block headed `## Internal audit skills` already exists, merge necessary changes into that block, preserving user additions and all unrelated instructions. Respect any existing `CLAUDE.md` pointer to `AGENTS.md`; add the block to the referenced project instruction file rather than replacing the pointer. Resolve conflicting instructions with the user.
+Read [WORKSPACE-INSTRUCTIONS.md](WORKSPACE-INSTRUCTIONS.md).
 
-The block locates the context files beside the instruction file. If the instruction file is outside the selected workspace, change its first sentence to name the actual workspace path. Avoid machine-specific source-repository paths in ordinary workspace instructions.
+Add its `## Internal audit skills` block to the workspace's `CLAUDE.md`, creating the file if it does not exist.
 
-This step is complete when Claude Code can find the context files, their ownership, the reading and capture rules, and the engagement selection rules from its project instructions without duplicate or conflicting setup blocks.
+If an `## Internal audit skills` block already exists, update it in place with any necessary changes. Preserve user additions and all unrelated instructions.
 
-## 4. Verify and hand off
+Use paths relative to the workspace. Do not add absolute or machine-specific paths to `CLAUDE.md`.
 
-Check that the context documents are readable, `engagements/` exists, and the project instructions point to the correct workspace. Report the absolute workspace path and the files created or retained.
+## 4. Done
 
-Tell the user to start a local Claude Code session in the workspace. Give one next prompt of the form "Use audit-context to capture <material>", with organizational material as the example. Setup is complete without generating an engagement plan or requiring another confirmation.
+Tell the user setup is complete and summarize the files created or updated.
+
+Mention that they can edit the context files directly or use `audit-context` to maintain them.
+
+Suggest `audit-context` as the next step for adding organization, methodology, glossary, or other shared context to the workspace.
