@@ -5,7 +5,7 @@ description: Create an engagement record from an engagement name and audit objec
 
 # Create Engagement
 
-Establish one engagement in the auditor workspace by recording its name and audit objective statement in the engagement record, `engagements/<year>/<name>/ENGAGEMENT.md`. Every later engagement skill starts from this record. Scope, risk assessment, criteria, resource planning, and refined objectives belong to planning; this skill records the assignment as given.
+Establish one engagement in the auditor workspace by recording its name and audit objective statement in the engagement record, `engagements/<year>/<name>/ENGAGEMENT.md`. Every later engagement skill starts from this record.
 
 Read the workspace glossary and the relevant methodology and organization context when present, and use the glossary's terms; documented methodology governs. Proceed silently when they are absent. Call `audit-context` when a term is missing or contested, or when the conversation settles a fact useful across engagements.
 
@@ -21,7 +21,7 @@ This step is complete when the record could quote both the name and the objectiv
 
 The engagement folder is `engagements/<year>/<name>/` under the auditor workspace root that the workspace instructions locate. The year is the annual-plan year; when it is unknown, ask for the intended year and suggest the current one. Work continuing into a later year stays in its original folder.
 
-The folder name is the engagement name as the auditor writes it, spaces and capitals kept, with only the characters a file system rejects removed. Create only the year folder, the engagement folder, and the record; later skills create `sources/`, `planning/`, and their own deliverables.
+The folder name is the engagement name in kebab-case: lowercase words joined by hyphens, so "Procurement Card Spend" becomes `procurement-card-spend`. Create only the year folder, the engagement folder, and the record.
 
 When `ENGAGEMENT.md` already exists at the target, leave it as it is and ask whether the auditor means that engagement or a separate one under another name. Its objective statement stays as recorded; refined objectives belong in planning deliverables.
 

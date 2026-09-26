@@ -57,7 +57,7 @@ METHODOLOGY.md
 ORGANIZATION.md
 engagements/
   <year>/
-    <engagement name>/
+    <engagement-name>/
       ENGAGEMENT.md
 ```
 
