@@ -4,6 +4,9 @@ A set of agent skills for internal auditors. This file defines the vocabulary th
 
 ## Language
 
+**Planning stage skill and planning writing skill**:
+A planning stage skill owns a planning artifact and carries the engagement through that stage under the auditor's judgement. A planning writing skill supplies reusable wording guidance to the auditor or a calling skill, owning no artifact or IDs.
+
 **Auditor workspace**:
 The user's working folder for one organization's audit work. Its root holds shared context; individual audit material lives under `engagements/`.
 
@@ -67,6 +70,7 @@ _Avoid_: date range, period coverage
 
 ## Relationships
 
+- A **Planning stage skill** uses **Planning writing skills** to word content in its artifact
 - A **Driver** profiles exactly one **Source table** with the **Choices** its profiling run recorded
 - A **Driver** builds exactly one **Report**
 - A **Driver** builds every **Visual** through the charts module and passes it to its **Report**
