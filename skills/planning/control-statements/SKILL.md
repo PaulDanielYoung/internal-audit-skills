@@ -3,7 +3,7 @@ name: control-statements
 description: Write a clear control title and description that says who does what, when, how precisely, and what happens to exceptions. Use when writing, reviewing, improving, or diagnosing control descriptions.
 ---
 
-A control is an activity that prevents or detects something going wrong. Write or review its **title** and **description**, returning wording to the auditor or calling skill. This planning writing skill owns no artifact, control list, IDs, In Scope flag, or Test Steps.
+A control is any action taken by management, the board, and other parties to manage risk and increase the likelihood that established goals are achieved. Write or review its **title** and **description**, returning wording to the auditor or calling skill.
 
 ## Starting pattern and completeness
 

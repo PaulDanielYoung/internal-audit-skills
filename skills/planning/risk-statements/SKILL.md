@@ -3,7 +3,7 @@ name: risk-statements
 description: Turn a risk, concern, issue, or vague topic into a clear risk statement that explains what could happen, why it could happen, and why it matters. Use when writing, reviewing, improving, or diagnosing risk statements.
 ---
 
-A risk statement connects an **event** to its **cause** and **consequence** in relation to an **objective**: what could happen, why it could happen, and why we care. The objective is the thing at stake, usually stated as context beside the statement rather than inside it. Write or review the statement, returning wording to the auditor or calling skill. This planning writing skill owns no artifact or IDs.
+A risk statement connects an **event** to its **cause** and **consequence** in relation to an **objective**: what could happen, why it could happen, and why we care. The objective is the thing at stake, usually stated as context beside the statement rather than inside it. Write or review the statement, returning wording to the auditor or calling skill.
 
 ## Starting pattern and completeness
 

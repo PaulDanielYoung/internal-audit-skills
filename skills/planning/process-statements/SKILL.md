@@ -3,7 +3,7 @@ name: process-statements
 description: Write a clear process title and description that says what the process achieves, where it starts and ends, and who does what with which systems. Use when writing, reviewing, improving, or diagnosing process descriptions.
 ---
 
-A process is one coherent flow from a start trigger to an end point. Write or review its **title** and **description**, returning wording to the auditor or calling skill. This planning writing skill owns no artifact, process list, or IDs.
+A process is one coherent flow from a start trigger to an end point. Write or review its **title** and **description**, returning wording to the auditor or calling skill.
 
 ## Starting pattern and completeness
 
