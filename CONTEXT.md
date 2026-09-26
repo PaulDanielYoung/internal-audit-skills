@@ -10,6 +10,21 @@ A planning stage skill owns a planning artifact and carries the engagement throu
 **Auditor workspace**:
 The user's working folder for one organization's audit work. Its root holds shared context; individual audit material lives under `engagements/`.
 
+**Planning artifact**:
+A persistent work product owned by a planning stage skill for one engagement, such as the engagement notification. On-demand agendas are not persistent artifacts; the shared engagement request list is a separate cross-phase artifact owned by `request-list`.
+
+**Engagement notification**:
+The initial communication from internal audit to management about an engagement, preserving the audit objective statement and presenting preliminary scope, period, timing, and next steps.
+
+**Engagement sources**:
+The retained supplied material and its provenance shared across an engagement's phases, distinct from the work products derived from it.
+
+**Information gap**:
+Missing or unresolved information relevant to an engagement's work. In a communication draft, a minor gap appears as a visible placeholder with its explanation outside the communication.
+
+**Stated readiness**:
+The skill's report of whether its work meets its completion criteria and which gaps remain. Readiness is distinct from approval or sending a communication.
+
 **Engagement**:
 One planned piece of internal audit work on a defined subject, carried from assignment through reporting, with its material in `engagements/<year>/<name>/`. "Audit" is an acceptable informal synonym in conversation; skills and docs say engagement.
 _Avoid_: project, review
@@ -71,6 +86,9 @@ _Avoid_: date range, period coverage
 ## Relationships
 
 - A **Planning stage skill** uses **Planning writing skills** to word content in its artifact
+- A **Planning stage skill** owns a **Planning artifact** for one **Engagement**
+- An **Engagement notification** is a **Planning artifact** that preserves the **Audit objective statement**
+- **Engagement sources** support work across one **Engagement**; **Stated readiness** identifies remaining **Information gaps**
 - A **Driver** profiles exactly one **Source table** with the **Choices** its profiling run recorded
 - A **Driver** builds exactly one **Report**
 - A **Driver** builds every **Visual** through the charts module and passes it to its **Report**
