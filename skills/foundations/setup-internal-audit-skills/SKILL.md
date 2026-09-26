@@ -26,9 +26,15 @@ Preserve existing files and configuration. Rerunning setup should add missing co
 
 ## 3. Add project instructions
 
-Read [WORKSPACE-INSTRUCTIONS.md](WORKSPACE-INSTRUCTIONS.md).
+Read [workspace.md](workspace.md) and write it to `docs/agents/workspace.md`, preserving any user additions when updating an existing copy.
 
-Add its `## Internal audit skills` block to the workspace's `CLAUDE.md`, creating the file if it does not exist.
+Add an `## Internal audit skills` block to the workspace's `CLAUDE.md`, creating the file if it does not exist:
+
+```
+## Internal audit skills
+
+Workspace context, engagement structure, and consumer rules are documented in `docs/agents/workspace.md`. Read and follow it before doing audit work.
+```
 
 If an `## Internal audit skills` block already exists, update it in place with any necessary changes. Preserve user additions and all unrelated instructions.
 
