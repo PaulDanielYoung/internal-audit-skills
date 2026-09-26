@@ -16,8 +16,8 @@ The auditor-supplied statement of what an engagement is about and what it is int
 _Avoid_: engagement objective, audit purpose, scope statement
 
 **Engagement record**:
-The `ENGAGEMENT.md` at the root of an engagement's folder, holding its identity, audit objective statement, and assignment facts. `create-engagement` creates and updates it; every other engagement skill reads it to find the selected engagement and its output path.
-_Avoid_: engagement file, engagement charter, engagement metadata
+The `ENGAGEMENT.md` at the root of an engagement's folder, holding its name and audit objective statement. `create-engagement` creates it; every other engagement skill reads it to find the selected engagement and its output path.
+_Avoid_: engagement file, engagement charter
 
 **Shared context**:
 The glossary, documented methodology captured in `METHODOLOGY.md`, and organizational overview in `ORGANIZATION.md` at the auditor workspace root. The `audit-context` skill maintains these files for other skills to read.

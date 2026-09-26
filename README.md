@@ -28,7 +28,7 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 - [`setup-internal-audit-skills`](skills/foundations/setup-internal-audit-skills/SKILL.md) prepares a new or existing auditor workspace and its project instructions. Invoke it explicitly for setup.
 - [`audit-context`](skills/foundations/audit-context/SKILL.md) maintains the glossary, documented methodology, and organizational context shared across engagements. It includes a guide and template for each document.
 - [`shared-understanding`](skills/foundations/shared-understanding/SKILL.md) resolves ambiguity with the user before a judgment is made or work is produced.
-- [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record from an engagement name and audit objective statement, and updates its assignment facts. Every later engagement skill starts from it.
+- [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record from an engagement name and audit objective statement. Every later engagement skill starts from it.
 
 ### [Planning](skills/planning/README.md)
 
