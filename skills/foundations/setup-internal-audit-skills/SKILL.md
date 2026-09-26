@@ -33,7 +33,7 @@ Add an `## Internal audit skills` block to the workspace's `CLAUDE.md`, creating
 ```
 ## Internal audit skills
 
-Workspace context, engagement structure, and consumer rules are documented in `docs/agents/workspace.md`. Read and follow it before doing audit work.
+Workspace context, engagement structure, and consumer rules are documented in `docs/agents/workspace.md`. Read it before making any changes and follow its guidance.
 ```
 
 If an `## Internal audit skills` block already exists, update it in place with any necessary changes. Preserve user additions and all unrelated instructions.
