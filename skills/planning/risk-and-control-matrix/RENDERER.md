@@ -50,5 +50,3 @@ Rows sort by Process ID (lexically), descending band then score, and Control ID 
 ## Validation
 
 Named failures are `TableStructure`, `MissingID`, `InvalidID`, `MissingControl`, `ConflictingEntity`, `DuplicateCombination`, `DanglingReference`, `InvalidMethodology`, `InvalidRating`, `InconsistentScore`, `InconsistentBand`, and `InvalidClassification`. The first failure stops generation. File read/write failures report `FileError`.
-
-From this folder run `python -m unittest`. Tests exercise Markdown input through HTML or named errors, preserving existing output on failure, and platform opener dispatch without opening a real browser.

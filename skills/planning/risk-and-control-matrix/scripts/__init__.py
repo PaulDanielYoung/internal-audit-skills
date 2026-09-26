@@ -1,1 +1,0 @@
-"""Bundled preliminary RCM renderer."""
