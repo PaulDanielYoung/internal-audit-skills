@@ -36,6 +36,7 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 - [`engagement-notification`](skills/planning/engagement-notification/SKILL.md) drafts the initial communication to management and, on demand, an entrance meeting agenda; request work routes to `request-list` when available.
 - [`preliminary-survey`](skills/planning/preliminary-survey/SKILL.md) describes the activity from retained sources, owns the process list and stable Process IDs, and flags matters for risk assessment.
 - [`risk-assessment`](skills/planning/risk-assessment/SKILL.md) develops sourced inherent risks, presents ratings for the auditor's judgement, and ranks the assessment for planning.
+- [`planning-memo`](skills/planning/planning-memo/SKILL.md) records auditor-agreed objectives and scope, sourced criteria and approach, and the team, budget, and timeline for the RCM handoff.
 - [`risk-statements`](skills/planning/risk-statements/SKILL.md) turns a risk, concern, or vague topic into a clear risk statement.
 - [`process-statements`](skills/planning/process-statements/SKILL.md) writes and reviews process titles and descriptions, including purpose, boundaries, roles, and systems.
 - [`control-statements`](skills/planning/control-statements/SKILL.md) writes and reviews control titles and descriptions, including roles, timing, precision, and exception handling.
