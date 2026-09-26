@@ -26,7 +26,11 @@ For combined requests, complete authorized list changes before rendering message
 
 ## Return the handoff
 
-Search affected engagement artifacts across all phases for the relevant RQ references and combine those locations with Needed by. Return matched or created IDs, retained-source links, unresolved matches, remaining information gaps, and affected artifact/section or workstream references. The substantive skill refreshes only its own artifact; this skill neither edits another skill's workpaper nor decides its readiness. Closing a row does not establish that its substantive information gap is resolved.
+Own discovery of explicit RQ references for the handoff. Search engagement artifacts across all phases for the relevant RQ IDs and combine those locations with Needed by, including references found outside the listed needs. Return matched or created IDs, retained-source links, unresolved matches, remaining information gaps, and affected artifact/section or workstream references.
+
+If any artifacts cannot be inspected, return the known references and identify what could not be inspected and why. Distinguish an incomplete search from a completed search with no references found; keep these limitations visible in the handoff.
+
+The substantive skill uses the returned references without repeating the RQ search, interprets the information for additional substantive impacts, flags other owners' work, and refreshes only its own artifact. It can continue supported work while keeping potentially affected work unresolved where search limitations remain. This skill neither edits another skill's workpaper nor decides its readiness. Closing a row does not establish that its substantive information gap is resolved.
 
 Completion means each supplied need or requested change has an accounted-for outcome under the rules, the authorized changes are saved, and outstanding decisions or confirmations are explicit. State the list path, changes made (or that none were made), and what remains unresolved. Keep internal assumptions, sources, methodology basis, and gaps outside any communication.
 
