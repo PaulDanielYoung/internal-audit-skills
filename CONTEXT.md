@@ -16,6 +16,9 @@ A persistent work product owned by a planning stage skill for one engagement, su
 **Engagement notification**:
 The initial communication from internal audit to management about an engagement, preserving the audit objective statement and presenting preliminary scope, period, timing, and next steps.
 
+**Preliminary RCM**:
+The planning artifact that maps the engagement's scoped processes and risks to intended controls and planned audit procedures. It carries the engagement work program, including procedures to investigate risks without identified controls, for the handoff to walkthroughs.
+
 **Engagement sources**:
 The retained supplied material and its provenance shared across an engagement's phases, distinct from the work products derived from it.
 
@@ -103,6 +106,7 @@ _Avoid_: date range, period coverage
 - A **Planning stage skill** uses **Planning writing skills** to word content in its artifact
 - A **Planning stage skill** owns a **Planning artifact** for one **Engagement**
 - An **Engagement notification** is a **Planning artifact** that preserves the **Audit objective statement**
+- A **Preliminary RCM** is a **Planning artifact** that carries planned procedures for one **Engagement**
 - **Engagement sources** support work across one **Engagement**; **Stated readiness** identifies remaining **Information gaps**
 - A **Shared engagement request list** holds **Request items** across one **Engagement**; each item has a **Stable ID**
 - A **Request item** can support several artifacts or workstreams, and several items can address one **Information gap**
