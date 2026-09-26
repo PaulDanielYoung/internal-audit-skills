@@ -3,7 +3,7 @@ name: test-steps
 description: "Write clear, executable test steps for a control: what to examine, what to do, and what counts as a satisfactory result, with population, period, and sampling. Use when writing, reviewing, improving, or diagnosing planned control tests."
 ---
 
-Write or review planned **operating effectiveness** procedures for one control or several, returning wording to the auditor or calling skill. This planning writing skill owns no artifact, IDs, In Scope flag, or control selection. Performing tests and recording results, deviations found, or conclusions belong to fieldwork. Tests of design and walkthrough procedures belong to walkthroughs; substantive and data-analytic procedures are outside this skill.
+Write or review planned **operating effectiveness** procedures for one control or several, returning wording to the auditor or calling skill. This planning writing skill owns no artifact, IDs, In Scope flag, or control selection. Performing tests and recording results, deviations found, or conclusions belong to fieldwork.
 
 ## Starting pattern and completeness
 
