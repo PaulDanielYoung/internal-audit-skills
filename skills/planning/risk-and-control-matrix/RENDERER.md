@@ -14,7 +14,13 @@ Markdown governs. Edit it and regenerate; the offline HTML is a viewer. Keep the
 
 ## One matrix
 
-Use exactly one pipe table, with a header, a separator row, and at least one data row. Copy the column headings and order from [the fixture](scripts/fixtures/matrix.md). All 18 columns are required. Every physical table line starts and ends with `|`; every separator cell is at least three hyphens, optionally with alignment colons. Blank lines end the table. Additional tables, missing cells, and extra cells are errors.
+Use exactly one pipe table, with this header, a separator row, and at least one data row. All 18 columns are required in this order:
+
+```text
+| Process ID | Process Title | Process Description | Risk ID | Risk Title | Risk Description | Inherent Risk Likelihood Rating | Inherent Risk Impact Rating | Inherent Risk Score | Risk Band | Control ID | Control Title | Control Description | Control Owner | Frequency | Control Type | Control Nature | Planned Procedures |
+```
+
+Every physical table line starts and ends with `|`; every separator cell is at least three hyphens, optionally with alignment colons. Blank lines end the table. Additional tables, missing cells, and extra cells are errors.
 
 Each row is one process–risk–control combination. IDs use `P-` (process), `R-` (risk), or `C-` (control) followed by digits. Repeated IDs across different combinations are valid. For each shared ID, repeat its entity fields identically, including citations and gap markers; control fields include Planned Procedures. Leading/trailing cell whitespace is ignored, but wording and within-cell spacing are significant. A risk can belong to several processes and a control to several risks. Duplicate combinations fail validation.
 
