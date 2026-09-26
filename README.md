@@ -28,6 +28,7 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 - [`setup-internal-audit-skills`](skills/foundations/setup-internal-audit-skills/SKILL.md) prepares a new or existing auditor workspace and its project instructions. Invoke it explicitly for setup.
 - [`audit-context`](skills/foundations/audit-context/SKILL.md) maintains the glossary, documented methodology, and organizational context shared across engagements. It includes a guide and template for each document.
 - [`shared-understanding`](skills/foundations/shared-understanding/SKILL.md) resolves ambiguity with the user before a judgment is made or work is produced.
+- [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record from an engagement name and audit objective statement. Every later engagement skill starts from it.
 
 ### [Planning](skills/planning/README.md)
 
@@ -55,6 +56,9 @@ GLOSSARY.md
 METHODOLOGY.md
 ORGANIZATION.md
 engagements/
+  <year>/
+    <engagement-name>/
+      ENGAGEMENT.md
 ```
 
 Create a folder for audit work, start Claude Code there, and run setup once:
@@ -75,7 +79,9 @@ Setup delegates the context documents to `audit-context`, which creates any that
 
 > Use audit-context to capture the organizational material at the path I provide.
 
-Definitions are agreed with you, methodology comes from documented sources, and organizational facts come from your material or explicit statements. As you work, Claude offers to record terms, methodology points, and organizational facts that get settled, and writes each one when you accept. Other skills read the context when present; `audit-context` needs setup to have run and asks you to run it if not. Individual audit material belongs under `engagements/`; an engagement planning skill is not yet included.
+Definitions are agreed with you, methodology comes from documented sources, and organizational facts come from your material or explicit statements. As you work, Claude offers to record terms, methodology points, and organizational facts that get settled, and writes each one when you accept. Other skills read the context when present; `audit-context` needs setup to have run and asks you to run it if not.
+
+Individual audit material belongs under `engagements/`. Start an engagement with `create-engagement`, giving its name and audit objective statement; it writes the engagement record under the annual-plan year. In later conversations, name the engagement you are working on and the engagement skills use its record and folder. Planning skills are not yet included.
 
 ## License
 
