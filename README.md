@@ -29,11 +29,11 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 - [`audit-terminology`](skills/foundations/audit-terminology/SKILL.md) sharpens audit terminology and maintains agreed definitions in the workspace's `GLOSSARY.md`, creating it when the first definition is settled.
 - [`shared-understanding`](skills/foundations/shared-understanding/SKILL.md) resolves ambiguity with the user before a judgment is made or work is produced.
 - [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record and folders from an engagement name and audit objective statement. Every later engagement skill starts from it.
-- [`document-request-list`](skills/foundations/document-request-list/SKILL.md) maintains the shared engagement information-request list across audit phases and drafts request messages and reminders on demand.
+- [`document-request-list`](skills/foundations/document-request-list/SKILL.md) creates and maintains one Markdown document request list per engagement from auditor-supplied information.
 
 ### [Planning](skills/planning/README.md)
 
-- [`engagement-notification`](skills/planning/engagement-notification/SKILL.md) drafts the initial communication to management and, on demand, an entrance meeting agenda; request work routes to `document-request-list` when available.
+- [`engagement-notification`](skills/planning/engagement-notification/SKILL.md) drafts the initial communication to management and, on demand, an entrance meeting agenda; request list updates route to `document-request-list` when available.
 - [`preliminary-survey`](skills/planning/preliminary-survey/SKILL.md) describes the activity from retained sources, owns the process list and stable Process IDs, and flags matters for risk assessment.
 - [`risk-assessment`](skills/planning/risk-assessment/SKILL.md) develops sourced inherent risks, presents ratings for the auditor's judgement, and ranks the assessment for planning.
 - [`planning-memo`](skills/planning/planning-memo/SKILL.md) records auditor-agreed objectives and scope, sourced criteria and approach, and the team, budget, and timeline for the RCM handoff.

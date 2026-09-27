@@ -6,4 +6,4 @@ Skills used across audit phases.
 - [`audit-terminology`](audit-terminology/SKILL.md) sharpens audit terminology and maintains agreed definitions in the workspace's `GLOSSARY.md`, creating it when the first definition is settled.
 - [`shared-understanding`](shared-understanding/SKILL.md) resolves material ambiguity with the user before work depends on an assumption.
 - [`create-engagement`](create-engagement/SKILL.md) creates the engagement record and folders from an engagement name and audit objective statement. Every later engagement skill starts from it.
-- [`document-request-list`](document-request-list/SKILL.md) maintains the shared engagement information-request list across audit phases and drafts request messages and reminders on demand.
+- [`document-request-list`](document-request-list/SKILL.md) creates and maintains one Markdown document request list per engagement from auditor-supplied information.

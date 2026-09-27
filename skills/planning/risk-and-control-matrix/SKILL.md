@@ -51,13 +51,11 @@ Search engagement artifacts across phases for affected IDs and references. Recor
 
 ## Route information needs and responses
 
-This skill owns the RCM's information needs. For external deliverables, invoke `document-request-list` for authorized creation or updates, including cold entry. Pass the deliverable, period/version, addressee if known, needing RCM section/IDs, and candidate retained-source links or proposed matches. Let that skill reconcile existing matches and preserve its Needed by behavior; record returned RQ IDs in Information gaps. Decide uncertain source sufficiency here or with the auditor, keeping the substantive gap visible meanwhile. Auditor-only questions stay in the RCM.
+This skill determines the workpaper's information needs. Keep proposed requests in Information gaps until the auditor instructs that they be added to the document request list. For auditor-directed creation or updates, invoke `document-request-list` with the selected engagement, request text (including any supplied period/version), known owner and due date, and the target request ID and requested changes for updates. Record returned IDs in Information gaps. Auditor-only questions stay in this workpaper.
 
-For responses, invoke `engagement-sources` for retention first, then pass its returned links and proposed RQ matches to `document-request-list`. That skill arranges confirmed RQ backlinks through `engagement-sources`; carry unfinished retention or provenance updates into the handoff. Unrequested material goes through `engagement-sources` without changing the list. For partial responses, carry returned remainder IDs and applicable Needed by references into remaining gaps, retaining links to the supplied portion. Received, Not available, or Withdrawn request states never silently resolve a substantive gap.
+For supplied responses, use `engagement-sources` for retention as described above and cite the retained material when updating this workpaper's gaps. Send list updates to `document-request-list` only on the auditor's instruction. Assess substantive sufficiency here or with the auditor; a request's status alone does not resolve an audit gap. Keep affected sections and source links in this workpaper.
 
-Use `document-request-list`'s returned affected references without repeating its RQ search. Add any substantive impacts identified here, flag other owners' work in the reply, and refresh only the RCM. Carry forward search limitations, continuing supported work while keeping potentially affected work unresolved.
-
-Request messages/reminders belong to `document-request-list`; invoke it for requested messages or authorized changes and recommend optional next steps. When unavailable, preserve the gap and give a concrete handoff with the need, known details, candidate sources, and affected references, explicitly stating that the list was not updated. Request table edits and lifecycle belong only to that skill.
+If `document-request-list` is unavailable, continue supported work, keep gaps visible, and return the auditor's requested list changes as a handoff, explicitly stating that the list was not updated. Recommend the skill when list maintenance is an optional next step; request table edits belong to that skill.
 
 ## Render and report readiness
 
