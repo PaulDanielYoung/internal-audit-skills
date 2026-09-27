@@ -1,34 +1,20 @@
 # Workspace Docs
 
-How the skills should consume workspace context when performing audit work.
+How the internal audit skills should consume workspace documentation when performing audit work.
 
-## Before working, read these files in the folder root
+## Before working, read these files located at the root
 
 - `GLOSSARY.md`
 - `METHODOLOGY.md`
 - `ORGANIZATION.md`
 
-If any of these file are absent, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `audit-context` skill creates them lazily when terms or decision actually get resolved.
-
-## Use shared context
-
-- **Use the glossary's vocabulary.** Use the organization's agreed terms and meanings in audit work, including its preferred names over synonyms it avoids.
-- **Follow documented methodology.** Apply the requirements relevant to the work, preserving required versus recommended steps, applicability conditions, scales, thresholds, and exceptions. Consult the linked governing sources when the summary directs it or does not settle a material question. The governing source takes precedence over the summary; a missing rule does not establish that no requirement applies.
-- **Use relevant organizational facts.** Consider the overview's sources and effective dates when applying facts to an engagement. Keep engagement-specific assumptions distinct from shared facts.
-- **Surface material conflicts.** Identify conflicts between the current work, shared context, and supplied sources. Resolve the governing meaning, requirement, or fact with the auditor before dependent work proceeds; continue unaffected work.
-
-## Capture shared context
-
-Route agent-made changes to shared context through `audit-context`. Call it when a term is missing or contested, or when audit work establishes a term, methodology point, or organizational fact useful across engagements. Pass the specific term, fact, or conflict and its evidence; that skill handles clarification and accepted updates.
+If any of these files are absent or contain only a blank template, **proceed silently**. Don't flag their absence or blank content; don't suggest populating them upfront.
 
 ## File structure
 
 ```text
 /
 ├── CLAUDE.md
-├── GLOSSARY.md
-├── METHODOLOGY.md
-├── ORGANIZATION.md
 ├── docs/
 │   └── agents/
 │       └── workspace.md
@@ -36,10 +22,25 @@ Route agent-made changes to shared context through `audit-context`. Call it when
     └── <year>/
         └── <name>/
             └── ENGAGEMENT.md
+├── GLOSSARY.md
+├── METHODOLOGY.md
+├── ORGANIZATION.md
 ```
 
-## Engagements
+## Use the glossary's vocabulary
 
-Engagements live in `engagements/<year>/<name>/` and are identified by their `ENGAGEMENT.md`. Keep engagement-specific outputs within the engagement folder.
+When your output names a workspace concept, use the term as defined in `GLOSSARY.md`. Don't drift to synonyms the glossary explicity avoids.
 
-Before producing work for an engagement, resolve the engagement named by the auditor and read its `ENGAGEMENT.md`. Ask when the selection is ambiguous rather than inferring it from the files being read.
+If the concept you need isn't in the glossary yet, that's a signal: either you're inventing language the auditors don't use (reconsider) or there's a real gap (note it for `audit-context`).
+
+## Follow the documented methodology
+
+When the work involves something addressed by the audit methodology, follow the relevant guidance and requirements in `METHODOLOGY.md`. Apply what is documented rather than inventing a different procedure or convention.
+
+If the methodology does not address something needed for the work, don't treat the absence as permission to invent it. Note the genuine methodology gap and resolve uncertainty with the auditor by calling the `shared-understanding` skill.
+
+## Reference organizational facts
+
+When the work depends on organization-specific facts, use the relevant context in `ORGANIZATION.md`. Treat the facts as context for the work rather than replacing them with generic assumptions.
+
+If needed organizational context is not documented, don't treat the absence as permission to invent it. Note the genuine organiztional context gap and resolve uncertainty with the auditor by calling the `shared-understanding` skill.
