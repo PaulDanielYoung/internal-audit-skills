@@ -2,11 +2,13 @@
 
 How the skills should consume workspace context when performing audit work.
 
-## Before working, read these
+## Before working, read these files in the folder root
 
-The workspace root is the folder containing the `CLAUDE.md` that points to this document at `docs/agents/workspace.md`. Shared context lives at that root in `GLOSSARY.md`, `METHODOLOGY.md`, and `ORGANIZATION.md`. At the start of each new chat session, read these files once, when present, before doing audit work.
+- `GLOSSARY.md`
+- `METHODOLOGY.md`
+- `ORGANIZATION.md`
 
-If a context file is absent, proceed silently with supported work. Its absence alone is not a reason to request setup or create it.
+If any of these file are absent, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `audit-context` skill creates them lazily when terms or decision actually get resolved.
 
 ## Use shared context
 
