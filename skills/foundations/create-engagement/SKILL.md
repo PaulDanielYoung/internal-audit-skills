@@ -5,7 +5,7 @@ description: Create an engagement record from an engagement name and audit objec
 
 # Create Engagement
 
-Establish an engagement in the workspace.
+Create the workspace structure and engagement record for an audit engagement. 
 
 ## Engagement Structure
 
@@ -14,11 +14,11 @@ Each engagement uses the following structure:
 ```
 /
 ├── ENGAGEMENT.md
-├── 1-planning/
-├── 2-walkthroughs/
-├── 3-fieldwork/
-├── 4-reporting/
 ├── document-requests/received/
+├── fieldwork/
+├── planning/
+├── reporting/
+├── walkthroughs/
 ```
 
 ## 1. Establish the engagement name, objective, and year
@@ -38,12 +38,4 @@ Create the year and engagement folders if they do not exist. Otherwise, use the 
 Within the engagement folder:
 
 - Create `ENGAGEMENT.md` using the structure in [ENGAGEMENT-FORMAT.md](ENGAGEMENT-FORMAT.md). If the file already exists, leave it unchanged and report the conflict to the user.
-- Create the following subfolders within the engagement folder, skipping any that already exist:
-
-```
-1-planning/
-2-walkthroughs/
-3-fieldwork/
-4-reporting/
-document-requests/received/
-```
+- Create any missing directories from the Engagement Structure above. Leave existing directories unchanged.

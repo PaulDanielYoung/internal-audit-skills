@@ -24,6 +24,11 @@ If any of these files are absent or contain only a blank template, **proceed sil
 │   └── <year>/
 │       └── <name>/
 │           └── ENGAGEMENT.md
+│           └── document-requests/received/
+│           └── fieldwork/
+│           └── planning/
+│           └── reporting/
+│           └── walkthroughs/
 ├── GLOSSARY.md
 ├── METHODOLOGY.md
 └── ORGANIZATION.md
