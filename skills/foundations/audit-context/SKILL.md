@@ -5,7 +5,7 @@ description: Maintain a workspace's context files. Use when audit terminology is
 
 # Audit Context
 
-Actively maintain the workspace context other audit skills use. Ensure that definitions, methodology, and organizational facts are accurate, complete, and up to date.
+Actively maintain the shared context other audit skills use. Challenge unclear terminology, reconcile conflicts against sources, and record settled definitions, documented methodology, and organizational facts as they emerge.
 
 ## File structure
 
@@ -33,30 +33,27 @@ When the user requests workspace setup, directly or through `setup-internal-audi
 
 Populate the documents only when the evidence and decisions required by their format files are available; setup can finish with the files otherwise as created. Outside explicit setup, create a missing file when there is settled content to record.
 
-## 1. Read and resolve
+## During the session
 
-Read the existing context files and the supplied source material relevant to the update. Establish what is new, changed, or conflicting before asking questions. During setup, record what the available material supports and leave the rest for later sessions. During maintenance, request only the missing sources or answers needed for the requested update.
+Read the existing context files and supplied source material relevant to the update. Establish what is new, changed, or conflicting before asking questions. Explicit requests and relevant discoveries during audit work trigger maintenance.
 
 Read the format file for each document being created or changed:
 
-- [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md): definitions, user decisions, and entry format.
+- [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md): definitions and entry format.
 - [METHODOLOGY-FORMAT.md](METHODOLOGY-FORMAT.md): documented requirements and source references.
 - [ORGANIZATION-FORMAT.md](ORGANIZATION-FORMAT.md): shared organizational facts and their evidence.
 
-Ask about material ambiguity; when it spans several decisions, call the Skill tool with `shared-understanding` if available.
-
-This step is complete when each proposed update has the basis required by its format file and material conflicts are resolved or identified as open questions. Continue with settled updates while dependent work waits for unresolved answers.
-
-## 2. Record settled context
-
-Update resolved content during the session rather than collecting it for a later review. Preserve unrelated content and replace superseded wording in place. Explicit requests and relevant discoveries during audit work trigger maintenance.
+- **Challenge terminology.** When usage conflicts with an existing definition, surface the conflict immediately and ask which meaning holds. When a word carries more than one meaning, propose a precise canonical term using supplied material and the organization's established terminology.
+- **Test meanings with scenarios.** Use concrete audit examples to clarify the boundaries between concepts. Treat hypothetical scenarios as questions to test a definition, not as evidence about the organization.
+- **Check against sources.** Reconcile methodology interpretations with governing documents. When sources disagree or their current status is unclear, establish which documented source governs before recording a requirement as settled. Resolve conflicting organizational facts against their evidence and effective dates before replacing settled context.
+- **Clarify material gaps.** Request only the missing sources or answers needed for the current update. When ambiguity spans several decisions, call the Skill tool with `shared-understanding` if available. Continue with settled updates while dependent work waits for unresolved answers; during setup, record what the available material supports and leave the rest for later sessions.
+- **Put proposed changes to the user.** New or revised definitions are the user's decision. Offer each proposed definition, source-supported methodology clarification, or supported organizational fact in one line during the work, then write it on acceptance. Don't hold proposals for later.
+- **Record settled context immediately.** Write accepted updates to the appropriate document during the session. Preserve unrelated content and replace superseded wording in place. When governing documents or organizational facts change, update the summary and its source references or effective period.
 
 Where a material methodology or organizational gap will affect future work, keep a short, clearly labeled open question in the relevant file. State what needs to be established and which work depends on it. Remove the question when resolved.
 
-This step is complete when each settled update is in its proper file, its basis is traceable, and unresolved matters remain distinct from definitions, facts, and requirements.
-
-## 3. Check and return
+## Check and return
 
 Read the edited passages against their sources and the other context files. Check for conflicting definitions, changed requirement strength, unsupported facts, duplicated content, and engagement detail stored as shared context. Keep definitions in the glossary and use its terms in the other files.
 
-Return the changed file paths, a short account of what changed, and any open question that affects the calling task. If there is nothing new to record, leave the files unchanged. Finish when the context is consistent with the available evidence and the calling task can distinguish settled context from what still needs an answer.
+Return the changed file paths, a short account of what changed, and any open question that affects the calling task. Keep unresolved matters distinct from settled context. If there is nothing new to record, leave the files unchanged.

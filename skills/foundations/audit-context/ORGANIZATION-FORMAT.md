@@ -21,9 +21,3 @@ Source: {Reference to supplied organizational material, or the user's explicit s
 - **Use supported facts.** Base the overview on supplied organizational material or explicit user statements. Keep inferences and temporary engagement assumptions out of the shared facts.
 - **Keep the basis traceable.** Place lightweight references beside related facts. For a user-provided fact, record that basis and the date; include an effective date or period when the fact depends on time.
 - **Use the glossary's terms.** Keep definitions in `GLOSSARY.md` and use its terms here.
-
-## During the session
-
-- **Clarify conflicting facts.** Resolve conflicts before replacing settled context.
-- **Put changes to the user.** When audit work surfaces a supported fact useful across engagements, offer it in one line during the work, then write it on acceptance. Don't hold proposals for later.
-- **Update inline.** Update changing facts in place with their current basis and effective period.
