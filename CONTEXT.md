@@ -115,7 +115,6 @@ _Avoid_: date range, period coverage
 - A **Driver** builds exactly one **Report**
 - A **Driver** builds every **Visual** through the charts module and passes it to its **Report**
 - A **Report** derives every **Mechanical condition** and date-field **Coverage span** from the profile, and the **Driver** explains each one
-- Each **Context template** is the starting structure for one document in **Shared context**
 - An **Auditor workspace** holds **Shared context**, including one **Glossary**
 - An **Auditor workspace** holds many **Engagements**, each in its own folder under `engagements/<year>/`
 - An **Engagement** has exactly one **Engagement record**, which records exactly one **Audit objective statement**
