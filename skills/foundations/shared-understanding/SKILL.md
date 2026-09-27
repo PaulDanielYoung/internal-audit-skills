@@ -7,11 +7,9 @@ description: Resolve material ambiguity with the user before making a judgment o
 
 Reach a shared understanding before proceeding with work that depends on unresolved decisions or assumptions.
 
-Read the workspace glossary and the relevant methodology and organization context, if present. Use `audit-context` for missing or contested terms and to record settled changes to shared context. If `audit-context` called this skill, return the resolved decisions to it for recording.
-
 Find the **facts** yourself first. Read the available files, tools, policies, procedures, prior work, and other evidence before asking the user for anything you can determine on your own. The **decisions** are the user's; put each material decision to them.
 
-If additional material only the user can provide would materially improve the answer, name the specific kind that would help—for example a methodology, policy, procedure, spreadsheet, report, prior workpaper, or meeting notes. Let the user answer the underlying question directly instead if they prefer.
+If additional material the user can provide would improve the answer, name the specific kind that would help (for example policies, procedures, audit reports, prior workpapers, meeting notes, etc.).
 
 ## Work the decision tree
 
@@ -53,9 +51,7 @@ After each round, reassess the decision tree. The user's answers may settle othe
 
 Continue until no **material** unresolved question, decision, or assumption remains that could change the work.
 
-When the frontier is empty, summarize the resulting shared understanding in the two-column table above.
-
-Do **not** ask for a separate confirmation by default. Reaching an empty frontier means the shared understanding has been established from the user's answers and the available evidence.
+When the frontier is empty, summarize the resulting shared understanding.
 
 If this skill was invoked by another skill, return the shared understanding and allow the invoking skill to continue.
 
