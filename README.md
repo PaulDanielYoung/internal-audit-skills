@@ -28,7 +28,7 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 ### [Foundations](skills/foundations/README.md)
 
 - [`setup-internal-audit-skills`](skills/foundations/setup-internal-audit-skills/SKILL.md) prepares a new or existing auditor workspace and its project instructions. Invoke it explicitly for setup.
-- [`audit-context`](skills/foundations/audit-context/SKILL.md) maintains the glossary, documented methodology, and organizational context shared across engagements. It includes a guide and template for each document.
+- [`audit-context`](skills/foundations/audit-context/SKILL.md) maintains the glossary, documented methodology, and organizational context shared across engagements. It includes a format file with a starting structure and guidance for each document.
 - [`shared-understanding`](skills/foundations/shared-understanding/SKILL.md) resolves ambiguity with the user before a judgment is made or work is produced.
 - [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record from an engagement name and audit objective statement. Every later engagement skill starts from it.
 - [`engagement-sources`](skills/foundations/engagement-sources/SKILL.md) retains supplied material and source notes, preserves receipt provenance, and records confirmed request references across engagement phases.
@@ -87,7 +87,7 @@ claude
 
 With the CLI install, the command is `/setup-internal-audit-skills`. You can also supply a target folder to the setup skill from an existing session; it creates a missing folder and preserves existing workspace content. Then start a session in that workspace so its project instructions load.
 
-Setup delegates the context documents to `audit-context`, which creates any that are missing from its templates, and adds `engagements/` and the project instructions in `CLAUDE.md`. Existing files are preserved. Then capture context, for example:
+Setup delegates the context documents to `audit-context`, which creates any that are missing using the starting structures in its format files, and adds `engagements/` and the project instructions in `CLAUDE.md`. Existing files are preserved. Then capture context, for example:
 
 > Use audit-context to capture the organizational material at the path I provide.
 

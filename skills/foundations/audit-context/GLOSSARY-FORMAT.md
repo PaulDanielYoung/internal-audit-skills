@@ -1,8 +1,28 @@
+# GLOSSARY.md Format
+
+## Structure
+
+```md
 # Glossary
 
-## Creating the file
+The organization's own audit vocabulary: each term's agreed meaning and the synonyms it displaces. Every skill reads it; only `audit-context` edits it.
 
-Copy [GLOSSARY-TEMPLATE.md](GLOSSARY-TEMPLATE.md) during explicit workspace setup, or when the first definition is ready to record. Preserve an existing glossary.
+## Terms
+
+**Term**:
+{One or two sentences stating what it is, not what it does.}
+_Avoid_: synonyms the organization does not use separated by commas
+
+**Term**:
+{One or two sentences stating what it is, not what it does.}
+_Avoid_: synonyms the organization does not use separated by commas
+```
+
+## Rules
+
+- **Be opinionated.** When multiple words exist for the same concept, pick the best one and list the others under `_Avoid_`.
+- **Keep definitions tight.** One or two sentences max. Define what it IS, not what it does.
+- **Only terms specific to internal audit or this organization.** General English and general business terms stay out.
 
 ## During the session
 
@@ -11,18 +31,3 @@ Copy [GLOSSARY-TEMPLATE.md](GLOSSARY-TEMPLATE.md) during explicit workspace setu
 - **Put changes to the user.** New or revised definitions are the user's decision. Use supplied material and the organization's established usage to recommend wording. Offer the entry in one line during the work, then write it on acceptance. Don't hold proposals for later.
 - **Update inline.** Record a resolved term immediately, in the session where it was settled. A task-specific exception or temporary interpretation stays in the conversation.
 - **Definitions belong here.** Audit methodology belongs in `METHODOLOGY.md`, organizational facts in `ORGANIZATION.md`, and engagement material under `engagements/`. Keep unresolved terminology questions in the conversation until a definition is settled.
-
-## Format
-
-Add each entry under `## Language`:
-
-```md
-**Term**:
-One or two sentences stating what it is, not what it does.
-_Avoid_: synonyms the organization does not use
-```
-
-- **Be opinionated.** When several words exist for one concept, pick one and list the others under `_Avoid_`.
-- **Keep definitions tight.** One or two sentences.
-- **Only terms specific to audit practice or this organization.** General English and general business terms stay out.
-- **Group terms under headings** when natural clusters emerge. A flat list is fine until then.

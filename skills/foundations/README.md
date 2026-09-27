@@ -3,7 +3,7 @@
 Skills used across audit phases.
 
 - [`setup-internal-audit-skills`](setup-internal-audit-skills/SKILL.md) prepares a new or existing auditor workspace in local Claude Code. Invoke it explicitly for project setup.
-- [`audit-context`](audit-context/SKILL.md) maintains the glossary, documented methodology, and organizational context shared across engagements. It includes a guide and template for each document.
+- [`audit-context`](audit-context/SKILL.md) maintains the glossary, documented methodology, and organizational context shared across engagements. It includes a format file with a starting structure and guidance for each document.
 - [`shared-understanding`](shared-understanding/SKILL.md) resolves material ambiguity with the user before work depends on an assumption.
 - [`create-engagement`](create-engagement/SKILL.md) creates the engagement record from an engagement name and audit objective statement. Every later engagement skill starts from it.
 - [`engagement-sources`](engagement-sources/SKILL.md) retains supplied material and source notes, preserves receipt provenance, and records confirmed request references across engagement phases.

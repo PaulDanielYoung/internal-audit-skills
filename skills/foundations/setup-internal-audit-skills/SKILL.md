@@ -18,7 +18,7 @@ Confirm that `audit-context` is available; setup cannot continue without it.
 
 ## 2. Initialize context and folders
 
-Invoke `audit-context` with the absolute workspace root to initialize any missing `GLOSSARY.md`, `METHODOLOGY.md`, and `ORGANIZATION.md` files from its templates. Pass any supplied sources or established decisions.
+Invoke `audit-context` with the absolute workspace root to initialize any missing `GLOSSARY.md`, `METHODOLOGY.md`, and `ORGANIZATION.md` files using the starting structures in its format files. Pass any supplied sources or established decisions.
 
 Ensure `engagements/` exists. Leave individual engagement folders to `create-engagement` and other engagement artifacts to the skills that create them.
 

@@ -1,43 +1,51 @@
 ---
 name: audit-context
-description: Maintain shared audit context in GLOSSARY.md, METHODOLOGY.md, and ORGANIZATION.md. Use when audit terminology is discussed, defined, or used inconsistently, when documented methodology needs clarifying, or when audit work settles a term or surfaces an organizational fact useful across engagements.
+description: Maintain a workspace's context files. Use when audit terminology is discussed, when documented methodology needs clarifying, or when audit work settles a term or surfaces an organizational fact useful across engagements.
 ---
 
 # Audit Context
 
-Maintain the context other audit skills use. Capture existing terminology, documented methodology, and organizational facts; methodology design and engagement planning are separate work.
+Actively maintain the workspace context other audit skills use. Ensure that definitions, methodology, and organizational facts are accurate, complete, and up to date.
+
+## File structure
+
+```text
+/
+├── CLAUDE.md
+├── GLOSSARY.md
+├── METHODOLOGY.md
+├── ORGANIZATION.md
+└── engagements/
+    └── <year>/
+        └── <name>/
+            └── ENGAGEMENT.md
+```
 
 ## Workspace and ownership
 
-The workspace instructions should have been provided to you. If not, tell the user to run `setup-internal-audit-skills`. The files sit at the workspace root those instructions name, separate from the installed skill; when setup calls this skill, use the absolute root it passes instead:
-
-- `GLOSSARY.md`: the organization's own definitions.
-- `METHODOLOGY.md`: a concise, source-linked account of documented audit requirements.
-- `ORGANIZATION.md`: an organizational overview useful across engagements.
-
-This skill owns edits to all three files. Other skills read them when present and call this skill when persistent context needs to change, passing the specific fact, term, or conflict and its evidence. Update only the relevant file or files, then return to the calling task.
+This skill owns edits to all three context files. Other skills read them when present and call this skill when persistent context needs to change, passing the specific fact, term, or conflict and its evidence. Update only the relevant file or files, then return to the calling task.
 
 Engagement scope, process and control detail, evidence, findings, and planning artifacts belong under `engagements/`.
 
 ## Initialize a workspace
 
-When the user requests workspace setup, directly or through `setup-internal-audit-skills`, initialize all three context files. Read the guides below and create only missing files from their corresponding templates. Preserve existing files, including partial documents, and report which were retained.
+When the user requests workspace setup, directly or through `setup-internal-audit-skills`, initialize all three context files. Read the format files below and create only missing files using their starting structures. Preserve existing files, including partial documents, and report which were retained.
 
-Populate the documents only when the evidence and decisions required by their guides are available; setup can finish with the files otherwise as created. Outside explicit setup, create a missing file when there is settled content to record.
+Populate the documents only when the evidence and decisions required by their format files are available; setup can finish with the files otherwise as created. Outside explicit setup, create a missing file when there is settled content to record.
 
 ## 1. Read and resolve
 
 Read the existing context files and the supplied source material relevant to the update. Establish what is new, changed, or conflicting before asking questions. During setup, record what the available material supports and leave the rest for later sessions. During maintenance, request only the missing sources or answers needed for the requested update.
 
-Read the guide for each document being created or changed:
+Read the format file for each document being created or changed:
 
-- [GLOSSARY-GUIDE.md](GLOSSARY-GUIDE.md): definitions, user decisions, and entry format.
-- [METHODOLOGY-GUIDE.md](METHODOLOGY-GUIDE.md): documented requirements and source references.
-- [ORGANIZATION-GUIDE.md](ORGANIZATION-GUIDE.md): shared organizational facts and their evidence.
+- [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md): definitions, user decisions, and entry format.
+- [METHODOLOGY-FORMAT.md](METHODOLOGY-FORMAT.md): documented requirements and source references.
+- [ORGANIZATION-FORMAT.md](ORGANIZATION-FORMAT.md): shared organizational facts and their evidence.
 
 Ask about material ambiguity; when it spans several decisions, call the Skill tool with `shared-understanding` if available.
 
-This step is complete when each proposed update has the basis required by its guide and material conflicts are resolved or identified as open questions. Continue with settled updates while dependent work waits for unresolved answers.
+This step is complete when each proposed update has the basis required by its format file and material conflicts are resolved or identified as open questions. Continue with settled updates while dependent work waits for unresolved answers.
 
 ## 2. Record settled context
 
