@@ -7,28 +7,13 @@ description: Maintain the workspace's glossary. Use when audit terminology is mi
 
 Actively build and sharpen the organization's audit vocabulary as you work. Challenge unclear terminology, test the boundaries between concepts, and record settled definitions as they emerge.
 
-## File structure
+## File Structure
 
 The workspace contains a single glossary file:
 
-```
+```text
 /
-├── CLAUDE.md
-├── docs/
-│   └── agents/
-│       └── workspace.md
-├── engagements/
-│   └── <year>/
-│       └── <name>/
-│           └── ENGAGEMENT.md
-│           └── document-requests/received/
-│           └── fieldwork/
-│           └── planning/
-│           └── reporting/
-│           └── walkthroughs/
-├── GLOSSARY.md
-├── METHODOLOGY.md
-└── ORGANIZATION.md
+└── GLOSSARY.md
 ```
 
 Create `GLOSSARY.md` when the first term’s meaning is settled, using the structure in [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md). If the file already exists, update it in place.

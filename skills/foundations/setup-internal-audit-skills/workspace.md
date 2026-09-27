@@ -12,9 +12,11 @@ If any of these files are absent or contain only a blank template, **proceed sil
 
 `METHODOLOGY.md` and `ORGANIZATION.md` are approved references maintained by the internal audit department; agents read them without making edits. Clarification on those documents through `shared-understanding` does not approve changes to them.
 
-## File structure
+## File Structure
 
-```
+The full workspace layout is shown below. Files and directories are created as needed by the relevant skills.
+
+```text
 /
 ├── CLAUDE.md
 ├── docs/
@@ -23,11 +25,13 @@ If any of these files are absent or contain only a blank template, **proceed sil
 ├── engagements/
 │   └── <year>/
 │       └── <name>/
-│           └── ENGAGEMENT.md
-│           └── document-requests/received/
-│           └── fieldwork/
-│           └── planning/
-│           └── reporting/
+│           ├── ENGAGEMENT.md
+│           ├── document-requests/
+│           │   ├── REQUESTS.md
+│           │   └── received/
+│           ├── fieldwork/
+│           ├── planning/
+│           ├── reporting/
 │           └── walkthroughs/
 ├── GLOSSARY.md
 ├── METHODOLOGY.md

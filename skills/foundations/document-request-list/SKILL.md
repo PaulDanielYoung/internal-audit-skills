@@ -1,26 +1,48 @@
 ---
 name: document-request-list
-description: Create and maintain audit engagement information requests across all phases. Use when an auditor asks to create a document request list, add requests, or update existing requests.
+description: Maintain audit engagement document requests. Use when missing materials warrant a request, received files may change a request's status, or the auditor asks to create or update the list.
 ---
 
 # Document Request List
 
-Maintain a document requests for an audit engagement with one row per request. Work from auditor-supplied information and instructions, including those passed by another skill.
+Proactively suggest document requests as needs emerge. The agent maintains `REQUESTS.md`; the auditor approves new requests and places client-provided files in `document-requests/received/`.
+
+## File Structure
+
+```text
+/
+└── engagements/
+    └── <year>/
+        └── <name>/
+            └── document-requests/
+                ├── REQUESTS.md
+                └── received/
+```
 
 ## Locate the list
 
-Resolve the engagement from the auditor's request and workspace context, then read its `ENGAGEMENT.md`. Ask when the engagement is ambiguous. Use:
+Resolve the engagement from the conversation and workspace context, then read its `ENGAGEMENT.md`. Ask when the engagement is ambiguous. Use:
 
 `engagements/<year>/<name>/document-requests/REQUESTS.md`
 
-Read the existing list before editing. If absent, create it when list creation or adding requests is requested; create the parent directory if needed.
+Read the existing list before editing. When the first request is approved or the auditor asks to create a list, create any missing `document-requests/` and `document-requests/received/` directories, and create `REQUESTS.md` if it does not already exist.
 
-## Maintain the table
+Read [REQUESTS-FORMAT.md](REQUESTS-FORMAT.md) for the table structure, IDs, fields, and dates. The status rules below take precedence over that reference.
 
-Read [REQUESTS-FORMAT.md](REQUESTS-FORMAT.md) before creating or updating `REQUESTS.md`; it defines the document structure and rules for request IDs, fields, dates, and statuses.
+## Suggest and add requests
 
-Apply the auditor's requested changes to the identified row, preserving its ID and all fields outside the requested change. Use the ID or an unambiguous request description to identify the row; ask only when ambiguity prevents adding or updating the correct request.
+When needed material is missing, check the list and received files for existing coverage. Propose a specific request in the conversation, explain why it is needed, and ask the auditor to approve adding it. Add the request only after approval; an explicit instruction to add it already counts as approval. Keep unapproved suggestions in the conversation.
+
+## Maintain requests
+
+Update the list as relevant information and received files become available, preserving stable IDs and unrelated fields. Maintain statuses without separate approval:
+
+- **Open:** Material remains outstanding or the response is partial.
+- **Closed:** Review of the received material establishes that the request is fulfilled.
+- **Withdrawn:** The auditor indicates the material is no longer needed.
+
+Follow explicit auditor status decisions. When fulfillment or the matching request is unclear, retain the current status and ask for clarification.
 
 ## Finish
 
-Verify that the saved list has the five columns, unique stable IDs, allowed statuses, and correctly formatted known dates, with unrelated rows preserved. Return the file path and a concise summary of added or updated IDs and any unresolved ambiguity. When another skill called this one, return the same information; substantive audit gaps remain with that skill.
+Verify the saved list follows the table format, with unique stable IDs and supported statuses. Briefly report added or updated IDs and any unresolved questions.
