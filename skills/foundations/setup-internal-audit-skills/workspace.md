@@ -37,7 +37,7 @@ Engagements live in `engagements/<year>/<name>/`. Before producing engagement wo
 
 When your output names an audit concept, use the term as defined in `GLOSSARY.md`. Don't drift to synonyms the glossary explicitly avoids.
 
-If the concept you need isn't in the glossary yet, that's a signal: either you're inventing language the auditors don't use (reconsider) or there's a real gap (note it for `audit-context`).
+If the concept you need isn't in the glossary yet, that's a signal: either you're inventing language the auditors don't use (reconsider) or there's a real gap (note it for `audit-terminology`).
 
 ## Follow the documented methodology
 
