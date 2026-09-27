@@ -5,7 +5,7 @@
 ```
 # Document Request List
 
-The audit engagement's document request list. One row corresponds to one request. Every skill reads it; only `document-request-list` edits it.
+The engagement's document request list. Each row represents one request. Other skills read it; only `document-request-list` edits it.
 
 ## Table
 
@@ -15,10 +15,10 @@ The audit engagement's document request list. One row corresponds to one request
 
 ## Rules
 
-- **Keep one request per row.** Use exactly the five columns shown above. An empty list has the table header without placeholder rows.
-- **Preserve request IDs.** Allocate `RQ-01`, `RQ-02`, and so on above the highest existing number.
-- **Describe the requested material.** Request text is the only required input for a new row.
-- **Identify the provider.** Owner is the business stakeholder responsible for providing the requested material. Leave the cell blank when unknown.
+- **Keep one request per row.** Use exactly the five columns shown above. An empty list contains only the table header, with no placeholder rows.
+- **Preserve request IDs.** Assign the next sequential ID after the highest existing number: RQ-01, RQ-02, and so on. Never reuse an existing ID.
+- **Describe the requested material.** Write each request clearly and specifically enough to identify what should be provided, including the relevant period or scope when known. Request is the only field that must be known when creating a new row.
+- **Identify the provider.** Owner is the business stakeholder responsible for providing the requested material. Leave it blank when unknown.
 - **Use consistent dates.** Write known due dates as `MM/DD/YYYY` and leave unknown dates blank.
-- **Use three statuses.** Open means outstanding and is the default for new requests. Closed means the auditor considers the request fulfilled. Withdrawn means the material is no longer being requested.
-- **Follow the auditor's status decisions.** Change status only on the auditor's instruction. Partial responses remain Open.
+- **Use three statuses.** Open means the request remains outstanding and is the default for new requests. Closed means the request has been fulfilled. Withdrawn means the material is no longer being requested.
+- **Keep partial responses open.** A request remains Open until the received material fully satisfies it or the auditor directs otherwise.
