@@ -1,16 +1,16 @@
 {
   "name": "internal-audit-skills",
   "version": "0.2.0",
-  "description": "Agent skills for internal auditors: workspace setup, audit context, shared understanding, engagement creation, source retention and notification, preliminary surveys, cross-phase information requests, risk, process, and control statements, planned procedures, and exploratory data analysis.",
+  "description": "Agent skills for internal auditors.",
   "author": {
     "name": "Paul Young"
   },
   "repository": "https://github.com/PaulDanielYoung/internal-audit-skills",
   "license": "MIT",
-  "keywords": ["internal-audit", "audit", "risk", "skills", "data-analysis"],
+  "keywords": ["internal-audit"],
   "skills": [
     "./skills/foundations/setup-internal-audit-skills",
-    "./skills/foundations/audit-context",
+    "./skills/foundations/audit-terminology",
     "./skills/foundations/shared-understanding",
     "./skills/foundations/create-engagement",
     "./skills/foundations/engagement-sources",
