@@ -62,7 +62,7 @@ _Avoid_: engagement file, engagement charter
 The glossary, documented methodology captured in `METHODOLOGY.md`, and organizational overview in `ORGANIZATION.md` at the auditor workspace root. The `audit-context` skill maintains these files for other skills to read.
 
 **Workspace instructions**:
-The `## Internal audit skills` block that `setup-internal-audit-skills` adds to the auditor workspace's `CLAUDE.md`. It locates the shared context files, sets the reading and capture rules, carries the engagement selection rules, and marks the workspace as set up.
+The `## Internal audit skills` block in the auditor workspace's `CLAUDE.md` and the `docs/agents/workspace.md` it points to, both written by `setup-internal-audit-skills`. Together they locate shared context, set its reading, use, and capture rules, carry engagement selection rules, and mark the workspace as set up.
 _Avoid_: setup block, instruction block
 
 **Context template**:

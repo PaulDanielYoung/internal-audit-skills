@@ -67,6 +67,9 @@ CLAUDE.md
 GLOSSARY.md
 METHODOLOGY.md
 ORGANIZATION.md
+docs/
+  agents/
+    workspace.md
 engagements/
   <year>/
     <engagement-name>/
@@ -87,11 +90,11 @@ claude
 
 With the CLI install, the command is `/setup-internal-audit-skills`. You can also supply a target folder to the setup skill from an existing session; it creates a missing folder and preserves existing workspace content. Then start a session in that workspace so its project instructions load.
 
-Setup delegates the context documents to `audit-context`, which creates any that are missing using the starting structures in its format files, and adds `engagements/` and the project instructions in `CLAUDE.md`. Existing files are preserved. Then capture context, for example:
+Setup delegates the context documents to `audit-context`, which creates any that are missing using the starting structures in its format files, and adds `engagements/`. It writes the workspace rules to `docs/agents/workspace.md` and a pointer to them in `CLAUDE.md`, preserving existing context and user additions. The rules cover reading and using context, capturing updates, and selecting an engagement. Then capture context, for example:
 
 > Use audit-context to capture the organizational material at the path I provide.
 
-Definitions are agreed with you, methodology comes from documented sources, and organizational facts come from your material or explicit statements. As you work, Claude offers to record terms, methodology points, and organizational facts that get settled, and writes each one when you accept. Other skills read the context when present; `audit-context` needs setup to have run and asks you to run it if not.
+Definitions are agreed with you, methodology comes from documented sources, and organizational facts come from your material or explicit statements. As you work, Claude offers to record terms, methodology points, and organizational facts that get settled, and writes each one when you accept. Other skills use the context when present and proceed silently when files are absent. Outside initialization by setup, `audit-context` relies on the workspace instructions and asks you to run setup if they are missing.
 
 Individual audit material belongs under `engagements/`. Start an engagement with `create-engagement`, giving its name and audit objective statement; it writes the engagement record under the annual-plan year. In later conversations, name the engagement you are working on and the engagement skills use its record and folder. Use `engagement-notification` to draft the initial communication to management.
 
