@@ -33,7 +33,7 @@ Use the engagement year and the engagement name in kebab-case (lowercase words j
 
 `engagements/<year>/<name-with-hyphens>/`
 
-Create the year and engagement folders if they do not exist. Otherwise, use the existing folders.
+Create `engagements/`, the year folder, and the engagement folder if they do not exist. Otherwise, use the existing folders.
 
 Within the engagement folder:
 
