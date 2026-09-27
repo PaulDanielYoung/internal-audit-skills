@@ -13,9 +13,9 @@ Use numbered steps with one executable action per step:
 
 Each step names what to examine, what to do, and the observable criterion for evaluating it. Techniques include **inquire**, **observe**, **inspect**, **reperform**, and **recalculate**; the glossary or methodology may rename or extend them. Replace bare "review", "check", "ensure", or "verify" with the actual action. Phrase criteria as planned comparisons or questions to resolve, preserving open outcomes.
 
-Read the workspace glossary and relevant methodology and organization context when present, using their role, system, report, and technique names; proceed silently when absent. Documented methodology governs the procedures; follow relevant longer sources it points to. Use `audit-terminology` for missing, ambiguous, or contested terms and settled definitions; use `shared-understanding` for material uncertainty about methodology or organizational facts, passing the question and available evidence.
+Read the workspace glossary and relevant methodology and organization context when present, using their role, system, report, and technique names; proceed silently when absent. Documented methodology governs the procedures; follow relevant longer sources it points to. Use `audit-terminology` when a term's meaning needs agreement or consistency across engagements. Use `shared-understanding` for material uncertainty about methodology or organizational facts, passing the question and available evidence.
 
-Use only local material and auditor-supplied facts. Mark unsupported criteria, evidence, reports, periods, or other necessary details in place, carrying gaps in the control description into the matching steps. Preserve the caller's gap markers, short inline retained-source references, and basis labels. The calling stage skill arranges retention through `engagement-sources` and owns artifact sourcing. Use `shared-understanding` when ambiguity about the agreed approach, control, evidence, criteria, or applicable sampling could materially change the procedure.
+Use only local material and auditor-supplied facts. Mark unsupported criteria, evidence, reports, periods, or other necessary details in place, carrying gaps in the control description into the matching steps. Preserve the caller's gap markers, short inline source references, and basis labels. The calling stage skill owns workpaper sourcing; for a standalone request, identify the supplied sources or attributed auditor statements supporting the wording. Use `shared-understanding` when ambiguity about the agreed approach, control, evidence, criteria, or applicable sampling could materially change the procedure. Keep dependent wording pending and continue supported portions; ask directly if the skill is unavailable.
 
 ## Completeness by purpose
 
@@ -35,7 +35,7 @@ State the population and its source, period, sampling approach and size (or full
 
 When the control relies on system-generated information, include completeness and accuracy checks; mark an unidentified report or extract as a gap. If only inquiry or observation is available, flag the evidence limitation and propose locally supported corroboration, with missing evidence left visible for the auditor's decision.
 
-For automated controls, note that reliance depends on general IT controls tested elsewhere; selection and design of those tests stay with the caller. A single-instance or baseline approach requires a methodology basis; otherwise leave the sampling basis as a gap.
+For automated controls, identify the supporting general IT control testing on which reliance depends and its source or responsible workpaper. Keep missing coverage visible for the caller to resolve; selection and design of those tests stay with the caller. A single-instance or baseline approach requires a methodology basis; otherwise leave the sampling basis as a gap.
 
 ### Risk gaps
 

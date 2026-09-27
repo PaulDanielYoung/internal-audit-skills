@@ -9,17 +9,17 @@ Own the internal workpaper at `planning/planning-memo.md` in the selected engage
 
 ## Establish the basis
 
-Follow the workspace instructions for engagement selection, read its `ENGAGEMENT.md`, and state the selected engagement and output path. Read the workspace glossary and relevant methodology and organization context when present; proceed silently when absent. Use `audit-terminology` for missing, ambiguous, or contested terms and settled definitions.
+Follow the workspace instructions for engagement selection, read its `ENGAGEMENT.md`, and state the selected engagement and output path. Read the workspace glossary and relevant methodology and organization context when present; proceed silently when absent. Use `audit-terminology` when a term's meaning needs agreement or consistency across engagements.
 
 Documented methodology overrides defaults. For structure, use a supplied organization template, then methodology, then relevant prior workpapers, then the defaults below. Read longer retained sources the methodology points to. Use the glossary's artifact name in prose and headings, noting the repo term once; keep skill names, paths, and ID prefixes fixed. State the methodology or default basis in the workpaper. Resolve unclear or conflicting methodology with the auditor through `shared-understanding`. List requirements outside this skill's remit as outstanding with their methodology source.
 
-Inspect available material before asking for more. Gather only what the memo needs: the survey, assessment, recorded framework, prior findings and assurance coverage, assignment facts, and any organization template or earlier memo. Accept equivalent auditor-supplied documents; have `engagement-sources` retain an unchanged received copy before adopting a working copy of an external current-engagement memo at the memo path. Quote the assignment's audit objective statement verbatim and leave the engagement record unchanged.
+Inspect available material before asking for more. Gather only what the memo needs: the survey, assessment, recorded framework, prior findings and assurance coverage, assignment facts, and any organization template or earlier memo. Accept equivalent auditor-supplied documents, preserving originals as described below. Quote the assignment's audit objective statement verbatim and leave the engagement record unchanged.
 
-Use `shared-understanding` for material ambiguity that could change scope or objectives, pausing only the affected portion; ask directly if unavailable. Minor gaps get descriptive bracketed markers in place and entries in Information gaps. Use retained local framework documents only. A missing reference or unknown edition/date is an auditor-only gap; dependent criteria and applicability decisions stay open until it is retained. Use plain concept terms and attribute rules to documented methodology without quoting, citing, or numbering IIA or ISACA text. Describe the activity without classifying the engagement by subject type.
+Use `shared-understanding` for material ambiguity that could change scope or objectives, pausing only the affected portion; ask directly if unavailable. Minor gaps get descriptive bracketed markers in place and entries in Information gaps. Use available local framework documents only. A missing reference or unknown edition/date is a gap for the auditor; dependent criteria and applicability decisions stay open until the source and its governing version are established. Use plain concept terms and attribute rules to documented methodology without quoting, citing, or numbering IIA or ISACA text. Describe the activity without classifying the engagement by subject type.
 
 ### Sources and provenance
 
-Delegate source retention and provenance updates to `engagement-sources`, passing supplied material and known original locations and receipt dates. Use its returned retained-source links. If unavailable, continue supported work from already-retained material and give a concrete handoff for outstanding retention or provenance updates; do not write sources or their index as a fallback. Settle which version governs with the auditor when unresolved.
+Read source files in place and leave originals unchanged. The auditor places client-provided files in `document-requests/received/`; cite those files, other available local references, and upstream workpapers directly. Record known source dates or versions and relevant locations; leave unknown provenance explicit. Settle conflicting versions with the auditor. When adopting an external draft, create the working copy at this skill's output path only after a separate unchanged original is available.
 
 Every factual statement and scoping consideration carries an inline citation to the retained copy and relevant location, or an explicit basis such as a dated auditor statement. Cite upstream workpapers and their underlying sources when carrying content. `ORGANIZATION.md` also counts as a source. Label meeting notes and prior-content bases. General context may appear only as a labelled note, never as an inferred fact about this activity.
 
@@ -27,7 +27,7 @@ Every factual statement and scoping consideration carries an inline citation to 
 
 Accept an equivalent assessment supplied by the auditor. Without one, recommend `risk-assessment`; if declined, scope at process level only and mark the risk table “pending the risk assessment”. Use established Process IDs and leave unavailable risk and activity Objective ID links pending. Refer a missing or incomplete process list to `preliminary-survey`; this skill creates no processes or IDs. Pause the whole memo through `shared-understanding` only when neither processes nor the assignment's audit objective statement can be established; otherwise draft the supported portions. An absent request list or notification-sent status is no prerequisite.
 
-Offer an earlier engagement's memo as a reference, retaining it unchanged in `sources/`. Write the current engagement's memo separately; never refresh the earlier memo. Its approach, team, budget, and dates may inform labelled prior content. Its scope decisions appear only as sourced considerations, with current decisions left undecided until the auditor decides.
+Offer an earlier engagement's memo as a reference and cite it in place. Write the current engagement's memo separately, leaving the earlier memo unchanged. Its approach, team, budget, and dates may inform labelled prior content. Its scope decisions appear only as sourced considerations, with current decisions left undecided until the auditor decides.
 
 ## Present the scope judgement point
 
@@ -35,7 +35,7 @@ Carry the assessment's active risks into a scoping table in its ranked order, ci
 
 Alongside that table, account for every process by Process ID with sourced considerations and its own In/Out, reason, and date, including processes with no risks. Present the period under examination, entities and locations, and systems for the auditor's scope decision, keeping unknown boundaries visible.
 
-Ask the auditor for decisions and record their reasons and dates. Leave undecided entries blank; mark missing decision details as gaps rather than supplying them. Excluding a process excludes only risks linked solely to that process: list them under the exclusion and record the process decision as their basis, with its reason and date. Shared risks keep their own decision, even when one linked process is Out. Resolve contradictory risk/process decisions with the auditor rather than silently altering either. Every exclusion, including an excluded area outside the risk list, needs a reason. List High and Critical risk exclusions first under Exclusions, followed by the remaining exclusions and their affected references.
+Ask the auditor for decisions and record their reasons and dates. Leave undecided entries blank; mark missing decision details as gaps rather than supplying them. Excluding a process excludes only risks linked solely to that process: list them under the exclusion and record the process decision as their basis, with its reason and date. Shared risks keep their own decision, even when one linked process is Out. Resolve contradictory risk/process decisions with the auditor rather than silently altering either. Every exclusion, including an excluded area outside the risk list, needs a reason. List risk exclusions in the assessment's ranked order, followed by other exclusions and their affected references; this preserves priority when methodology uses different band names.
 
 ## Agree objectives, criteria, and applicability
 
@@ -63,11 +63,11 @@ Memo changes flag the RCM for revision, identifying affected scope, objectives, 
 
 ## Route information needs and responses
 
-This skill determines the workpaper's information needs. Keep proposed requests in Information gaps until the auditor instructs that they be added to the document request list. For auditor-directed creation or updates, invoke `document-request-list` with the selected engagement, request text (including any supplied period/version), known owner and due date, and the target request ID and requested changes for updates. Record returned IDs in Information gaps. Auditor-only questions stay in this workpaper.
+Record missing information and its effect on the work in Information gaps. Invoke `document-request-list` when missing material warrants a document request, relevant information or received files may change an existing request, or the auditor asks to create or update the list. Pass the selected engagement, the material needed and why, known period/version, request owner and due date, relevant files, and any existing request ID or auditor instruction. Let that skill manage approval of new requests and maintain the list; record returned RQ IDs beside the corresponding gaps. Questions requiring the auditor's judgement stay in this workpaper.
 
-For supplied responses, use `engagement-sources` for retention as described above and cite the retained material when updating this workpaper's gaps. Send list updates to `document-request-list` only on the auditor's instruction. Assess substantive sufficiency here or with the auditor; a request's status alone does not resolve an audit gap. Keep affected sections and source links in this workpaper.
+Cite received material when updating the workpaper and assess whether it resolves each affected gap. A request's status alone does not establish that the workpaper's information need is satisfied.
 
-If `document-request-list` is unavailable, continue supported work, keep gaps visible, and return the auditor's requested list changes as a handoff, explicitly stating that the list was not updated. Recommend the skill when list maintenance is an optional next step; request table edits belong to that skill.
+If `document-request-list` is unavailable, continue supported work, keep gaps visible, and return proposed requests or status changes as a handoff, explicitly stating that the list was not updated. Request table edits belong to that skill.
 
 ## Assemble the memo and report readiness
 
@@ -76,7 +76,7 @@ Use these default sections in order, retaining missing content with bracketed ga
 1. **Engagement context:** unchanged audit objective statement, links to the survey and assessment, and methodology or default basis.
 2. **Engagement objectives:** numbered wording, linked Objective IDs and Risk IDs, and auditor agreement.
 3. **Scope:** period, entities and locations, systems, process decisions, and ranked risk scoping table.
-4. **Exclusions:** reasons and affected references, with High and Critical exclusions first.
+4. **Exclusions:** reasons and affected references, with risk exclusions in the assessment's ranked order.
 5. **Criteria:** per engagement objective, with sources, auditor-developed labels and agreement, or gaps.
 6. **Topical requirements applicability:** sourced list, considerations, and auditor decisions, or the one-line basis for no list.
 7. **Approach:** summary per engagement objective.
@@ -88,4 +88,4 @@ Use these default sections in order, retaining missing content with bracketed ga
 
 Save the memo in Markdown. It is ready for `risk-and-control-matrix` when every engagement objective is agreed, every active risk and process has a current In/Out decision with reasons for exclusions, every in-scope risk is covered by an agreed objective, every objective has criteria or a named gap, and no open gap would change scope or objectives. A pending assessment or scoping re-decision prevents readiness. Team, budget, and timeline gaps or inconsistencies are listed without blocking the RCM; any associated unresolved scope or objective decision still blocks. Resolve scope-changing or objective-changing gaps through `shared-understanding`, pausing the affected portion meanwhile.
 
-In the reply, give the output path, stated readiness against each criterion, undecided items, remaining gaps and RQ references, outstanding methodology requirements, and downstream flags. Recommend `risk-and-control-matrix`, with blockers clear when not ready. Readiness is distinct from approval: neither request nor record approval, and send no communications.
+In the reply, give the output path, stated readiness against each criterion, undecided items, remaining gaps and RQ references, outstanding methodology requirements, and downstream flags. Recommend `risk-and-control-matrix`, with blockers clear when not ready. Report readiness separately from the auditor decisions and document-request approvals required above; add no final approval gate and send no communications.

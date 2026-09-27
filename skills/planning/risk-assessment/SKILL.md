@@ -9,17 +9,17 @@ Own the engagement risk assessment at `planning/risk-assessment.md` in the selec
 
 ## Establish the basis
 
-Follow the workspace instructions for engagement selection, read its `ENGAGEMENT.md`, and state the selected engagement and output path. Read the workspace glossary and relevant methodology and organization context when present; proceed silently when absent. Use `audit-terminology` for missing, ambiguous, or contested terms and settled definitions.
+Follow the workspace instructions for engagement selection, read its `ENGAGEMENT.md`, and state the selected engagement and output path. Read the workspace glossary and relevant methodology and organization context when present; proceed silently when absent. Use `audit-terminology` when a term's meaning needs agreement or consistency across engagements.
 
 Documented methodology overrides defaults. For structure, use a supplied organization template, then methodology, then relevant prior workpapers, then the defaults below. Read longer retained sources the methodology points to. Use the glossary's artifact name in prose and headings, noting the repo term once; keep skill names, paths, and ID prefixes fixed. State the methodology or default basis in the workpaper. Resolve unclear or conflicting methodology with the auditor through `shared-understanding`. List requirements outside this skill's remit as outstanding with their methodology source.
 
-Inspect available material before asking for more. Gather only what this assessment needs: the survey, prior assessments and findings, incidents, management concerns, and equivalent auditor-supplied material. Accept an equivalent assessment produced elsewhere, having `engagement-sources` preserve a received copy before adopting a working copy at the assessment path. Preserve the assignment's audit objective statement verbatim and leave the engagement record unchanged.
+Inspect available material before asking for more. Gather only what this assessment needs: the survey, prior assessments and findings, incidents, management concerns, and equivalent auditor-supplied material. Accept an equivalent assessment produced elsewhere, preserving its original as described below. Preserve the assignment's audit objective statement verbatim and leave the engagement record unchanged.
 
 Use `shared-understanding` for material ambiguity that could change the assessment, pausing only the affected portion; ask directly if unavailable. Minor gaps get descriptive bracketed markers in place and entries in Information gaps. Use retained local framework documents; a missing document or undated edition is a gap for the auditor, not a reason to fetch an external reference. Use plain concept terms and attribute rules to documented methodology without quoting, citing, or numbering IIA or ISACA text. Describe the activity without classifying the engagement by subject type.
 
 ### Sources and provenance
 
-Delegate source retention and provenance updates to `engagement-sources`, passing supplied material and known original locations and receipt dates. Use its returned retained-source links. If unavailable, continue supported work from already-retained material and give a concrete handoff for outstanding retention or provenance updates; do not write sources or their index as a fallback. Settle which version governs with the auditor when unresolved.
+Read source files in place and leave originals unchanged. The auditor places client-provided files in `document-requests/received/`; cite those files, other available local references, and upstream workpapers directly. Record known source dates or versions and relevant locations; leave unknown provenance explicit. Settle conflicting versions with the auditor. When adopting an external draft, create the working copy at this skill's output path only after a separate unchanged original is available.
 
 Every factual statement, including each rating consideration, carries an inline citation to the retained copy and relevant location, or an explicit basis such as a dated auditor statement. Cite the survey and its underlying sources when carrying its content. `ORGANIZATION.md` also counts as a source. Label meeting notes and prior-content bases. General knowledge supplies labelled candidates, never facts about this activity.
 
@@ -43,7 +43,7 @@ For a new, changed, or retired risk, record the change and affected references i
 
 ### Refresh an earlier assessment
 
-When an earlier assessment of the same activity exists, offer to refresh it. On acceptance, have `engagement-sources` retain an unchanged received copy and work at the current assessment path, reconciling identities with this engagement's established IDs. Label carried risks “prior engagement; not reconfirmed” until a current source or the auditor reconfirms them. Show prior ratings only as sourced likelihood or impact considerations; leave current ratings, score, and band blank until the auditor rates. For reassessment after a flag, move the affected risks' previous ratings into considerations and reopen their current ratings, preserving unaffected current decisions. Treat unresolved currency or upstream changes as gaps against readiness.
+When an earlier assessment of the same activity exists, offer to use it as the starting point for the current assessment. On acceptance, leave the earlier artifact unchanged and work at the current assessment path, reconciling identities with this engagement's established IDs. Label carried risks “prior engagement; not reconfirmed” until a current source or the auditor reconfirms them. Show prior ratings only as sourced likelihood or impact considerations; leave current ratings, score, and band blank until the auditor rates. For reassessment after a flag, move the affected risks' previous ratings into considerations and reopen their current ratings, preserving unaffected current decisions. Treat unresolved currency or upstream changes as gaps against readiness.
 
 ## Present the rating judgement point
 
@@ -72,14 +72,14 @@ Use these default sections in order, retaining missing content with bracketed ga
 
 ## Route information needs and responses
 
-This skill determines the workpaper's information needs. Keep proposed requests in Information gaps until the auditor instructs that they be added to the document request list. For auditor-directed creation or updates, invoke `document-request-list` with the selected engagement, request text (including any supplied period/version), known owner and due date, and the target request ID and requested changes for updates. Record returned IDs in Information gaps. Auditor-only questions stay in this workpaper.
+Record missing information and its effect on the work in Information gaps. Invoke `document-request-list` when missing material warrants a document request, relevant information or received files may change an existing request, or the auditor asks to create or update the list. Pass the selected engagement, the material needed and why, known period/version, request owner and due date, relevant files, and any existing request ID or auditor instruction. Let that skill manage approval of new requests and maintain the list; record returned RQ IDs beside the corresponding gaps. Questions requiring the auditor's judgement stay in this workpaper.
 
-For supplied responses, use `engagement-sources` for retention as described above and cite the retained material when updating this workpaper's gaps. Send list updates to `document-request-list` only on the auditor's instruction. Assess substantive sufficiency here or with the auditor; a request's status alone does not resolve an audit gap. Keep affected sections and source links in this workpaper.
+Cite received material when updating the workpaper and assess whether it resolves each affected gap. A request's status alone does not establish that the workpaper's information need is satisfied.
 
-If `document-request-list` is unavailable, continue supported work, keep gaps visible, and return the auditor's requested list changes as a handoff, explicitly stating that the list was not updated. Recommend the skill when list maintenance is an optional next step; request table edits belong to that skill.
+If `document-request-list` is unavailable, continue supported work, keep gaps visible, and return proposed requests or status changes as a handoff, explicitly stating that the list was not updated. Request table edits belong to that skill.
 
 ## Report readiness
 
 Save the assessment in Markdown. It is ready for `planning-memo` when every active risk links to a process and an objective, every description has gone through `risk-statements`, every risk is rated by the auditor, the coverage check is done, and no open gap would add, remove, or re-rate a risk. Resolve such a gap through `shared-understanding`, pausing that risk meanwhile.
 
-In the reply, give the output path, stated readiness against each criterion, named undecided risks, remaining gaps and RQ references, outstanding methodology requirements, and downstream flags. Recommend `planning-memo`, with blockers clear when not ready. Readiness is distinct from approval: neither request nor record approval, and send no communications.
+In the reply, give the output path, stated readiness against each criterion, named undecided risks, remaining gaps and RQ references, outstanding methodology requirements, and downstream flags. Recommend `planning-memo`, with blockers clear when not ready. Report readiness separately from the auditor decisions and document-request approvals required above; add no final approval gate and send no communications.

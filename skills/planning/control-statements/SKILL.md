@@ -29,15 +29,15 @@ Evidence of performance is optional; include it only when a source states it. Ev
 
 Read the workspace glossary, if present, and use its definitions for control and role; without one, the meanings above apply. Read the relevant methodology and organization context too, using their canonical role and system names, and proceed silently when absent. Documented methodology governs the wording; the pattern above is a starting point.
 
-Use `audit-terminology` for missing, ambiguous, or contested terms and settled definitions. Use `shared-understanding` for material uncertainty about methodology or organizational facts. Pass the specific question and available evidence.
+Use `audit-terminology` when a term's meaning needs agreement or consistency across engagements. Use `shared-understanding` for material uncertainty about methodology or organizational facts. Pass the specific question and available evidence.
 
-Call the Skill tool with `shared-understanding` when material ambiguity about intended design, its governing source, or whether activities form one control could change the wording. Mark missing facts in place with bracketed gaps, such as `[frequency not identified]` or `[exception handling not established]`; use only details supported by local material or the auditor. Preserve the caller's gap markers, short inline retained-source references, and basis labels. The calling stage skill arranges retention through `engagement-sources` and owns artifact sourcing.
+Use `shared-understanding` when material ambiguity about intended design, its governing source, or whether activities form one control could change the wording. Keep dependent wording pending and continue supported portions; ask directly if the skill is unavailable. Mark missing facts in place with bracketed gaps, such as `[frequency not identified]` or `[exception handling not established]`; use only details supported by local material or the auditor. Preserve the caller's gap markers, short inline source references, and basis labels. The calling stage skill owns workpaper sourcing; for a standalone request, identify the supplied sources or attributed auditor statements supporting the wording.
 
 ## Intended design and boundaries
 
 Describe intended design and intended frequency from applicable policy or procedure, or an attributed management or auditor account when those documents are silent. Identify the supported activity rather than inferring one from a requirement alone. Keep short source references beside the details they support.
 
-Keep known contrary practice outside the baseline description: return a separately attributed note and retained-source reference linked by Control ID for the caller to retain for walkthroughs or fieldwork. A monthly policy activity remains monthly when quarterly practice is reported. The departure is material for later examination, not an automatic final finding.
+Keep known contrary practice outside the baseline description: return a separately attributed note and source reference linked by an existing Control ID, or by title when no ID has been assigned, for the caller to retain for walkthroughs or fieldwork. A monthly policy activity remains monthly when quarterly practice is reported. The departure is material for later examination, not an automatic final finding.
 
 For a risk without an identified control, leave the title and description empty; return the gap to the caller and route gap-confirmation or assessment wording to `planned-procedures`.
 
@@ -57,7 +57,7 @@ Use these when reviewing, improving, or diagnosing. Each fault names what sound 
 - **A purpose missing or tied to one risk.** State what the control itself prevents or detects in wording that works across every linked risk and process.
 - **A policy, requirement, or objective stated as a control.** Describe the activity that implements it when supported; a requirement such as "All payments must be approved" alone does not establish a control.
 - **Several controls combined in one description.** Describe one control activity and recommend a split where separate activities need their own descriptions.
-- **Operating practice substituted for intended design.** Keep the supported design and intended frequency in the description, with contrary practice separately attributed and linked by Control ID.
+- **Operating practice substituted for intended design.** Keep the supported design and intended frequency in the description, with contrary practice separately attributed and linked to the control.
 - **Invented or guessed details.** Use supported intended-design facts and bracketed gaps for unknowns; an account of design does not establish performance or evidence.
 - **An adequacy judgement or recommended improvement in the description.** State what the control does, leaving adequacy and improvements to walkthroughs and the auditor.
 - **Procedure or evidence-examination detail in the description.** Describe intended control activity; leave planned examination to `planned-procedures`.
@@ -65,6 +65,6 @@ Use these when reviewing, improving, or diagnosing. Each fault names what sound 
 
 ## Review output
 
-Check the title, intended-design basis, inline references, and every completeness element as well as the faults. Check that any contrary practice has a separate attributed handoff linked by Control ID. For several controls, also compare pairs for duplicates (the same activity under different titles or Control IDs) and combined controls.
+Check the title, intended-design basis, inline references, and every completeness element as well as the faults. Check that any contrary practice has a separate attributed handoff linked to the control. For several controls, also compare pairs for duplicates (the same activity under different titles or Control IDs) and combined controls.
 
 Name each fault found using the names above, explicitly identify duplicates, explain any other unmet requirement, and propose a revised title and description for affected wording. Preserve gap markers, source links, and basis labels in the revisions. Keep any split or merge as a recommendation for the caller rather than changing the control list or IDs. Confirm sound wording and leave it unchanged, without rewriting for style.

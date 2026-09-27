@@ -1,6 +1,6 @@
 ---
 name: engagement-notification
-description: Draft or refresh the initial engagement notification to management, or prepare an entrance meeting agenda. Use when asked to notify or announce an engagement. Request list updates route to document-request-list.
+description: Draft or refresh the initial engagement notification to management, or prepare an entrance meeting agenda. Use when asked to notify or announce an engagement or plan its entrance meeting.
 ---
 
 # Engagement Notification
@@ -9,13 +9,13 @@ Draft the auditor's initial communication to management. The only persistent wor
 
 ## Establish the basis
 
-Follow the workspace instructions for engagement selection, read its `ENGAGEMENT.md`, and state the selected engagement and output path. Read the workspace glossary and relevant methodology and organization context when present; proceed silently when absent. Use `audit-terminology` for missing, ambiguous, or contested terms and settled definitions.
+Follow the workspace instructions for engagement selection, read its `ENGAGEMENT.md`, and state the selected engagement and output path. Read the workspace glossary and relevant methodology and organization context when present; proceed silently when absent. Use `audit-terminology` when a term's meaning needs agreement or consistency across engagements.
 
 Documented methodology governs the work. For structure, use a supplied organization template, then methodology, then relevant prior workpapers, then the defaults below. Read any longer retained source the methodology points to. Use the glossary's artifact name in prose and headings, noting the repo term once; keep skill names and file paths fixed. If methodology is unclear or conflicts with sources, resolve the uncertainty with the auditor through `shared-understanding`. Keep requirements outside this skill's remit outstanding in the reply, with their methodology source.
 
 Inspect the record and available material before asking for more. Intake is limited to the communication: an assignment note, organization notification template, or prior notification may help; accept equivalent auditor-supplied material. Ground activity facts in supplied material or dated auditor statements, never general knowledge. Record only auditor-supplied scope decisions; do not propose them.
 
-Delegate source retention and provenance updates to `engagement-sources`, passing supplied material and known original locations and receipt dates. Use its returned retained-source links. If unavailable, continue supported work from already-retained material and give a concrete handoff for outstanding retention or provenance updates; do not write sources or their index as a fallback. Before adopting an external draft at the notification path, have `engagement-sources` preserve an unchanged received copy. Engagement sources are intake records, not additional planning work products.
+Read source files in place and leave originals unchanged. The auditor places client-provided files in `document-requests/received/`; use those files and other available local references directly. When adopting an external draft, create the working copy at the notification path only after a separate unchanged original is available. Explain source dates or versions and relevant locations in the reply, leaving unknown provenance explicit.
 
 Use `shared-understanding` only for material ambiguity that could change the communication, including a missing identifiable management addressee or a missing/materially unclear audit objective statement. Pause only the affected portion. If that skill is unavailable in an independent install, ask the material questions directly. Never invent or reword the assignment objective, or edit the engagement record to refine it. Mark non-material missing facts with descriptive bracketed placeholders and continue without interruption.
 
@@ -51,11 +51,11 @@ Leave attendees to the auditor. Keep walkthrough and detailed control-design con
 
 ## Route request work
 
-`document-request-list` owns the engagement's document request list. Route auditor-directed list creation and updates there, including when no list exists or the notification has not been sent. Request messages and reminders are outside that skill's scope. This skill saves only the notification.
+`document-request-list` owns the engagement's document request list. Invoke it when drafting reveals missing material that warrants a document request, relevant information or received files may change an existing request, or the auditor asks to create or update the list. Neither an existing list nor a sent notification is a prerequisite. Request messages and reminders are outside that skill's scope. This skill saves only the notification.
 
-For a combined notification and list-maintenance request, pass the selected engagement, auditor-supplied request text (including any period/version), known owner and due date, and the target request ID and requested changes for updates. Recommend `document-request-list` when list maintenance is only an optional next step. Additional substantive needs belong to the appropriate planning skill, normally `preliminary-survey`.
+Pass the selected engagement, the material needed and why, known period/version, request owner and due date, relevant files, and any existing request ID or auditor instruction. Let `document-request-list` manage approval of new requests and maintain the list. Keep requests separate from the notification; broader information-needs analysis belongs to `preliminary-survey`.
 
-When `document-request-list` is unavailable, finish the notification work and return the auditor's requested list changes as a handoff, explicitly stating that the list was not updated. Request table edits belong to that skill. Handle source retention as described above; supplied material alone does not trigger a list update.
+When `document-request-list` is unavailable, finish supported notification work and return proposed requests or status changes as a handoff, explicitly stating that the list was not updated. Request table edits belong to that skill.
 
 ## Report completion
 

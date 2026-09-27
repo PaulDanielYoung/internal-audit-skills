@@ -26,9 +26,9 @@ Adapt the wording to the context. A statement is complete when a reader can poin
 
 Read the workspace glossary, if present, and use its definitions for risk, objective, event, cause, and consequence; without one, the meanings above apply. Read the relevant methodology and organization context too, and proceed silently when absent. Documented methodology governs the wording; the pattern above is a starting point.
 
-Use `audit-terminology` for missing, ambiguous, or contested terms and settled definitions. Use `shared-understanding` for material uncertainty about methodology or organizational facts. Pass the specific question and available evidence.
+Use `audit-terminology` when a term's meaning needs agreement or consistency across engagements. Use `shared-understanding` for material uncertainty about methodology or organizational facts. Pass the specific question and available evidence.
 
-Call the Skill tool with `shared-understanding` when material ambiguity about the objective, event, causes, consequences, or intended use of the statement could change the wording. Mark missing facts in place with bracketed gaps, such as `[cause not established]` or `[objective not identified]`; use only causes, events, and consequences the available information supports. Preserve the caller's gap markers, source links, and basis labels.
+Use `shared-understanding` when material ambiguity about the objective, event, causes, consequences, or intended use of the statement could change the wording. Keep dependent wording pending and continue supported portions; ask directly if the skill is unavailable. Mark missing facts in place with bracketed gaps, such as `[cause not established]` or `[objective not identified]`; use only causes, events, and consequences the available information supports. Preserve the caller's gap markers, source links, and basis labels. For a standalone request, identify the supplied sources or attributed auditor statements supporting the wording.
 
 ## Faults
 
