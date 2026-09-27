@@ -14,7 +14,7 @@ If any of these files are absent or contain only a blank template, **proceed sil
 
 ## File structure
 
-```text
+```
 /
 ├── CLAUDE.md
 ├── docs/

@@ -11,7 +11,7 @@ Actively build and sharpen the organization's audit vocabulary as you work. Chal
 
 The workspace contains a single glossary file:
 
-```text
+```
 /
 ├── CLAUDE.md
 ├── docs/

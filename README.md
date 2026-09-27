@@ -19,8 +19,6 @@ npx skills add PaulDanielYoung/internal-audit-skills -g
 
 The plugin prefixes each skill name with `internal-audit-skills:`; the CLI installs the plain names. Reinstall to pick up a new version.
 
-When installing individual skills, include `engagement-sources` for planning or request workflows that need to retain new material or update source provenance. Without it, those skills can continue from already-retained material and report the outstanding source work.
-
 ## Skills
 
 Skills are organized by where an auditor would first reach for them. Their invocation names stay the same.
@@ -30,8 +28,7 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 - [`setup-internal-audit-skills`](skills/foundations/setup-internal-audit-skills/SKILL.md) prepares a new or existing auditor workspace and its project instructions. Invoke it explicitly for setup.
 - [`audit-terminology`](skills/foundations/audit-terminology/SKILL.md) sharpens audit terminology and maintains agreed definitions in the workspace's `GLOSSARY.md`, creating it when the first definition is settled.
 - [`shared-understanding`](skills/foundations/shared-understanding/SKILL.md) resolves ambiguity with the user before a judgment is made or work is produced.
-- [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record from an engagement name and audit objective statement. Every later engagement skill starts from it.
-- [`engagement-sources`](skills/foundations/engagement-sources/SKILL.md) retains supplied material and source notes, preserves receipt provenance, and records confirmed request references across engagement phases.
+- [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record and folders from an engagement name and audit objective statement. Every later engagement skill starts from it.
 - [`request-list`](skills/foundations/request-list/SKILL.md) maintains the shared engagement information-request list across audit phases and drafts request messages and reminders on demand.
 
 ### [Planning](skills/planning/README.md)

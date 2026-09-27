@@ -19,11 +19,12 @@ The initial communication from internal audit to management about an engagement,
 **Preliminary RCM**:
 The planning artifact that maps the engagement's scoped processes and risks to intended controls and planned audit procedures. It carries the engagement work program, including procedures to investigate risks without identified controls, for the handoff to walkthroughs.
 
-**Engagement sources**:
-The retained supplied material and its provenance shared across an engagement's phases, maintained by `engagement-sources` and distinct from the work products derived from it.
+**Received material**:
+Anything supplied to an engagement from outside the engagement team, requested or not, kept in the engagement's `requests/received/` folder. The engagement team's own notes and work products are not received material; they belong in the phase folder where the work happened.
+_Avoid_: engagement sources, client documents, evidence folder
 
-**Receipt event**:
-One occasion on which supplied material is received, with its original location and receipt date. Identical material can have several receipt events sharing one retained copy; recording an event does not confirm a request match or establish source sufficiency.
+**Phase folder**:
+One of the engagement folder's numbered folders for a phase of the engagement: `1-planning/`, `2-walkthroughs/`, `3-fieldwork/`, and `4-reporting/`. It holds the engagement team's work products for that phase.
 
 **Shared engagement request list**:
 The cross-phase artifact owned by `request-list` that records external information requests and their lifecycle for one engagement. It is distinct from planning artifacts and from the information gaps those requests may help resolve.
@@ -47,7 +48,7 @@ A decision reserved for the auditor, presented with sourced considerations and r
 A notice that a change may require an artifact's owning skill and the auditor to revisit earlier work or decisions. A flag identifies affected references without changing the downstream artifact.
 
 **Engagement**:
-One planned piece of internal audit work on a defined subject, carried from assignment through reporting, with its material in `engagements/<year>/<name>/`. "Audit" is an acceptable informal synonym in conversation; skills and docs say engagement.
+One planned piece of internal audit work on a defined subject, carried from assignment through reporting, with its material in `engagements/<year>/<name>/`: its **Phase folders** and a `requests/` folder holding the **Shared engagement request list** and **Received material**. "Audit" is an acceptable informal synonym in conversation; skills and docs say engagement.
 _Avoid_: project, review
 
 **Audit objective statement**:
@@ -107,8 +108,8 @@ _Avoid_: date range, period coverage
 - A **Planning stage skill** owns a **Planning artifact** for one **Engagement**
 - An **Engagement notification** is a **Planning artifact** that preserves the **Audit objective statement**
 - A **Preliminary RCM** is a **Planning artifact** that carries planned procedures for one **Engagement**
-- **Engagement sources** support work across one **Engagement**; **Stated readiness** identifies remaining **Information gaps**
-- **Engagement sources** preserve **Receipt events** independently of confirmed **Request item** matches
+- **Stated readiness** identifies remaining **Information gaps**
+- **Received material** may answer one or more **Request items**, or none
 - A **Shared engagement request list** holds **Request items** across one **Engagement**; each item has a **Stable ID**
 - A **Request item** can support several artifacts or workstreams, and several items can address one **Information gap**
 - A **Driver** profiles exactly one **Source table** with the **Choices** its profiling run recorded
