@@ -28,7 +28,7 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 ### [Foundations](skills/foundations/README.md)
 
 - [`setup-internal-audit-skills`](skills/foundations/setup-internal-audit-skills/SKILL.md) prepares a new or existing auditor workspace and its project instructions. Invoke it explicitly for setup.
-- [`audit-context`](skills/foundations/audit-context/SKILL.md) maintains the glossary, documented methodology, and organizational context shared across engagements. It includes a format file with a starting structure and guidance for each document.
+- [`audit-terminology`](skills/foundations/audit-terminology/SKILL.md) sharpens audit terminology and maintains agreed definitions in the workspace's `GLOSSARY.md`, creating it when the first definition is settled.
 - [`shared-understanding`](skills/foundations/shared-understanding/SKILL.md) resolves ambiguity with the user before a judgment is made or work is produced.
 - [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record from an engagement name and audit objective statement. Every later engagement skill starts from it.
 - [`engagement-sources`](skills/foundations/engagement-sources/SKILL.md) retains supplied material and source notes, preserves receipt provenance, and records confirmed request references across engagement phases.
@@ -48,7 +48,7 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 
 ### [Walkthroughs](skills/walkthroughs/README.md)
 
-Skills for walkthroughs will be listed here as they are added.
+
 
 ### [Fieldwork](skills/fieldwork/README.md)
 
@@ -56,48 +56,4 @@ Skills for walkthroughs will be listed here as they are added.
 
 ### [Reporting](skills/reporting/README.md)
 
-Skills for reporting will be listed here as they are added.
 
-## Auditor workspace
-
-Keep shared context at the root of your audit workspace, separate from the installed skills:
-
-```text
-CLAUDE.md
-GLOSSARY.md
-METHODOLOGY.md
-ORGANIZATION.md
-docs/
-  agents/
-    workspace.md
-engagements/
-  <year>/
-    <engagement-name>/
-      ENGAGEMENT.md
-```
-
-Create a folder for audit work, start Claude Code there, and run setup once:
-
-```powershell
-New-Item -ItemType Directory -Path "$env:USERPROFILE\Projects\audit-workspace" -Force
-Set-Location "$env:USERPROFILE\Projects\audit-workspace"
-claude
-```
-
-```text
-/internal-audit-skills:setup-internal-audit-skills
-```
-
-With the CLI install, the command is `/setup-internal-audit-skills`. You can also supply a target folder to the setup skill from an existing session; it creates a missing folder and preserves existing workspace content. Then start a session in that workspace so its project instructions load.
-
-Setup delegates the context documents to `audit-context`, which creates any that are missing using the starting structures in its format files, and adds `engagements/`. It writes the workspace rules to `docs/agents/workspace.md` and a pointer to them in `CLAUDE.md`, preserving existing context and user additions. The rules cover reading and using context, capturing updates, and selecting an engagement. Then capture context, for example:
-
-> Use audit-context to capture the organizational material at the path I provide.
-
-Definitions are agreed with you, methodology comes from documented sources, and organizational facts come from your material or explicit statements. As you work, Claude offers to record terms, methodology points, and organizational facts that get settled, and writes each one when you accept. Other skills use the context when present and proceed silently when files are absent. Outside initialization by setup, `audit-context` relies on the workspace instructions and asks you to run setup if they are missing.
-
-Individual audit material belongs under `engagements/`. Start an engagement with `create-engagement`, giving its name and audit objective statement; it writes the engagement record under the annual-plan year. In later conversations, name the engagement you are working on and the engagement skills use its record and folder. Use `engagement-notification` to draft the initial communication to management.
-
-## License
-
-[MIT](LICENSE)
