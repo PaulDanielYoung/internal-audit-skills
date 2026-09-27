@@ -26,7 +26,7 @@ Adapt the wording to the context. Write one present-tense paragraph, roughly two
 
 Read the workspace glossary, if present, and use its definitions for process, activity, and role; without one, the meanings above apply. Read the relevant methodology and organization context too, using their canonical role and system names, and proceed silently when absent. Documented methodology governs the wording; the pattern above is a starting point.
 
-Use `audit-context` when a needed term is missing from an existing glossary, terminology is contested or unclear, or persistent methodology or organization context needs updating or clarification. Pass the specific question and available evidence.
+Use `audit-terminology` for missing, ambiguous, or contested terms and settled definitions. Use `shared-understanding` for material uncertainty about methodology or organizational facts. Pass the specific question and available evidence.
 
 Call the Skill tool with `shared-understanding` when material ambiguity about a process boundary, or whether two flows are one process, could change the wording. Mark missing facts in place with bracketed gaps, such as `[system not identified]` or `[end point not established]`; use only actors, systems, steps, and boundaries the sources support. Preserve the caller's gap markers, source links, and basis labels. The calling stage skill arranges retention through `engagement-sources` and owns artifact sourcing.
 

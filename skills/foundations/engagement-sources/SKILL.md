@@ -5,11 +5,11 @@ description: Retain supplied material for an engagement, maintain its source pro
 
 # Engagement Sources
 
-Own retained material in the selected engagement's `sources/` folder and its provenance in `sources/README.md` across audit phases. Preserve supplied originals and existing citations. Substantive skills decide what material they need, when a verbal account needs a retained note, which version governs, and whether a source supports their work. `request-list` owns RQ matching and lifecycle; `audit-context` owns shared context.
+Own retained material in the selected engagement's `sources/` folder and its provenance in `sources/README.md` across audit phases. Preserve supplied originals and existing citations. Substantive skills decide what material they need, when a verbal account needs a retained note, which version governs, and whether a source supports their work. `request-list` owns RQ matching and lifecycle; `audit-terminology` owns glossary edits; the internal audit department maintains the methodology and organization references.
 
 ## Establish the basis
 
-Follow the workspace instructions for engagement selection, read its `ENGAGEMENT.md`, and state the selected engagement and source paths. Read the workspace glossary and relevant methodology and organization context when present; proceed silently when absent. Documented methodology governs. Use `audit-context` for missing or contested terms and persistent context changes; surface conflicting retention requirements for resolution.
+Follow the workspace instructions for engagement selection, read its `ENGAGEMENT.md`, and state the selected engagement and source paths. Read the workspace glossary and relevant methodology and organization context when present; proceed silently when absent. Documented methodology governs. Use `audit-terminology` for missing, ambiguous, or contested terms and settled definitions; use `shared-understanding` for material uncertainty about methodology or organizational facts, including conflicting retention requirements.
 
 Accept supplied material or accessible paths, its original location and receipt date when known, and the requested retention or provenance update. For a source note, accept the supplied account, attribution, and date. For an RQ backlink, require the retained-source link, request-list path, RQ ID, and auditor-confirmed match supplied by `request-list` or the auditor. Existing explicit confirmation suffices; a candidate match does not.
 

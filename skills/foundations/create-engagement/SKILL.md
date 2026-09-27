@@ -7,7 +7,7 @@ description: Create an engagement record from an engagement name and audit objec
 
 Establish one engagement in the auditor workspace by recording its name and audit objective statement in the engagement record, `engagements/<year>/<name>/ENGAGEMENT.md`. Every later engagement skill starts from this record.
 
-Read the workspace glossary and the relevant methodology and organization context when present, and use the glossary's terms; documented methodology governs. Proceed silently when they are absent. Call `audit-context` when a term is missing or contested, or when the conversation settles a fact useful across engagements.
+Read the workspace glossary and the relevant methodology and organization context when present, and use the glossary's terms; documented methodology governs. Proceed silently when they are absent. Call `audit-terminology` for missing, ambiguous, or contested terms and settled definitions useful across engagements. Use `shared-understanding` for material uncertainty about methodology or organizational facts.
 
 **## 1. Establish the objective**
 
