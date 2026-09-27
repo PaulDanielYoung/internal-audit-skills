@@ -1,6 +1,6 @@
 ---
 name: engagement-notification
-description: Draft or refresh the initial engagement notification to management, or prepare an entrance meeting agenda. Use when asked to notify or announce an engagement. Information requests and request emails route to request-list.
+description: Draft or refresh the initial engagement notification to management, or prepare an entrance meeting agenda. Use when asked to notify or announce an engagement. Information requests and request emails route to document-request-list.
 ---
 
 # Engagement Notification
@@ -51,11 +51,11 @@ Leave attendees to the auditor. Keep walkthrough and detailed control-design con
 
 ## Route request work
 
-`request-list` owns the shared engagement request list and all request emails, including the initial message. Route information-request work there even if no list exists or the notification has not been sent. This skill owns no request IDs, statuses, lifecycle rules, or request-table edits, and saves no request messages.
+`document-request-list` owns the shared engagement request list and all request emails, including the initial message. Route information-request work there even if no list exists or the notification has not been sent. This skill owns no request IDs, statuses, lifecycle rules, or request-table edits, and saves no request messages.
 
-For a combined request, pass auditor-supplied needs to `request-list` with the item, period/version, addressee, relevant artifact/section or workstream, and candidate retained sources. Preserve unknown details as gaps. Invoke it for authorized list creation or updates and requested message drafting; recommend it when request work is only an optional next step. Additional substantive needs belong to the appropriate planning skill, normally `preliminary-survey`; do not derive them from organization context while drafting a notification.
+For a combined request, pass auditor-supplied needs to `document-request-list` with the item, period/version, addressee, relevant artifact/section or workstream, and candidate retained sources. Preserve unknown details as gaps. Invoke it for authorized list creation or updates and requested message drafting; recommend it when request work is only an optional next step. Additional substantive needs belong to the appropriate planning skill, normally `preliminary-survey`; do not derive them from organization context while drafting a notification.
 
-When `request-list` is unavailable, finish the notification work and give a concrete handoff in the reply containing those supplied needs and context. Explicitly state that the list was not updated. Never edit the request table as a fallback. If supplied material responds to an existing request, invoke `engagement-sources` for retention and pass its returned link and proposed match to `request-list`. That skill arranges confirmed RQ backlinks through `engagement-sources`; report unfinished retention or provenance updates. Unrequested material does not change the list.
+When `document-request-list` is unavailable, finish the notification work and give a concrete handoff in the reply containing those supplied needs and context. Explicitly state that the list was not updated. Never edit the request table as a fallback. If supplied material responds to an existing request, invoke `engagement-sources` for retention and pass its returned link and proposed match to `document-request-list`. That skill arranges confirmed RQ backlinks through `engagement-sources`; report unfinished retention or provenance updates. Unrequested material does not change the list.
 
 ## Report completion
 

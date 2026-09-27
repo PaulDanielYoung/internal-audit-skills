@@ -1,5 +1,5 @@
 ---
-name: request-list
+name: document-request-list
 description: Create, seed, reconcile, or maintain engagement information requests across audit phases, including receipt, withdrawal, and follow-up. Use also to draft initial or additional request messages and reminders.
 ---
 
@@ -36,6 +36,6 @@ Completion means each supplied need or requested change has an accounted-for out
 
 ## Contract for calling skills
 
-The auditor or substantive skill decides needs and passes the deliverable, period/version, addressee if known, needing artifact/section or workstream, and candidate source links. Invoke `request-list` for authorized creation, changes, or requested message drafting; recommend it for an optional next step. The caller or auditor decides uncertain substantive source sufficiency.
+The auditor or substantive skill decides needs and passes the deliverable, period/version, addressee if known, needing artifact/section or workstream, and candidate source links. Invoke `document-request-list` for authorized creation, changes, or requested message drafting; recommend it for an optional next step. The caller or auditor decides uncertain substantive source sufficiency.
 
-In a single-skill install where `request-list` is unavailable, the caller returns those precise needs and affected references as a handoff, explicitly states that the list has not been updated, and keeps the information gap visible. The caller never edits the request table as a fallback.
+In a single-skill install where `document-request-list` is unavailable, the caller returns those precise needs and affected references as a handoff, explicitly states that the list has not been updated, and keeps the information gap visible. The caller never edits the request table as a fallback.
