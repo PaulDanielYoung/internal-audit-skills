@@ -6,38 +6,42 @@ disable-model-invocation: true
 
 # Setup Internal Audit Skills
 
-Scaffold the workspace with the necessary configuration that the internal audit skills assume:
-
-- **Workspace**: where the internal audit skills are set up and configured.
-
-This is a prompt-driven skill, not a deterministic script.
+Prepare the workspace with the necessary configuration that the internal audit skills assume exist.
 
 ## 1. Establish the workspace
 
 The current directory is used as the default workspace if no target folder is supplied by the user.
 
-Inspect existing workspace files relevant to setup before making changes. Preserve existing content and reuse existing configuration where possible. If existing context or instructions conflict with the new setup, resolve the conflict before writing.
+Inspect the existing files relevant to setup before making changes. If existing content conflict with the new setup, resolve the conflict with the user before writing.
 
-## 2. Initialize context and folders
+## 2. Create or Update CLAUDE.md
 
-If `CLAUDE.md` does not exist, create it. If `CLAUDE.md` exists, edit it.
+Create `CLAUDE.md` if it doesn't exist. Otherwise, edit it.
 
 If an `## Internal audit skills` block already exists in `CLAUDE.md`, update its contents in-place rather than appending a duplicate.
-
-The `## Internal audit skills` block:
 
 ```
 ## Internal audit skills
 
 ### Workspace Instructions
 
-[one-line summary of where the internal audit skills are set up]. See 'docs/agents/workspace.md'.
+Workspace instructions for the internal audit skills are located in 'docs/agents/workspace.md'.
 ```
 
-Then read [workspace.md](workspace.md) and write it to `docs/agents/workspace.md`.
+## 3. Create files from templates
 
-## 3. Done
+Copy each template from this skill's folder to its destination. If the file already exists, skip it and leave it unchanged.
+
+| Template | Destination |
+|---|---|
+| [workspace.md](workspace.md) | `docs/agents/workspace.md` |
+| [METHODOLOGY.md](METHODOLOGY.md) | `METHODOLOGY.md` (workspace root) |
+| [ORGANIZATION.md](ORGANIZATION.md) | `ORGANIZATION.md` (workspace root) |
+
+## 4. Report
 
 Tell the user setup is complete and the internal audit skills will now read from these files.
+
+Explain that newly created `METHODOLOGY.md` and `ORGANIZATION.md` files are blank templates for the auditor to populate manually with approved content.
 
 Mention that they can edit docs/agents/workspace.md directly to update workspace instructions.
