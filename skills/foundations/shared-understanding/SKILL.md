@@ -23,12 +23,12 @@ If the frontier is reasonably small, ask all of its questions in the same round.
 
 Do not ask a question whose answer depends on another unresolved question in the same round.
 
-For each question, give a recommended answer and briefly explain the reasoning. Make the recommendation specific enough that the user can accept it, modify it, or choose another option.
+For each decision question, give a recommended answer and briefly explain the reasoning. Make the recommendation specific enough that the user can accept it, modify it, or choose another option. For missing facts, ask for the fact or supporting evidence; suggest how to establish it when useful.
 
-Format each round and question like so:
+Format each question as shown below for its type, numbering questions in order within the round:
 
 ```
-❓ **Q1** - **{question title}**
+❓ **Q1** - **{decision question title}**
 
 {question body, including choices where useful}
 
@@ -36,23 +36,23 @@ Format each round and question like so:
 
 {recommended answer and brief reasoning}
 ---
-❓ Q2 - {question title}
+❓ **Q2** - **{factual question title}**
 
-{question body, including choices where useful}
+{question asking for the missing fact or supporting evidence}
 
-➡️ Recommended answer
+➡️ **Suggested source**
 
-{recommended answer and brief reasoning}
+{where or how to establish the fact, when useful; otherwise omit this section}
 ```
 
 After each round, reassess the decision tree. The user's answers may settle other questions, introduce new ones, change assumptions, or move the frontier.
 
 ## Know when to stop
 
-Continue until no **material** unresolved question, decision, or assumption remains that could change the work.
+Shared understanding is complete when no **material** unresolved question, decision, or assumption remains that could change the work. Summarize the resulting shared understanding when this criterion is met.
 
-When the frontier is empty, summarize the resulting shared understanding.
+If material questions remain but none can be answered until unavailable evidence or a prerequisite decision is supplied, report the blocked questions and what would unblock them. Keep dependent work pending and continue unaffected work.
 
-If this skill was invoked by another skill, return the shared understanding and allow the invoking skill to continue.
+If this skill was invoked by another skill, return the settled understanding and any blockers so the invoking skill can continue supported work.
 
-If this skill was invoked directly as part of work the user already requested, continue with that work after presenting the shared understanding.
+If this skill was invoked directly as part of work the user already requested, continue supported work after presenting the settled understanding and any blockers.

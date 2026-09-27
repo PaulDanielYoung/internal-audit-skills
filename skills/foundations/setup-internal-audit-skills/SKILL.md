@@ -25,7 +25,7 @@ If an `## Internal audit skills` block already exists in `CLAUDE.md`, update its
 
 ### Workspace Instructions
 
-Workspace instructions for the internal audit skills are located in 'docs/agents/workspace.md'.
+Before performing work, read and follow 'docs/agents/workspace.md'.
 
 ### Shared Understanding
 

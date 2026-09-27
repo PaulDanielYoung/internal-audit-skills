@@ -29,7 +29,7 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 - [`audit-terminology`](skills/foundations/audit-terminology/SKILL.md) sharpens audit terminology and maintains agreed definitions in the workspace's `GLOSSARY.md`, creating it when the first definition is settled.
 - [`shared-understanding`](skills/foundations/shared-understanding/SKILL.md) resolves ambiguity with the user before a judgment is made or work is produced.
 - [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record and folders from an engagement name and audit objective statement. Every later engagement skill starts from it.
-- [`document-request-list`](skills/foundations/document-request-list/SKILL.md) creates and maintains one Markdown document request list per engagement from auditor-supplied information.
+- [`document-request-list`](skills/foundations/document-request-list/SKILL.md) proactively suggests requests for auditor approval and maintains one Markdown document request list per engagement as information and received files become available.
 
 ### [Planning](skills/planning/README.md)
 

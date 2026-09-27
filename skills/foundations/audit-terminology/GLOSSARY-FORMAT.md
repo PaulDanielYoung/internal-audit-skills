@@ -24,4 +24,4 @@ _Avoid_: displaced synonyms, separated by commas
 - **Keep definitions tight.** Use one or two sentences. Define what the term is, not what it does.
 - **Define what needs a shared meaning.** Only include audit concepts whose meaning needs to be consistent across the organization.
 - **Group when useful.** Use subheadings under `## Terminology` when natural clusters emerge; a flat list is fine for a cohesive vocabulary.
-- **Make the glossary easy to navigate.** Alphabetize subheadings and and terms.
+- **Make the glossary easy to navigate.** Alphabetize subheadings and the terms within each group.

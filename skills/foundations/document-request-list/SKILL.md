@@ -29,11 +29,7 @@ Add the request only after approval. An explicit instruction to add a request co
 
 ## Maintain requests
 
-Update `REQUESTS.md` as relevant information and received files become available. Maintain request statuses without separate approval:
-
-- **Open:** Material remains outstanding or the response does not fully satisfy the request.
-- **Closed:** The received material satisfies the request.
-- **Withdrawn:** The material is no longer needed.
+Update `REQUESTS.md` as relevant information and received files become available. Maintain request statuses without separate approval, using the status rules in [REQUESTS-FORMAT.md](REQUESTS-FORMAT.md).
 
 Ask the user for clarification if the status of a request is unclear.
 
