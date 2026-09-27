@@ -18,8 +18,7 @@ Each engagement uses the following structure:
 ├── 2-walkthroughs/
 ├── 3-fieldwork/
 ├── 4-reporting/
-├── requests/
-├── requests/received/
+├── document-requests/received/
 ```
 
 ## 1. Establish the engagement name, objective, and year
@@ -46,6 +45,5 @@ Within the engagement folder:
 2-walkthroughs/
 3-fieldwork/
 4-reporting/
-requests/
-requests/received/
+document-requests/received/
 ```

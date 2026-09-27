@@ -11,7 +11,7 @@ Own the engagement's shared information-request list and its lifecycle across pl
 
 Follow the workspace instructions for engagement selection and read its `ENGAGEMENT.md`. Read the workspace glossary and relevant methodology and organization context when present; proceed silently when absent. Documented methodology governs. Use `audit-terminology` for missing, ambiguous, or contested terms and settled definitions. Use the glossary's artifact name in prose and headings, noting the repo term once; keep skill names, paths, columns, and ID prefixes fixed. Surface conflicting methodology requirements for resolution with the auditor.
 
-Inspect both engagement-root `request-list.md` and `planning/request-list.md`. Continue the planning-level list in place if it is the only existing list; create new lists at the engagement root. If both exist, reconcile them with the auditor before changing either or creating another. State the selected engagement and list path once settled.
+The list lives at `document-requests/document-request-list.md` in the engagement folder. If an older `request-list.md` exists at the engagement root or in `planning/`, ask the auditor before moving it or creating another. State the selected engagement and list path once settled.
 
 Read [LIST-RULES.md](LIST-RULES.md) before interpreting or changing rows. Accept the supplied deliverable, period/version, addressee if known, needing artifact/section or workstream, and candidate source links. Preserve unknown details as visible gaps; use `shared-understanding` only for material ambiguity, or ask directly if unavailable. Pause only the affected work until the request or decision is clear.
 
