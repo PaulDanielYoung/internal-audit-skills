@@ -41,31 +41,31 @@ When reviewing multiple statements, compare their mechanisms and scope for dupli
 
 When reviewing control statements, check for the following problems and apply the corresponding guidance.
 
-- **A title that names an owner, department, or system rather than the control activity.** Name the action and object with a short, unique noun phrase.
-- **A description that restates the title.** Explain the mechanism, its scope, performers, timing, applicable follow-up, and purpose.
-- **A missing performer or ownership confused with performance.** Identify the performing role or automated system, marking a gap when unknown. Distinguish accountability from execution.
-- **Vague timing where a frequency or trigger is known.** Replace "periodically", "as needed", or "regularly" with the supported frequency or trigger.
-- **A vague action with no checkable activity.** Explain what "monitors", "oversees", or "ensures" means in observable terms supported by the sources.
-- **Missing precision.** State the relevant operating rule or review criteria at the supported level of detail, marking material unknowns as gaps.
-- **Missing applicable exception handling.** State how exceptions are resolved or escalated and by whom, with gaps for unknowns.
-- **A missing, generic, or row-dependent purpose.** State the specific risk, undesired outcome, or objective addressed in wording that works across every linked risk and process.
-- **A requirement or objective without a described control mechanism.** Describe the supported mechanism; "All payments must be approved" alone leaves its implementation unclear. For policy-based or directive controls, explain the supported activities for establishing, communicating, or enforcing the policy.
-- **Several controls combined, or one control fragmented across descriptions.** Apply the coherent-mechanism boundary and recommend a split or combination where warranted.
-- **Operating practice substituted for intended design.** Keep the supported design and intended frequency in the description, with contrary practice separately attributed and linked to the control.
-- **Design or reported practice presented as observed operation.** Preserve the source attribution and what each source establishes.
-- **Invented or guessed details.** Use supported intended-design facts and bracketed gaps for unknowns, including records or outputs.
-- **An adequacy judgment or recommended improvement in the description.** Describe intended design and keep assessments and control improvements with their owning audit work.
-- **Procedure or evidence-examination detail in the description.** Describe intended control activity; leave planned examination to `planned-procedures`.
-- **A description that contradicts a supplied attribute field.** Flag the conflict and propose source-supported wording or a gap while leaving the attribute unchanged.
+- **A title that does not identify the control being described.** Name the action and its object and match the description's boundaries. Owner, department, or system names alone are insufficient.
+- **A description that merely restates the title.** Explain what the control addresses, how it works, and its scope, performers, timing, and applicable follow-up.
+- **A missing or unclear performer.** Identify the roles or automated systems that perform the control and distinguish them from the accountable owner where relevant.
+- **Vague frequency or timing.** State the supported frequency, trigger, or conditions for continuous operation, including relevant deadlines.
+- **A vague control activity.** State the specific action or mechanism and what it applies to, using details supported by the sources.
+- **Missing operating rules or criteria.** State the rules or criteria that explain how the mechanism works, including relevant granularity and supported thresholds.
+- **Missing applicable exception handling.** State how exceptions are resolved or escalated, by whom, and within any supported time limit.
+- **A missing or unclear purpose.** State the specific risk, undesired outcome, or objective addressed. Make the purpose understandable without a linked risk statement and accurate wherever the control appears.
+- **A requirement or objective without a control mechanism.** Explain how the requirement or objective is put into practice. For policy-based controls, describe the supported activities for establishing, communicating, or enforcing the policy.
+- **Distinct controls combined, or one control split across descriptions.** Keep connected steps of one mechanism together and propose separate statements for distinct controls. Recommend combining statements that describe the same control.
+- **Operating practice substituted for intended design.** Describe the supported intended design and frequency. Keep contrary practice separately attributed and linked to the control.
+- **Documented design or reported practice presented as observed operation.** Make the distinction clear among documented requirements, someone's account of practice, and direct observation. When sources differ, state what each source supports.
+- **Invented or guessed facts.** Use details supported by the supplied material or information provided by the user or other identified sources. Mark missing information with descriptive bracketed gaps, including unknown records or outputs.
+- **An embedded judgment about control adequacy, effectiveness, or improvements.** Describe intended design and keep assessments and improvements separate from the control description.
+- **Audit procedure or evidence-examination detail in the description.** Describe how the control is intended to operate and keep planned examination separate from the control description.
+- **A description that contradicts a supplied attribute field.** Identify the conflict and propose wording supported by the sources, or mark the missing information as a gap. Leave the supplied attribute unchanged.
 
 ## Output
 
-Check that the statements adhere to the guidance above, including every applicable completeness element, source attribution, and any separate handoff of contrary practice.
+Check that the statements adhere to the guidance above before returning them.
 
-Return the drafted or revised titles and descriptions to the user or calling skill, with a brief summary of what was created or changed and an explanation of each substantive issue found.
+Return the drafted or revised titles and descriptions to the user or calling skill, with a brief summary of what was created or changed.
 
-Distinguish changes made from proposed changes, including any recommendations to combine or separate statements. Identify duplicates explicitly. Keep changes to the control list and IDs with the caller.
+Distinguish changes made from proposed changes, including any recommendations to combine, separate, or remove statements.
 
 For each unresolved question or information gap, state which statement it affects and what clarification or source material is needed to resolve it.
 
-If no changes are needed, confirm that the statements meet the guidance and leave sound wording unchanged.
+If no changes are needed, confirm that the statements meet the guidance.
