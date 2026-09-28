@@ -26,10 +26,6 @@ If an `## Internal audit skills` block already exists in `CLAUDE.md`, update its
 ### Workspace Instructions
 
 Before performing work, read and follow 'docs/agents/workspace.md'.
-
-### Shared Understanding
-
-When unresolved ambiguity about context, assumptions, preferences, or decisions could materially change the work, call the `shared-understanding` skill and resolve with the user before proceeding.
 ```
 
 ## 3. Create files from templates

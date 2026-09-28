@@ -10,8 +10,6 @@ How the internal audit skills should consume workspace documentation when perfor
 
 If any of these files are absent or contain only a blank template, **proceed silently**. Do not flag their absence or blank content alone; don't suggest populating them upfront. Clarify specific uncertainty when it materially affects the current work, and continue unaffected work.
 
-`METHODOLOGY.md` and `ORGANIZATION.md` are approved references maintained by the internal audit department; agents read them without making edits. Clarification on those documents through `shared-understanding` does not approve changes to them.
-
 ## File Structure
 
 The full workspace layout is shown below. Files and directories are created as needed by the relevant skills.
@@ -38,9 +36,11 @@ The full workspace layout is shown below. Files and directories are created as n
 └── ORGANIZATION.md
 ```
 
-## Engagements
+## Resolve material ambiguity with the auditor
 
-Engagements live in `engagements/<year>/<name>/`. Before producing engagement work, resolve the engagement named by the auditor and read its `ENGAGEMENT.md`. Ask if the selection is ambiguous. Keep engagement-specific outputs within that engagement's folder.
+When ambiguity about context, assumptions, preferences, or decisions could materially change the work, call the `shared-understanding` skill and resolve it with the auditor before producing the affected part. Continue work the ambiguity doesn't affect.
+
+Clarification through `shared-understanding` settles the current work only; it does not approve changes to `METHODOLOGY.md` or `ORGANIZATION.md`.
 
 ## Use the glossary's vocabulary
 
@@ -59,3 +59,7 @@ If the methodology does not address something needed for the work, don't treat t
 When the work depends on organization-specific facts, use the relevant context in `ORGANIZATION.md`. Treat the facts as context for the work rather than replacing them with generic assumptions.
 
 If needed organizational context is not documented, don't treat the absence as permission to invent it. Note the genuine organizational context gap and resolve uncertainty with the auditor by calling the `shared-understanding` skill.
+
+## Engagements
+
+Engagements live in `engagements/<year>/<name>/`. Before producing engagement work, resolve the engagement named by the auditor and read its `ENGAGEMENT.md`. Ask if the selection is ambiguous. Keep engagement-specific outputs within that engagement's folder.
