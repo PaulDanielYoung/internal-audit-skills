@@ -1,15 +1,13 @@
 ---
 name: operating-effectiveness-procedures
-description: Write or review procedures for assessing whether a control operated as designed, consistently over the relevant period or at the required time, through the appropriate people or systems. Use when drafting or reviewing steps to evaluate the operating effectiveness of a control.
+description: Write or review procedures for assessing whether a control operated as designed, consistently over the relevant period or at the required time, through the appropriate people or systems. Use when evaluating the operating effectiveness of a control.
 ---
 
 Write procedures for determining whether an implemented control operated as designed, consistently over the relevant period or at the required time, through the appropriate people or systems. Return planned actions and evaluation criteria for the user's testing approach; executing tests, recording results, and reaching effectiveness conclusions belong to the user performing the work.
 
 ## Writing the procedures
 
-Use numbered steps with one coherent test objective per step. Identify the evidence to examine, the action to perform, and the observable criterion for evaluating the result. Keep connected actions together when they answer the same question; separate attributes that need independent results. State common population, period, and selection details once for the test set.
-
-Specify the actual inquiry, observation, inspection, reperformance, calculation, or other examination needed.
+Use numbered steps with one coherent test objective per step. Identify the evidence to examine, the action to perform, and the observable criterion for evaluating the result. Build the criterion into the step's wording, such as a required deadline, threshold, or approval the evidence must show. Keep connected actions together when they answer the same question; separate attributes that need independent results. State common population, period, and selection details once for the procedure set. Specify the actual inquiry, observation, inspection, reperformance, calculation, or other examination needed.
 
 Base organization-specific details and criteria on supplied or retained sources. Preserve source references, existing bracketed gaps, and distinctions between intended design and reported or observed practice. Identify the sources used when drafting from scratch. Mark unsupported evidence, criteria, periods, or selection details as descriptive bracketed gaps and complete the supported steps around them.
 
@@ -41,6 +39,6 @@ Fit the nature and extent of testing to the control and intended reliance. A sin
 
 ## Review and return
 
-Check that every Control performance attribute is either tested by a step or explained as outside the agreed approach, and that each step names its evidence and an observable criterion supporting the intended period and extent of testing. The wording is complete when an experienced auditor with no prior connection to the engagement could perform each step and determine whether the requirement was met without inventing a missing criterion. Flag conflicts with the supplied control description or testing basis without silently changing either. Where the control is unidentified, unimplemented, or has an unresolved design concern, flag the effect on the proposed testing.
+Check that every control performance attribute is either tested by a step or explained as outside the agreed approach, and that each step names its evidence and an observable criterion supporting the intended period and extent of testing. The wording is complete when an experienced auditor with no prior connection to the engagement could perform each step and determine whether the requirement was met without inventing a missing criterion. Flag conflicts with the supplied control description or testing basis without silently changing either. Where the control is unidentified, unimplemented, or has an unresolved design concern, flag the effect on the proposed testing.
 
-Return the test steps with material gaps and evidence limitations. When reviewing existing wording, explain substantive weaknesses and propose revisions only where needed.
+Return the procedures with material gaps and evidence limitations. When reviewing existing wording, explain substantive weaknesses and propose revisions only where needed.

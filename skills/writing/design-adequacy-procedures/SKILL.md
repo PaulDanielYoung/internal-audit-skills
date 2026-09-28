@@ -1,6 +1,6 @@
 ---
 name: design-adequacy-procedures
-description: Write or review procedures for assessing whether a control, if performed as intended, would adequately address the relevant risk. Use when drafting or reviewing steps to evaluate the design adequacy of a control.
+description: Write or review procedures for assessing whether a control, if performed as intended, would adequately address the relevant risk. Use when evaluating the design adequacy of a control, including implementation and walkthrough steps.
 ---
 
 Write procedures for assessing whether a control, if performed as intended, would adequately address the relevant risk or support the control objective. Return planned actions and evaluation criteria; performing the assessment and reaching a design conclusion belong to the user executing the work.
