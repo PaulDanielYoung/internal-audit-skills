@@ -16,14 +16,14 @@ A useful starting point for the **description** is:
 Adapt the wording to the context. Write one present-tense paragraph, roughly one to three sentences, stating the supported intended design. A description is complete when a reader can point to:
 
 - **Performer or automated system:** which roles or systems perform the control. Name people by role and distinguish the accountable owner from the performer where relevant.
-- **Action and scope:** the observable activity or mechanism and what it applies to, including the population or coverage where needed.
-- **Frequency or timing:** how often the activity happens, what triggers it, or when a continuous control applies, including relevant deadlines.
+- **Action and scope:** the observable activity or mechanism and the population or other scope it covers.
+- **Frequency or timing:** how often the activity occurs, what triggers it, or when it applies continuously, including relevant deadlines.
 - **Information or system:** the relevant information, systems, or configurations used, where applicable.
-- **Precision:** the operating rule or review criteria, including relevant granularity, coverage, timing, and supported thresholds. Describe the comparison, authorization condition, configured restriction, recovery action, or other mechanism as applicable; qualitative criteria need no invented numerical threshold.
-- **Exception handling:** where applicable, how exceptions are resolved or escalated, by whom, and within any supported time limit. Distinguish an inapplicable element from an unknown detail.
-- **Purpose:** the specific risk or undesired outcome the control addresses, or the objective it supports, including prevention, detection, correction, or recovery as applicable. Keep the wording understandable independently of a particular risk and accurate wherever the shared control appears.
+- **Precision:** the operating rule or criteria that make the mechanism specific, such as the comparison performed, authorization condition, configured restriction, or recovery action. Include relevant granularity and supported thresholds; qualitative criteria may be sufficient.
+- **Exception handling:** how applicable exceptions are resolved or escalated, by whom, and within any supported time limit.
+- **Purpose:** the specific risk or undesired outcome addressed, or objective supported, through prevention, detection, correction, or recovery as applicable. Make the purpose understandable without consulting a linked risk statement and accurate wherever the shared control appears.
 
-Include supported records or outputs where they explain the control activity or how its performance is recorded. Mark material unknowns as gaps.
+Include supported records or outputs where they explain the activity or how its performance is recorded. Distinguish inapplicable elements from material unknowns, and mark the latter as gaps.
 
 ## Sources and gaps
 
