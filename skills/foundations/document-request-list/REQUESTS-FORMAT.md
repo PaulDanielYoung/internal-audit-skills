@@ -2,7 +2,7 @@
 
 ## Structure
 
-```
+```markdown
 # Document Request List
 
 The engagement's document request list. Each row represents one request. Other skills read it; only `document-request-list` edits it.

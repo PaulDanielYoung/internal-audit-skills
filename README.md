@@ -43,8 +43,7 @@ Skills for writing and reviewing reusable audit statements and procedures, used 
 
 ### [Planning](skills/planning/README.md)
 
-- [`engagement-notification`](skills/planning/engagement-notification/SKILL.md) drafts the initial communication to management and, on demand, an entrance meeting agenda; new document requests and status updates route to `document-request-list`.
-- [`preliminary-survey`](skills/planning/preliminary-survey/SKILL.md) describes the activity from available sources, owns the process list and stable Process IDs, and flags matters for risk assessment.
+- [`preliminary-survey`](skills/planning/preliminary-survey/SKILL.md) establishes a sourced understanding of the activity, maintains its process list and stable Process IDs, and identifies matters and information gaps for risk assessment.
 - [`risk-assessment`](skills/planning/risk-assessment/SKILL.md) develops sourced inherent risks, presents ratings for the auditor's judgement, and ranks the assessment for planning.
 - [`planning-memo`](skills/planning/planning-memo/SKILL.md) records auditor-agreed objectives and scope, sourced criteria and approach, and the team, budget, and timeline for the RCM handoff.
 - [`risk-and-control-matrix`](skills/planning/risk-and-control-matrix/SKILL.md) owns the preliminary RCM and Control IDs, plans procedures for controls and risk gaps, and generates its HTML view from Markdown.

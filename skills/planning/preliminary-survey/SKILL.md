@@ -1,77 +1,76 @@
 ---
 name: preliminary-survey
-description: Draft or refresh a preliminary survey to understand the activity under audit or the auditee's environment. Use also to summarize prior reports and sources for planning. Owns the process list and flags matters for risk assessment.
+description: Develop or refresh a preliminary survey at the start of engagement planning. Establish a sourced understanding of the activity, maintain its process list, and identify matters and information gaps for risk assessment.
 ---
 
 # Preliminary Survey
 
-Describe the activity under audit in a sourced internal workpaper at `planning/preliminary-survey.md` in the selected engagement. Own the process list and Process IDs inherited by later planning artifacts. Describe and flag matters; risk wording and rating belong to `risk-assessment` and `risk-statements`. Scope, criteria, and topical requirement applicability belong to `planning-memo`.
+Build an initial understanding of the activity under review: what it aims to achieve, how it is organized, how its processes are intended to work, and what has changed. Save the survey at `planning/preliminary-survey.md` in the selected engagement.
 
-## Establish the basis
+The survey owns the process list and Process IDs used by later workpapers. Describe known controls and concerns where they help explain the activity. Risk assessment, engagement scope decisions, criteria selection, and conclusions about control design or effectiveness belong to subsequent work.
 
-Follow the workspace instructions for engagement selection, read its `ENGAGEMENT.md`, and state the selected engagement and output path. Read the workspace glossary and relevant methodology and organization context when present; proceed silently when absent. Use `audit-terminology` when a term's meaning needs agreement or consistency across engagements.
+## 1. Establish the starting point
 
-Documented methodology governs the work. For structure, use a supplied organization template, then methodology, then relevant prior workpapers, then the defaults below. Read any longer retained source the methodology points to. Use the glossary's artifact name in prose and headings, noting the repo term once; keep skill names and file paths fixed. State the methodology or default basis in the workpaper. Resolve unclear or conflicting methodology with the auditor through `shared-understanding`. List requirements outside this skill's remit as outstanding, with their methodology source.
+Read the selected engagement's `ENGAGEMENT.md`. Preserve its audit objective statement verbatim in the survey and leave the engagement record unchanged. Distinguish that assignment from the activity's own business objectives.
 
-Inspect available material before asking for more. Gather only what the survey needs: activity descriptions, organization charts, procedures, framework documents, prior assurance, management or entrance meeting notes, and equivalent auditor-supplied material. Accept an equivalent survey produced elsewhere, preserving its original as described below. Neither notification-sent status nor an existing request list is a prerequisite; assess readiness using the criteria below.
+Establish why the engagement was commissioned, the initial expectations and known boundaries, and relevant changes since the assignment was made. Review the risk assessment supporting the audit plan, when available, alongside prior engagement material and management's concerns. Treat initial boundaries as context for understanding the activity; later scope decisions belong to `planning-memo`.
 
-Use `shared-understanding` for material ambiguity that could change the survey, including unclear activity objectives or process boundaries; pause only the affected portion. Ask the material questions directly if that skill is unavailable. Preserve the assignment's audit objective statement verbatim and leave the engagement record unchanged. Minor gaps get descriptive bracketed markers in place and entries in Information gaps without interrupting the work.
+Use the organization's supplied template when consistent with its methodology. Otherwise, read and follow [SURVEY-FORMAT.md](SURVEY-FORMAT.md), adapting the detail to the activity and the assignment. Record the basis used. Relevant prior workpapers can inform the structure and content without establishing current facts.
 
-## Ground the work in sources
+## 2. Gather and describe the activity
 
-Read source files in place and leave originals unchanged. The auditor places client-provided files in `document-requests/received/`; cite those files, other available local references, and upstream workpapers directly. Record known source dates or versions and relevant locations; leave unknown provenance explicit. Settle conflicting versions with the auditor. When adopting an external draft, create the working copy at this skill's output path only after a separate unchanged original is available.
+Inspect available material before identifying additional information needs. Useful sources include activity plans and objectives, performance reports, organization charts, policies, procedures, process maps, system documentation, management risk assessments, prior assurance reports, and attributed meeting notes.
 
-Every factual statement carries an inline citation at the end of its sentence or paragraph to the source file and relevant location, or an explicit basis such as a dated auditor statement. `ORGANIZATION.md` also counts as a source. Label meeting notes as such. Record relevant verbal facts as dated, attributed statements in the workpaper; keep unconfirmed accounts visibly unresolved.
+Develop enough understanding to explain the activity's objectives, process boundaries, responsibilities, dependencies, and operating environment. Capture established risk tolerance and the measures management uses to judge performance. Describe governance, risk management, and known control arrangements at a level that supports risk assessment.
 
-Use only facts supported by supplied material or the auditor. General subject context, if helpful, belongs in a clearly labelled note and supplies no facts about this activity. Use summary figures already stated in sources. For raw CSV or XLSX extracts, recommend `exploratory-data-analysis` rather than profiling the extract here. Its report is temporary: before using its observations in the survey, record the source file, selected table, run date, relevant results, and limitations in the workpaper so the survey does not depend on a temporary report link. Treat exploratory observations as leads for follow-up.
+Distinguish documented design, reported practice, and direct observation. Preserve differences between them with their sources; a procedure document alone does not establish what happens in practice. If a focused discussion or process observation is needed to understand a material uncertainty, identify what it must resolve. Detailed walkthroughs will corroborate and deepen the understanding; they need not be completed before every survey can support risk assessment.
 
-Use retained local framework documents; a missing document or undated edition is an information gap for the auditor, not a reason to fetch an external reference. Use plain concept terms and attribute rules to documented methodology without quoting, citing, or numbering IIA or ISACA text. Describe the subject from sources without classifying the engagement by type.
+Identify matters for risk assessment from the facts gathered, such as significant changes, dependencies, incidents, management concerns, or unresolved prior findings. Link each matter to its source and relevant process when known. Leave formal risk statements, ratings, and prioritization to `risk-assessment`.
 
-## Draft the survey
+### Sources and evidence
 
-Use these default sections in order. Keep an unsourced section with a bracketed gap and list the missing information under Information gaps.
+Read source files in place and preserve originals. Cite client material in `document-requests/received/`, other available references, and relevant workpapers. When adopting an externally prepared survey, retain an unchanged original before creating the engagement's working copy.
 
-1. **Engagement context:** why the engagement is in the plan, the audit objective statement quoted unchanged from the engagement record, and changes since the plan was set.
-2. **Activity overview:** the activity's purpose and objectives, mandate, and scale, including sourced volumes, spend, headcount, and locations. Distinguish activity objectives from the assignment's audit objective statement.
-3. **Governance and organization:** owners, reporting lines, key roles, committees, and oversight.
-4. **Processes:** a table with **Process ID**, **Process Title**, and **Process Description**, following the ownership rules below.
-5. **Systems and data:** applications, interfaces, data held, and ownership.
-6. **Policy, regulatory, and contractual framework:** the documented framework as fact, with factual topic links such as the use of third-party processors. Leave criteria selection and applicability decisions to `planning-memo`.
-7. **Recent changes and developments:** sourced reorganizations and changes in systems, regulation, or volume.
-8. **Prior assurance:** earlier engagement results, open findings and their reported remediation status, and other assurance providers and their coverage.
-9. **Management's perspective:** attributed concerns and changes raised by management.
-10. **Matters for risk assessment:** candidate areas, each pointing to the source fact it came from, such as “Vendor onboarding system change in March.” Keep risk event chains and ratings for the assessment. The list may be explicitly empty when sources reveal no matters; missing coverage remains a gap.
-11. **Information gaps:** each in-place gap, its affected section, whether it could change the process list or activity objectives, and its returned RQ ID or question put to the auditor. Include outstanding methodology requirements and unresolved handoffs.
-12. **Sources:** links to the retained copies used and other stated bases, preserving provenance and prior-content labels.
+Support factual statements with inline citations at the end of the sentence or paragraph, including the relevant source location and known date or version. Record verbal information as dated, attributed statements. Keep unknown provenance and conflicting accounts visible. General subject knowledge may supply labelled background or questions; it does not establish facts about this activity.
 
-### Process ownership
+Record the frameworks and requirements evidenced by the sources, including their known editions. Missing or uncertain references remain information gaps. Evaluation criteria and topical requirement applicability decisions belong to `planning-memo`; this survey records the factual basis for those decisions.
 
-Use `process-statements` to draft and review every process title and description. Check its completeness elements: purpose, start trigger and end point, main activities, roles, systems, and key inputs and outputs where they clarify boundaries. Carry its source links, basis labels, and bracketed gaps into the table. If unavailable in an independent install, apply these elements directly and report that the wording review remains outstanding. Compare the flows with all available activity sources for coverage, overlap, and handoff gaps; ask through `shared-understanding` when an ambiguity could change the list.
+Use sourced summary figures. When raw CSV or XLSX extracts need exploration, use `exploratory-data-analysis` if available. Before relying on its temporary report, retain the source file reference, selected table, run date, relevant observations, and limitations in the survey. Treat those observations as leads for follow-up.
 
-Allocate `P-01`, `P-02`, and so on above the highest allocated Process ID, including retired IDs. Preserve IDs already established for the engagement, including provisional IDs in later artifacts; reconcile conflicting identities with the auditor before allocation. Wording updates keep the ID. A split or merge gives each resulting process a new ID; mark the old IDs retired with a note naming their replacements. A dropped process keeps its old ID as retired, with “no replacement” when applicable; any replacement gets a new ID. Keep retired entries and their history visible below the active process table. Never renumber or reuse an ID.
+## 3. Establish the process list
 
-### Refresh and downstream flags
+Maintain a table with **Process ID**, **Process Title**, and **Process Description**. Use `process-statements` to draft or review titles and descriptions, retaining its source references and distinctions between documented, reported, and observed practice. If unavailable, describe each process's purpose, boundaries, main activities, roles, systems, and relevant inputs and outputs, and report the unavailable wording guidance.
 
-When an earlier survey of the same activity exists, offer to use it as the starting point for the current survey. If accepted, leave the earlier artifact unchanged and work at the current survey path. Label carried content not reconfirmed by a current source or the auditor as “prior engagement; not reconfirmed,” with its citation. Reconcile earlier processes with this engagement's established identities and allocate IDs under the ownership rules above. Reassess currency gaps against readiness; prior coverage alone does not establish current completeness.
+Compare the list with the activity sources for missing coverage, overlapping processes, and unclear handoffs. A system or department alone does not define a process. Keep unresolved boundaries visible rather than presenting an incomplete list as settled.
 
-Compare a refresh with the existing survey and any upstream flags. Record changes and affected downstream references in a note within Processes or the relevant section, and flag them in the reply for re-decision. A process-list change flags `risk-assessment` and the RCM, plus any affected planning memo references. Search existing engagement artifacts for affected Process IDs and objectives; identify pending handoffs when an artifact does not yet exist. Refresh only the survey, leaving downstream content and prior decisions for their owning skills.
+Preserve Process IDs already established in this engagement, including provisional IDs in downstream workpapers. Resolve conflicting identities before assigning IDs. Allocate new IDs as `P-01`, `P-02`, and so on above the highest allocated number, including retired IDs. Never renumber or reuse an ID.
 
-## Route information needs and responses
+Wording changes retain the ID. A split or merge gives each resulting process a new ID; retire the old IDs and name their replacements. A dropped process retains a retirement entry with its replacement or "no replacement". Keep this history below the active process table.
 
-Record missing information and its effect on the work in Information gaps. Invoke `document-request-list` when missing material warrants a document request, relevant information or received files may change an existing request, or the auditor asks to create or update the list. Pass the selected engagement, the material needed and why, known period/version, request owner and due date, relevant files, and any existing request ID or auditor instruction. Let that skill manage approval of new requests and maintain the list; record returned RQ IDs beside the corresponding gaps. Questions requiring the auditor's judgement stay in this workpaper.
+## 4. Address information gaps
 
-Cite received material when updating the workpaper and assess whether it resolves each affected gap. A request's status alone does not establish that the workpaper's information need is satisfied.
+Mark missing information where it belongs and maintain an Information gaps section. For each gap, state what is missing, the affected process or section, its effect on the survey, and the question or material needed to resolve it. Distinguish an unknown fact from a confirmed absence or an item that does not apply.
 
-If `document-request-list` is unavailable, continue supported work, keep gaps visible, and return proposed requests or status changes as a handoff, explicitly stating that the list was not updated. Request table edits belong to that skill.
+Use `document-request-list` when missing material warrants a document request or received material may affect an existing request. Pass the engagement, the material needed and why, known period or version, request owner and due date, relevant files, and any existing request ID. That skill maintains the list and handles approval of new requests. Record returned RQ IDs against the corresponding gaps. Keep questions requiring auditor judgment in the survey.
 
-## Report readiness
+When material arrives, assess whether its contents resolve the gap and update the survey with citations. A request's status alone does not resolve the information need. If `document-request-list` is unavailable, report the proposed handoff and leave request-list edits pending.
 
-Save the survey in Markdown. It is ready for `risk-assessment` when all of these hold:
+## 5. Refresh existing work
 
-- The activity's objectives are stated.
-- The process list covers the activity described by the assignment, as far as current sources show.
-- Every section is sourced or has its gap named.
-- No open gap would change the process list or activity objectives. Resolve such a gap through `shared-understanding`, pausing the affected work meanwhile.
-- The Matters for risk assessment list exists, even if explicitly empty.
+Update the current engagement's survey in place. Use earlier engagement surveys as references, leaving their originals unchanged. Label carried content without current support as "prior engagement; not reconfirmed" and assess its effect on readiness. Reconcile process identities with those already established for the current engagement.
 
-In the reply, give the output path, stated readiness against these criteria, remaining gaps and RQ references, outstanding methodology requirements, and downstream flags. Recommend `risk-assessment`, with blockers clear when the survey is not ready. Report readiness separately from the auditor decisions and document-request approvals required above; add no final approval gate and send no communications.
+For changes to processes, objectives, or other material facts, search existing engagement workpapers for affected references. Record the changes and flag the affected risk assessment, planning memo, RCM, or later workpapers for review by their owning skills. Update only the survey; preserve downstream decisions until they are reconsidered.
+
+## 6. Report readiness for risk assessment
+
+Check that:
+
+- The activity's objectives are supported and distinguished from the assignment's audit objective statement.
+- The process list covers the activity described by the assignment, as far as current sources show, with boundaries and handoffs sufficiently clear to identify risks.
+- Relevant survey topics have sourced content, an explained absence or non-applicability, or a named information gap.
+- Matters for risk assessment are linked to their supporting facts, or the section explicitly states that none were identified from the material reviewed.
+- No unresolved gap prevents meaningful risk assessment of the portion being handed over, including understanding its objectives, processes, scale, and material dependencies.
+
+Report readiness for the supported portions and identify what remains pending. Minor gaps need not stop risk assessment; explain which gaps prevent the affected portion from being ready and why. Readiness here concerns the basis for risk assessment, not completion of planning or confirmation that controls work.
+
+Return the saved path, a concise account of the activity and significant matters, readiness, remaining gaps and RQ references, and affected downstream workpapers. Recommend `risk-assessment` as the next step where ready, identifying the information needed elsewhere. This skill produces an internal workpaper; communications and professional approvals follow the engagement's established workflow.
