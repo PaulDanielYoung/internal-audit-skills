@@ -33,13 +33,9 @@ Mark missing facts with descriptive bracketed gaps. When revising supplied wordi
 
 ## Control boundaries
 
-Describe one coherent control mechanism per statement. Keep connected steps together when they explain how that control works; review, investigation, resolution, and sign-off may form one control. Different roles, verbs, or frequencies warrant examining the boundary rather than automatically splitting the statement. When wording combines independently identifiable controls, explain the distinction and propose separate statements.
+Describe one coherent control mechanism per statement, with a clear purpose and scope. Keep connected steps together when they explain how the control works, including applicable review, investigation, resolution, and sign-off. Different roles, actions, or frequencies alone do not establish separate controls. When wording combines distinct controls, explain the distinction and propose separate statements.
 
-When reviewing multiple statements, compare their mechanisms and scope for duplicates, including the same control under different titles or Control IDs. Recommend combining statements that describe the same control.
-
-For a risk without an identified control, leave the title and description empty; return the gap to the caller and route gap-confirmation or assessment wording to `planned-procedures`.
-
-Judge clarity, completeness, and testability. Keep assessments of design adequacy, operating effectiveness, and recommended control improvements separate from the description and return them to the responsible audit work or auditor. Owner, Frequency, Type, and Nature fields belong to the caller; flag any supplied attribute that contradicts intended design and leave the fields unchanged.
+When reviewing multiple statements, compare their mechanisms and scope for duplicated coverage. Clarify shared activities and recommend combining statements that describe the same control.
 
 ## Faults
 
