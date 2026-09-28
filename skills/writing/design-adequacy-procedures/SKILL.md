@@ -1,30 +1,34 @@
 ---
 name: design-adequacy-procedures
-description: Write or review procedures for evaluating the design adequacy of controls. Use when a user or another skill needs procedures to assess whether a control, if performed as intended, would adequately address the relevant risk.
+description: Write or review procedures for assessing whether a control, if performed as intended, would adequately address the relevant risk. Use when drafting or reviewing steps to evaluate the design adequacy of a control.
 ---
 
-Write procedures for assessing whether a control, if performed as intended, can adequately address the relevant risk or support the control objective. Return planned actions and evaluation criteria; performing the assessment and reaching a design conclusion belong to the user executing the work.
+Write procedures for assessing whether a control, if performed as intended, would adequately address the relevant risk or support the control objective. Return planned actions and evaluation criteria; performing the assessment and reaching a design conclusion belong to the user executing the work.
 
 ## Writing the procedures
 
 Use numbered steps with one coherent assessment objective per step. Identify what to examine, what to do, and the criterion for evaluating the design. Keep connected actions together when they answer the same question; separate questions that need independent answers. State common context once for the procedure set.
 
-Connect the control mechanism to the relevant process and risk. Specify the comparison or analysis needed to assess that connection, preserving an open outcome. Identify the documents, configurations, process information, or attributed explanations needed to understand the design. A control description supplies the design to examine; applicable requirements and the risk supply the basis for evaluating it.
+Connect the control mechanism to the relevant process and risk. Specify the comparison or analysis needed to assess that connection. Phrase each step as a determination whose answer is open: "Determine whether…", "Compare… and note differences." Identify the documents, configurations, process information, or attributed explanations needed to understand the design. A control description supplies the design to examine; applicable requirements and the risk supply the basis for evaluating it.
 
-Base organization-specific details and evaluation criteria on supplied or retained sources. Preserve their attribution, distinguish intended design from reported or observed practice, and mark material unknowns where they affect the wording. Identify the sources used when drafting from scratch. Keep unsupported portions pending while completing supported procedures.
+Base organization-specific details and evaluation criteria on supplied or retained sources. Preserve their attribution, and distinguish intended design from reported or observed practice. Identify the sources used when drafting from scratch. Mark material unknowns as descriptive bracketed gaps, such as `[review threshold not yet confirmed]`, and complete the supported steps around them.
+
+An illustrative step, showing the shape rather than the content to copy:
+
+> 1. Obtain the [vendor master change policy] and the change report the AP Supervisor reviews. Determine whether the report captures every vendor bank-account change, including changes made directly in [ERP], and whether a weekly review would detect an unauthorized change before the next payment run. Criterion: [policy requirement or agreed risk tolerance].
 
 ## Design coverage
 
 Address the following where relevant to the control's purpose:
 
-- **Risk coverage:** how the mechanism prevents, detects, corrects, or supports recovery from the relevant event, including material ways the risk could arise or bypass the control.
+- **Risk coverage:** how the mechanism prevents, detects, corrects, or supports recovery from the relevant event, including material ways the risk could arise outside the control, or the control could be bypassed or overridden.
 - **Performer:** the authority, competence, access, and independence or segregation needed for the person or system to perform the control.
 - **Scope and timing:** whether the activity covers the relevant population, systems, and process paths, and operates at a frequency or trigger and within a time frame that can address the risk.
 - **Information and precision:** whether the inputs, comparison, decision rule, thresholds, and level of detail are sufficient to identify or respond to the condition the control is intended to address.
 - **Exception handling:** how identified exceptions are investigated, resolved, or escalated, with supported responsibilities and timing.
-- **Dependencies:** the information, systems, other controls, or compensating activities necessary for the mechanism to work. Evaluate the control in that context rather than assuming it addresses the risk independently.
+- **Dependencies:** the information, systems, other controls, or compensating activities necessary for the mechanism to work. Evaluate the control together with those dependencies.
 
-Tailor coverage to the mechanism and objective. Frame each relevant matter as an assessment action with a supported criterion; a checklist of descriptive attributes alone does not establish design adequacy. Identify evidence that would demonstrate how the mechanism is intended to work, including any required records or outputs.
+Frame each relevant matter as an assessment action with a supported criterion; a checklist of descriptive attributes alone does not establish design adequacy. Identify evidence that would demonstrate how the mechanism is intended to work, including any required records or outputs, and whether the design produces records sufficient to evidence its performance.
 
 ## Implementation evidence
 
@@ -32,10 +36,20 @@ When establishing implementation is part of the request, add distinct steps to d
 
 Keep the questions separate: implementation evidence establishes what has been put into use; design evaluation considers whether that mechanism can address the risk. Evidence from a selected instance supports only the scope actually examined unless a broader basis is established.
 
-Where the control itself has not been identified, specify the evidence needed to determine whether a relevant control exists. Distinguish missing information from evidence of a missing necessary control. Leave any operating-effectiveness testing dependent on identifying an implemented control.
+## No identified control
+
+Where the control itself has not been identified, specify the evidence needed to determine whether a relevant control exists. Distinguish missing information from evidence of a missing necessary control. Operating-effectiveness testing (see `operating-effectiveness-procedures`) depends on first identifying an implemented control.
 
 ## Review and return
 
-Check that the procedures connect the control to its process and risk, cover the relevant design considerations, and identify evidence and criteria sufficient for the user to perform the assessment. Flag contradictions in the supplied control description or assessment basis without silently resolving them in the wording.
+Check that every Design coverage matter is either addressed by a step or set aside as not relevant to this control, and that each step names its evidence and a supported criterion. The wording is complete when an experienced auditor with no prior connection to the engagement could perform each step without inventing a missing criterion. Flag contradictions in the supplied control description or assessment basis without silently resolving them in the wording.
 
-Return the procedures with material gaps and evidence limitations. When reviewing existing wording, explain substantive weaknesses and propose revisions only where needed.
+When reviewing existing wording, check for the following faults, explain substantive weaknesses, and propose revisions only where needed:
+
+- **A step that presumes its answer**, such as "Confirm that…". Rephrase as an open determination.
+- **A step with no criterion**, such as "Review for reasonableness". Name the supported criterion or mark it as a bracketed gap.
+- **A checklist of attributes without assessment.** Frame each as a determination of whether the design addresses the risk.
+- **Implementation evidence presented as design evaluation**, or a single walkthrough presented as operating-effectiveness evidence. Keep the questions and their scope separate.
+- **Invented organization-specific details.** Replace with supported sources or bracketed gaps.
+
+Return the procedures with material gaps and evidence limitations.
