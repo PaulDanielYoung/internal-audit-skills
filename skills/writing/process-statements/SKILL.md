@@ -1,56 +1,60 @@
 ---
 name: process-statements
-description: Write a clear process title and description that says what the process achieves, where it starts and ends, and who does what with which systems. Use when writing, reviewing, improving, or diagnosing process descriptions.
+description: Guidance for concise process titles and descriptions. Use when drafting or reviewing process statements, either directly for the user or within another skill's workflow.
 ---
 
-A process is one coherent flow from a start trigger to an end point. Write or review its **title** and **description**, returning wording to the auditor or calling skill.
+A process is a coherent set of related activities with a purpose and defined boundaries. Write or review its **title** and **description**, returning wording to the auditor or calling skill.
 
 ## Starting pattern and completeness
 
-The **title** is a noun phrase of two to five words naming the flow by what it does, such as "Vendor onboarding". It is unique within the activity and names no organization unit, system, or control.
+The **title** is a noun phrase of two to five words naming the work performed. It is unique within the activity and matches the description’s boundaries. Department or system names alone are insufficient; include a system qualifier when needed to distinguish otherwise identical process titles.
 
 A useful starting point for the **description** is:
 
-> [Roles] [main activities] in [systems], starting when [trigger] and ending when [end point], so that [purpose].
+> [Roles or automated systems] [main activities], starting when [trigger] and ending when [end point or alternative outcomes], to [purpose].
 
 Adapt the wording to the context. Write one present-tense paragraph, roughly two to five sentences, stating facts. A description is complete when a reader can point to:
 
 - **Purpose:** what the process achieves.
-- **Start trigger and end point:** where the flow begins and ends.
-- **Main activities:** what happens in sequence, at summary level.
-- **Roles:** who performs the activities, by role rather than person.
-- **Systems:** what systems the roles use.
+- **Boundaries:** the start trigger and end points, or the cycle or operating boundaries for recurring or continuous processes.
+- **Activities and performers:** what happens in sequence at summary level, and which roles or automated systems perform the main activities. Name people by role.
+- **Systems:** the relevant systems used, where applicable.
 - **Key inputs and outputs:** what enters and leaves the flow, where these clarify the boundaries.
 
-## Shared context and gaps
+Include control activities where they explain the flow. Describe what happens, leaving judgments about control adequacy, effectiveness, and risk to their owning work.
 
-Read the workspace glossary, if present, and use its definitions for process, activity, and role; without one, the meanings above apply. Read the relevant methodology and organization context too, using their canonical role and system names, and proceed silently when absent. Documented methodology governs the wording; the pattern above is a starting point.
+## Sources and gaps
 
-Use `audit-terminology` when a term's meaning needs agreement or consistency across engagements. Use `shared-understanding` for material uncertainty about methodology or organizational facts. Pass the specific question and available evidence.
+Base descriptions on supported facts and distinguish documented design, reported practice, and direct observation. Preserve differences between sources with their attribution.
 
-Use `shared-understanding` when material ambiguity about a process boundary, or whether two flows are one process, could change the wording. Keep dependent wording pending and continue supported portions; ask directly if the skill is unavailable. Mark missing facts in place with bracketed gaps, such as `[system not identified]` or `[end point not established]`; use only roles, systems, steps, and boundaries the sources support. Preserve the caller's gap markers, source links, and basis labels. The calling stage skill owns workpaper sourcing; for a standalone request, identify the supplied sources or attributed auditor statements supporting the wording.
+Mark missing facts with descriptive bracketed gaps. When revising supplied wording, retain its source references, visible information gaps, and distinctions between documented, reported, and observed practice. When drafting directly for the auditor, identify the material or attributed statements used. When another skill requests the wording, return this supporting information with the draft for inclusion in its workpaper.
 
-## Single process layer
+## Process boundaries
 
-Keep one process layer. Summarize related parts of a flow as activities. If distinct flows need separate descriptions, recommend sibling processes. Adding, splitting, merging, or retiring processes belongs to `preliminary-survey`; recommend splits or merges and leave the process list and IDs unchanged.
+Describe one coherent process per statement, with a clear purpose and boundaries. Summarize its main activities at a consistent level of detail, including material branches and alternative end points. A branch alone does not establish a separate process. When wording combines distinct processes, explain the distinction and propose separate statements.
+
+When reviewing multiple statements, compare their boundaries for duplicated coverage and gaps in handoffs. Clarify shared activities and recommend combining statements that describe the same process.
 
 ## Faults
 
-Use these when reviewing, improving, or diagnosing. Each fault names what sound wording has instead.
+When reviewing process statements, check for the following problems and apply the corresponding guidance.
 
-- **A title that names a department, system, or control rather than the flow.** Name the flow with a short, unique noun phrase.
-- **A description that restates the title.** Explain the purpose and the activities that achieve it, with roles, systems, and key inputs and outputs.
-- **A missing start or end boundary.** State a concrete trigger and end point, including a clear handoff to the next process where supported.
-- **Overlap with a sibling process.** Give each flow distinct boundaries and activities; recommend a boundary clarification or merge where the sources support it.
-- **A subprocess nested inside the description.** Summarize it as an activity or recommend a separate sibling process, keeping one process layer.
-- **Procedure-level detail, such as keystrokes or field-by-field steps.** Describe the main activities in sequence at summary level.
-- **An embedded control or risk judgement.** State the activity as fact, leaving adequacy and risk judgements to their owning work.
-- **Intended design presented as observed practice.** Attribute intended design and actual practice to their respective sources, stating both when they diverge.
-- **Invented or guessed actors or systems.** Use supported roles and systems, with bracketed gaps for unknowns.
-- **Several distinct flows combined under one title.** Describe one coherent flow from trigger to end point; recommend a split when separate flows need separate boundaries.
+- **A title that does not identify the process being described.** Name the work performed and match the description’s boundaries. Department or system names alone are insufficient; an individual activity should name the process only when it represents the full flow being described.
+- **A description that merely restates the title.** Explain what the process achieves, how it begins and ends, and the main activities and roles or systems involved.
+- **A missing process boundary.** State where the process begins and ends, including relevant triggers, end points, and handoffs. For recurring or continuous processes, describe the cycle or operating boundaries.
+- **Excessive procedure-level detail.** Summarize the main activities and their sequence, retaining only the detail needed to understand the flow.
+- **An embedded judgment about control adequacy, effectiveness, or risk.** Describe what happens and keep assessments of control adequacy, effectiveness, or risk separate from the process description.
+- **Documented design or reported practice presented as observed practice.** Make the distinction clear among documented requirements, someone’s account of practice, and direct observation. When sources differ, state what each source supports.
+- **Invented or guessed facts.** Use details supported by the supplied material or information provided by the user or other identified sources. Mark missing information with descriptive bracketed gaps.
 
-## Review output
+## Output
 
-Check the title, description form, and every completeness element as well as the faults. For several processes, also compare pairs for overlap and handoff gaps between one process's end and the next one's start. Report a handoff gap explicitly; whether the list covers the whole activity remains the survey's responsibility.
+Check that the statements adhere to the guidance above before returning them.
 
-Name each fault found using the names above, explain any other unmet requirement, and propose a revised title and description for affected wording. Preserve gap markers, source links, and basis labels in the revisions. Keep any split or merge as a recommendation for the survey rather than applying it. Confirm sound wording and leave it unchanged, without rewriting for style.
+Return the drafted or revised titles and descriptions to the user or calling skill, with a brief summary of what was created or changed.
+
+Distinguish changes made from proposed changes, including any recommendations to combine, separate, or remove statements.
+
+For each unresolved question or information gap, state which statement it affects and what clarification or source material is needed to resolve it.
+
+If no changes are needed, confirm that the statements meet the guidance.
