@@ -8,7 +8,9 @@ How the internal audit skills should consume workspace documentation when perfor
 - `METHODOLOGY.md`
 - `ORGANIZATION.md`
 
-If any of these files are absent or contain only a blank template, **proceed silently**. Do not flag their absence or blank content alone; don't suggest populating them upfront. Clarify specific uncertainty when it materially affects the current work, and continue unaffected work.
+If any of these files are absent or contain only a blank template, **proceed silently**. Do not flag their absence or blank content alone; don't suggest populating them upfront.
+
+`METHODOLOGY.md` and `ORGANIZATION.md` are approved references maintained by the internal audit department; agents read them without making edits.
 
 ## File Structure
 
