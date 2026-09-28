@@ -1,52 +1,67 @@
 ---
 name: risk-statements
-description: Turn a risk, concern, issue, or vague topic into a clear risk statement that explains what could happen, why it could happen, and why it matters. Use when writing, reviewing, improving, or diagnosing risk statements.
+description: Guidance for writing concise risk titles and descriptions. Use when drafting or reviewing risk statements, either directly for the user or within another skill's workflow.
 ---
 
-A risk statement connects an **event** to its **cause** and **consequence** in relation to an **objective**: what could happen, why it could happen, and why we care. The objective is the thing at stake, usually stated as context beside the statement rather than inside it. Write or review the statement, returning wording to the auditor or calling skill.
+A risk statement connects an uncertain **event** to its **cause** and **consequence** in relation to an **objective**: what could happen, why it could happen, and why it matters. Write or review its **title** and **description**, returning wording to the auditor or calling skill.
 
 ## Starting pattern and completeness
 
-A useful starting point is:
+The **title** is a short noun phrase naming the uncertain event. It is unique within the activity and matches the description's boundaries. Include the affected process, system, or population when needed to distinguish otherwise identical risk titles.
 
-> [Event] caused by [cause/s] resulting in [consequence/s].
+A useful starting point for the **description** is:
 
-Split it into two sentences when it runs long:
+> [Event] may occur due to [causes], resulting in [consequences].
 
-> [Event] caused by [cause/s]. This may result in [consequence/s].
-
-Adapt the wording to the context. A statement is complete when a reader can point to:
+Adapt the wording to the context. Write one paragraph, roughly one to two sentences, describing what could happen and why it matters. A description is complete when a reader can point to:
 
 - **Event:** the uncertain thing that could happen.
 - **Cause:** the specific condition that could give rise to it.
 - **Consequence:** the plausible effect that shows how the objective is affected.
 - **Objective:** what is at stake, named in the statement or its context.
 
-## Shared context and gaps
+Include relevant records, outputs, systems, or activities where they clarify how the risk could arise or affect the organization’s objectives.
 
-Read the workspace glossary, if present, and use its definitions for risk, objective, event, cause, and consequence; without one, the meanings above apply. Read the relevant methodology and organization context too, and proceed silently when absent. Documented methodology governs the wording; the pattern above is a starting point.
+## Sources and gaps
 
-Use `audit-terminology` when a term's meaning needs agreement or consistency across engagements. Use `shared-understanding` for material uncertainty about methodology or organizational facts. Pass the specific question and available evidence.
+Base descriptions on supported facts and plausible causal relationships. Distinguish existing conditions and past incidents from uncertain events and potential consequences. Preserve differences between sources with their attribution.
 
-Use `shared-understanding` when material ambiguity about the objective, event, causes, consequences, or intended use of the statement could change the wording. Keep dependent wording pending and continue supported portions; ask directly if the skill is unavailable. Mark missing facts in place with bracketed gaps, such as `[cause not established]` or `[objective not identified]`; use only causes, events, and consequences the available information supports. Preserve the caller's gap markers, source links, and basis labels. For a standalone request, identify the supplied sources or attributed auditor statements supporting the wording.
+Mark missing facts with descriptive bracketed gaps. When revising supplied wording, retain its source references, visible information gaps, and basis labels. When drafting directly for the user, identify the material or attributed statements used. When another skill requests the wording, return this supporting information with the draft for inclusion in its workpaper.
+
+## Risk boundaries
+
+Describe one coherent event chain per statement, with a clear connection to the objective. Keep related causes and consequences together when they explain the same risk. Different causes, consequences, or affected processes alone do not establish separate risks. When wording combines distinct event chains that would be understood, assessed, or managed differently, explain the distinction and propose separate statements.
+
+When reviewing multiple statements, compare their event chains and scope for duplicated coverage. Clarify shared causes and consequences and recommend combining statements that describe the same risk.
 
 ## Faults
 
-Use these when reviewing, improving, or diagnosing. Each fault names what sound wording has instead.
+When reviewing risk statements, check for the following problems and apply the corresponding guidance.
 
-- **A cause or control weakness stated as the risk.** Conditions such as weak access controls or insufficient monitoring explain why an event could occur; state the uncertain event and its consequence.
-- **A consequence stated as the event.** Financial loss, service disruption, regulatory action, and reputational harm are effects; identify the event they follow from.
-- **An issue stated as a risk.** Something that has happened or is certain to occur is an existing condition; use it as context or a cause and state the remaining uncertain event and consequence.
-- **The objective merely negated.** "Failure to achieve the objective" names no cause; name the event that would affect the objective.
-- **A topic or category stated as the risk.** Labels such as "cyber risk" or "human error" describe no causal chain; state what could happen, why, and with what consequence.
-- **Multiple distinct risks combined into one statement.** Related causes or consequences may share a statement; separate event chains that would be understood, assessed, or managed differently.
+- **A title that does not identify the risk being described.** Name the uncertain event and match the description's boundaries. A topic, cause, or generic consequence alone is insufficient.
+- **A description that merely restates the title.** Explain what could happen, why it could happen, and how it would affect the objective.
+- **A cause or control weakness without an event or consequence.** Explain what could happen because of the condition and how it could affect the objective.
+- **A consequence without the event that gives rise to it.** Identify what could happen to produce the stated effect. Distinguish event and consequence by their roles in the causal chain and the objective at stake.
+- **An existing issue without explaining the remaining risk.** Describe how the issue could lead to further events or consequences that affect the objective.
+- **The objective merely negated.** Name the event that would affect the objective and explain its cause and consequence.
+- **A topic or category stated as the risk.** Describe what could happen, why it could happen, and how it could affect the objective.
+- **Distinct risks combined, or one risk split across descriptions.** Keep related causes and consequences of one event chain together and propose separate statements for distinct chains. Recommend combining statements that describe the same risk.
 - **A cause too vague to explain the event.** Replace generic labels with the specific condition the available information supports, marking a gap when it supports none.
 - **A consequence too vague or disconnected from the objective.** State the plausible effect that shows why the event matters and how the objective is affected, preferring specifics over generic phrases where supported.
+- **A missing or unclear objective.** Identify what is at stake in the statement or its context, using the supplied objective or marking a gap when it is not established.
 - **A broken or circular causal chain.** Each cause plausibly gives rise to the event and each consequence plausibly follows from it, with each link adding a distinct condition.
 - **An overloaded statement.** Include the causes and consequences needed to understand the material risk; split or move supporting detail to context when it obscures the core.
+- **Invented or guessed facts.** Use details supported by the supplied material or information provided by the user or other identified sources. Mark missing information with descriptive bracketed gaps and distinguish potential events and consequences from established facts.
+- **An embedded risk rating, control assessment, or proposed response.** Describe the event chain and keep ratings, judgments about controls, and responses separate from the risk description.
 
-## Review output
+## Output
 
-Check the pattern and every completeness element as well as the faults. For several statements, also compare pairs for the same event chain stated twice or one risk split across statements.
+Check that the statements adhere to the guidance above before returning them.
 
-Name each fault found using the names above, explain any other unmet requirement, and propose a revised statement for affected wording. Preserve gap markers, source links, and basis labels in the revisions. Confirm sound wording and leave it unchanged, without rewriting for style.
+Return the drafted or revised titles and descriptions to the user or calling skill, with a brief summary of what was created or changed.
+
+Distinguish changes made from proposed changes, including any recommendations to combine, separate, or remove statements.
+
+For each unresolved question or information gap, state which statement it affects and what clarification or source material is needed to resolve it.
+
+If no changes are needed, confirm that the statements meet the guidance.
