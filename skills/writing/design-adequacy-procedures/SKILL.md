@@ -9,7 +9,7 @@ Write procedures for assessing whether a control, if performed as intended, woul
 
 Use numbered steps with one coherent assessment objective per step. Identify what to examine, what to do, and the criterion for evaluating the design. Build the criterion into the step's wording, such as a required timing, threshold, or policy requirement the design must meet. Keep connected actions together when they answer the same question; separate questions that need independent answers. State common context once for the procedure set.
 
-Connect the control mechanism to the relevant process and risk. Specify the comparison or analysis needed to assess that connection. Phrase each step as a determination whose answer is open: "Determine whether…", "Compare… and note differences." Identify the documents, configurations, process information, or attributed explanations needed to understand the design. A control description supplies the design to examine; applicable requirements and the risk supply the basis for evaluating it.
+Connect the control mechanism to the relevant process and risk. Specify the comparison or analysis needed to assess that connection. A control description supplies the design to examine; applicable requirements and the risk supply the basis for evaluating it.
 
 Base organization-specific details and evaluation criteria on supplied or retained sources. Preserve their attribution, and distinguish intended design from reported or observed practice. Identify the sources used when drafting from scratch. Mark material unknowns as descriptive bracketed gaps and complete the supported steps around them.
 
@@ -38,6 +38,6 @@ Where the control itself has not been identified, specify the evidence needed to
 
 ## Review and return
 
-Check that every Design coverage matter is either addressed by a step or set aside as not relevant to this control, and that each step names its evidence and a supported criterion. The wording is complete when an experienced auditor with no prior connection to the engagement could perform each step without inventing a missing criterion. Flag contradictions in the supplied control description or assessment basis without silently resolving them in the wording.
+Check that every design coverage matter is either addressed by a step or set aside as not relevant to this control, and that each step names its evidence and a supported criterion. The wording is complete when an experienced auditor with no prior connection to the engagement could perform each step without inventing a missing criterion. Flag contradictions in the supplied control description or assessment basis without silently resolving them in the wording.
 
 Return the procedures with material gaps and evidence limitations.
