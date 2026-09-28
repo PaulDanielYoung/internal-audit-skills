@@ -39,17 +39,13 @@ When reviewing multiple statements, compare their event chains and scope for dup
 When reviewing risk statements, check for the following problems and apply the corresponding guidance.
 
 - **A title that does not identify the risk being described.** Name the uncertain event and match the description's boundaries. A topic, cause, or generic consequence alone is insufficient.
-- **A description that merely restates the title.** Explain what could happen, why it could happen, and how it would affect the objective.
-- **A cause or control weakness without an event or consequence.** Explain what could happen because of the condition and how it could affect the objective.
-- **A consequence without the event that gives rise to it.** Identify what could happen to produce the stated effect. Distinguish event and consequence by their roles in the causal chain and the objective at stake.
+- **An incomplete risk description.** Describe the uncertain event, the conditions that could give rise to it, and the consequences that could affect the objective.
 - **An existing issue without explaining the remaining risk.** Describe how the issue could lead to further events or consequences that affect the objective.
-- **The objective merely negated.** Name the event that would affect the objective and explain its cause and consequence.
-- **A topic or category stated as the risk.** Describe what could happen, why it could happen, and how it could affect the objective.
 - **Distinct risks combined, or one risk split across descriptions.** Keep related causes and consequences of one event chain together and propose separate statements for distinct chains. Recommend combining statements that describe the same risk.
 - **A cause too vague to explain the event.** Replace generic labels with the specific condition the available information supports, marking a gap when it supports none.
 - **A consequence too vague or disconnected from the objective.** State the plausible effect that shows why the event matters and how the objective is affected, preferring specifics over generic phrases where supported.
 - **A missing or unclear objective.** Identify what is at stake in the statement or its context, using the supplied objective or marking a gap when it is not established.
-- **A broken or circular causal chain.** Each cause plausibly gives rise to the event and each consequence plausibly follows from it, with each link adding a distinct condition.
+- **An unclear or circular explanation of the risk.** Explain how the stated causes could lead to the event and how the consequences could follow, with each element adding information rather than restating another.
 - **An overloaded statement.** Include the causes and consequences needed to understand the material risk; split or move supporting detail to context when it obscures the core.
 - **Invented or guessed facts.** Use details supported by the supplied material or information provided by the user or other identified sources. Mark missing information with descriptive bracketed gaps and distinguish potential events and consequences from established facts.
 - **An embedded risk rating, control assessment, or proposed response.** Describe the event chain and keep ratings, judgments about controls, and responses separate from the risk description.
