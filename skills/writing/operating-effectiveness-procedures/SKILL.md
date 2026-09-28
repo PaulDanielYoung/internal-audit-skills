@@ -41,6 +41,6 @@ Fit the nature and extent of testing to the control and intended reliance. A sin
 
 ## Review and return
 
-Check that every Control performance attribute is either tested by a step or explained as outside the agreed approach, and that each step names its evidence and an observable criterion supporting the intended period and extent of testing. The wording is complete when an experienced auditor with no prior connection to the engagement could perform each step and determine whether the requirement was met without inventing a missing criterion. Flag conflicts with the supplied control description or testing basis without silently changing either.
+Check that every Control performance attribute is either tested by a step or explained as outside the agreed approach, and that each step names its evidence and an observable criterion supporting the intended period and extent of testing. The wording is complete when an experienced auditor with no prior connection to the engagement could perform each step and determine whether the requirement was met without inventing a missing criterion. Flag conflicts with the supplied control description or testing basis without silently changing either. Where the control is unidentified, unimplemented, or has an unresolved design concern, flag the effect on the proposed testing.
 
-Return the test steps with material gaps and evidence limitations.
+Return the test steps with material gaps and evidence limitations. When reviewing existing wording, explain substantive weaknesses and propose revisions only where needed.

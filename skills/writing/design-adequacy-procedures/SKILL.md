@@ -40,4 +40,4 @@ Where the control itself has not been identified, specify the evidence needed to
 
 Check that every design coverage matter is either addressed by a step or set aside as not relevant to this control, and that each step names its evidence and a supported criterion. The wording is complete when an experienced auditor with no prior connection to the engagement could perform each step without inventing a missing criterion. Flag contradictions in the supplied control description or assessment basis without silently resolving them in the wording.
 
-Return the procedures with material gaps and evidence limitations.
+Return the procedures with material gaps and evidence limitations. When reviewing existing wording, explain substantive weaknesses and propose revisions only where needed.
