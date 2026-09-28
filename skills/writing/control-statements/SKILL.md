@@ -27,15 +27,9 @@ Include supported records or outputs where they explain the activity or how its 
 
 ## Sources and gaps
 
-Read the workspace glossary, if present, and use its definitions for control and role; without one, the meanings above apply. Read the relevant methodology and organization context too, using their canonical role and system names, and proceed silently when absent. Documented methodology governs the wording; the pattern above is a starting point.
+Base descriptions on supported intended design and distinguish documented design, reported practice, and direct observation. Preserve differences between sources with their attribution.
 
-Base descriptions on supported intended design and intended frequency from applicable policy or procedure, or an attributed management or auditor account when those documents are silent. Distinguish documented design, reported practice, and direct observation. Preserve differences between sources with their attribution; an account of design does not establish operation.
-
-Keep known contrary practice outside the baseline description: return a separately attributed note and source reference linked by an existing Control ID, or by title when no ID has been assigned, for the caller to retain for subsequent examination. A monthly policy activity remains monthly when quarterly practice is reported. The departure requires examination rather than an automatic final finding.
-
-Mark missing facts with descriptive bracketed gaps, such as `[frequency not identified]` or `[exception handling not established]`, using only details supported by local material or the auditor. Keep short source references beside the details they support. When revising supplied wording, retain its source references, visible information gaps, and basis labels. When drafting directly for the auditor, identify the material or attributed statements used. When another skill requests the wording, return this supporting information with the draft for inclusion in its workpaper.
-
-Use `audit-terminology` when a term's meaning needs agreement or consistency across engagements. Use `shared-understanding` when material ambiguity about methodology, organizational facts, intended design, its governing source, or control boundaries could change the wording. Pass the specific question and available evidence. Keep dependent wording pending and continue supported portions; ask directly if the skill is unavailable.
+Mark missing facts with descriptive bracketed gaps. When revising supplied wording, retain its source references, visible information gaps, and distinctions between documented, reported, and observed practice. When drafting directly for the user, identify the material or attributed statements used. When another skill requests the wording, return this supporting information with the draft for inclusion in its workpaper.
 
 ## Control boundaries
 

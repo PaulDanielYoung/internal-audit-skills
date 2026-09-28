@@ -27,7 +27,7 @@ Include control activities where they explain the flow. Describe what happens, l
 
 Base descriptions on supported facts and distinguish documented design, reported practice, and direct observation. Preserve differences between sources with their attribution.
 
-Mark missing facts with descriptive bracketed gaps. When revising supplied wording, retain its source references, visible information gaps, and distinctions between documented, reported, and observed practice. When drafting directly for the auditor, identify the material or attributed statements used. When another skill requests the wording, return this supporting information with the draft for inclusion in its workpaper.
+Mark missing facts with descriptive bracketed gaps. When revising supplied wording, retain its source references, visible information gaps, and distinctions between documented, reported, and observed practice. When drafting directly for the user, identify the material or attributed statements used. When another skill requests the wording, return this supporting information with the draft for inclusion in its workpaper.
 
 ## Process boundaries
 
