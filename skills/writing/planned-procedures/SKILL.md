@@ -3,7 +3,7 @@ name: planned-procedures
 description: "Write or review executable planned procedures for design assessment, implementation or walkthroughs, operating effectiveness, risk gaps, or auditor-selected direct examination of transactions or outcomes."
 ---
 
-Return procedure wording to the auditor or calling skill for the auditor's agreed approach. This planning writing skill owns no artifacts or IDs and makes no approach decisions. Executing procedures and recording results, deviations found, findings, or conclusions belong to the stage performing the work.
+Return procedure wording to the auditor or calling skill for the auditor's agreed approach. This writing skill owns no artifacts or IDs and makes no approach decisions. Executing procedures and recording results, deviations found, findings, or conclusions belong to the stage performing the work.
 
 ## Common writing rules
 

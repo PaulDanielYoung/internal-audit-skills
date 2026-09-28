@@ -21,7 +21,7 @@ The plugin prefixes each skill name with `internal-audit-skills:`; the CLI insta
 
 ## Skills
 
-Skills are organized by where an auditor would first reach for them. Their invocation names stay the same.
+Skills are organized into shared capabilities (Foundations and Writing) and engagement stages (Planning, Walkthroughs, Fieldwork, and Reporting). Their invocation names stay the same.
 
 ### [Foundations](skills/foundations/README.md)
 
@@ -31,6 +31,15 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 - [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record and folders from an engagement name and audit objective statement. Every later engagement skill starts from it.
 - [`document-request-list`](skills/foundations/document-request-list/SKILL.md) proactively suggests requests for auditor approval and maintains one Markdown document request list per engagement as information and received files become available.
 
+### [Writing](skills/writing/README.md)
+
+Skills for writing and reviewing reusable audit statements and procedures, used across engagement stages.
+
+- [`process-statements`](skills/writing/process-statements/SKILL.md) writes and reviews process titles and descriptions, including purpose, boundaries, roles, and systems.
+- [`risk-statements`](skills/writing/risk-statements/SKILL.md) turns a risk, concern, or vague topic into a clear risk statement.
+- [`control-statements`](skills/writing/control-statements/SKILL.md) writes and reviews intended-design control titles and descriptions, preserving inline sources and separately referring contrary practice.
+- [`planned-procedures`](skills/writing/planned-procedures/SKILL.md) writes and reviews planned design, walkthrough, operating-effectiveness, risk-gap, and auditor-selected direct examination procedures.
+
 ### [Planning](skills/planning/README.md)
 
 - [`engagement-notification`](skills/planning/engagement-notification/SKILL.md) drafts the initial communication to management and, on demand, an entrance meeting agenda; new document requests and status updates route to `document-request-list`.
@@ -38,10 +47,6 @@ Skills are organized by where an auditor would first reach for them. Their invoc
 - [`risk-assessment`](skills/planning/risk-assessment/SKILL.md) develops sourced inherent risks, presents ratings for the auditor's judgement, and ranks the assessment for planning.
 - [`planning-memo`](skills/planning/planning-memo/SKILL.md) records auditor-agreed objectives and scope, sourced criteria and approach, and the team, budget, and timeline for the RCM handoff.
 - [`risk-and-control-matrix`](skills/planning/risk-and-control-matrix/SKILL.md) owns the preliminary RCM and Control IDs, plans procedures for controls and risk gaps, and generates its HTML view from Markdown.
-- [`risk-statements`](skills/planning/risk-statements/SKILL.md) turns a risk, concern, or vague topic into a clear risk statement.
-- [`process-statements`](skills/planning/process-statements/SKILL.md) writes and reviews process titles and descriptions, including purpose, boundaries, roles, and systems.
-- [`control-statements`](skills/planning/control-statements/SKILL.md) writes and reviews intended-design control titles and descriptions, preserving inline sources and separately referring contrary practice.
-- [`planned-procedures`](skills/planning/planned-procedures/SKILL.md) writes and reviews planned design, walkthrough, operating-effectiveness, risk-gap, and auditor-selected direct examination procedures.
 
 ### [Walkthroughs](skills/walkthroughs/README.md)
 
