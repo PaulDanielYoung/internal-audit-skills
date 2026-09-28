@@ -1,6 +1,6 @@
 ---
 name: control-statements
-description: Guidance for concise control titles and intended-design descriptions. Use when drafting or reviewing control statements, either directly for the user or within another skill's workflow.
+description: Guidance for writing concise control titles and intended-design descriptions. Use when drafting or reviewing control statements, either directly for the user or within another skill's workflow.
 ---
 
 A control is any action taken by management, the board, and other parties to manage risk and increase the likelihood that established goals are achieved. Write or review its **title** and **description**, returning wording to the auditor or calling skill.

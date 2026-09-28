@@ -1,6 +1,6 @@
 ---
 name: process-statements
-description: Guidance for concise process titles and descriptions. Use when drafting or reviewing process statements, either directly for the user or within another skill's workflow.
+description: Guidance for writing concise process titles and descriptions. Use when drafting or reviewing process statements, either directly for the user or within another skill's workflow.
 ---
 
 A process is a coherent set of related activities with a purpose and defined boundaries. Write or review its **title** and **description**, returning wording to the auditor or calling skill.
