@@ -7,15 +7,11 @@ Write procedures for assessing whether a control, if performed as intended, woul
 
 ## Writing the procedures
 
-Use numbered steps with one coherent assessment objective per step. Identify what to examine, what to do, and the criterion for evaluating the design. Keep connected actions together when they answer the same question; separate questions that need independent answers. State common context once for the procedure set.
+Use numbered steps with one coherent assessment objective per step. Identify what to examine, what to do, and the criterion for evaluating the design. Build the criterion into the step's wording, such as a required timing, threshold, or policy requirement the design must meet. Keep connected actions together when they answer the same question; separate questions that need independent answers. State common context once for the procedure set.
 
 Connect the control mechanism to the relevant process and risk. Specify the comparison or analysis needed to assess that connection. Phrase each step as a determination whose answer is open: "Determine whether…", "Compare… and note differences." Identify the documents, configurations, process information, or attributed explanations needed to understand the design. A control description supplies the design to examine; applicable requirements and the risk supply the basis for evaluating it.
 
-Base organization-specific details and evaluation criteria on supplied or retained sources. Preserve their attribution, and distinguish intended design from reported or observed practice. Identify the sources used when drafting from scratch. Mark material unknowns as descriptive bracketed gaps, such as `[review threshold not yet confirmed]`, and complete the supported steps around them.
-
-An illustrative step, showing the shape rather than the content to copy:
-
-> 1. Obtain the [vendor master change policy] and the change report the AP Supervisor reviews. Determine whether the report captures every vendor bank-account change, including changes made directly in [ERP], and whether a weekly review would detect an unauthorized change before the next payment run. Criterion: [policy requirement or agreed risk tolerance].
+Base organization-specific details and evaluation criteria on supplied or retained sources. Preserve their attribution, and distinguish intended design from reported or observed practice. Identify the sources used when drafting from scratch. Mark material unknowns as descriptive bracketed gaps and complete the supported steps around them.
 
 ## Design coverage
 
@@ -38,18 +34,10 @@ Keep the questions separate: implementation evidence establishes what has been p
 
 ## No identified control
 
-Where the control itself has not been identified, specify the evidence needed to determine whether a relevant control exists. Distinguish missing information from evidence of a missing necessary control. Operating-effectiveness testing (see `operating-effectiveness-procedures`) depends on first identifying an implemented control.
+Where the control itself has not been identified, specify the evidence needed to determine whether a relevant control exists. Distinguish missing information from evidence of a missing necessary control.
 
 ## Review and return
 
 Check that every Design coverage matter is either addressed by a step or set aside as not relevant to this control, and that each step names its evidence and a supported criterion. The wording is complete when an experienced auditor with no prior connection to the engagement could perform each step without inventing a missing criterion. Flag contradictions in the supplied control description or assessment basis without silently resolving them in the wording.
-
-When reviewing existing wording, check for the following faults, explain substantive weaknesses, and propose revisions only where needed:
-
-- **A step that presumes its answer**, such as "Confirm that…". Rephrase as an open determination.
-- **A step with no criterion**, such as "Review for reasonableness". Name the supported criterion or mark it as a bracketed gap.
-- **A checklist of attributes without assessment.** Frame each as a determination of whether the design addresses the risk.
-- **Implementation evidence presented as design evaluation**, or a single walkthrough presented as operating-effectiveness evidence. Keep the questions and their scope separate.
-- **Invented organization-specific details.** Replace with supported sources or bracketed gaps.
 
 Return the procedures with material gaps and evidence limitations.
