@@ -68,7 +68,7 @@ Engagements live in `engagements/<year>/<name>/`. Before producing engagement wo
 
 ## Cite sources
 
-Support factual statements with inline citations giving the source, its relevant location, and its known date or version. Keep unknown provenance and conflicting accounts visible. General subject knowledge can supply labelled background or questions, never facts about the activity.
+Support factual statements with inline citations giving the source, its relevant location, and its known date or version. Keep unknown provenance and conflicting accounts visible.
 
 ## Request missing material
 
