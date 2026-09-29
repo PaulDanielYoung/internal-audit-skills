@@ -5,7 +5,7 @@ description: Assess or rate an engagement's inherent risks, identify risks from 
 
 # Risk Assessment
 
-Own the engagement risk assessment at `planning/risk-assessment.md` in the selected engagement, including Risk IDs and activity Objective IDs. Identify, word, and present inherent risks for the auditor to rate. Rank risks for `planning-memo`; scope decisions belong there. List no controls; those belong to the RCM.
+Identify the significant risks to the activity's objectives, including fraud, and rank them by inherent significance so the engagement can focus where it matters most. The auditor rates each risk; the assessment lays out the evidence for that judgement. It owns the engagement's Risk IDs and activity Objective IDs, and leaves scope decisions to the planning memo and controls to the RCM.
 
 ## File Structure
 
