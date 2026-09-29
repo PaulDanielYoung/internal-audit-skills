@@ -65,3 +65,11 @@ If needed organizational context is not documented, don't treat the absence as p
 ## Engagements
 
 Engagements live in `engagements/<year>/<name>/`. Before producing engagement work, resolve the engagement named by the auditor and read its `ENGAGEMENT.md`. Ask if the selection is ambiguous. Keep engagement-specific outputs within that engagement's folder.
+
+## Cite sources
+
+Support factual statements with inline citations giving the source, its relevant location, and its known date or version. Keep unknown provenance and conflicting accounts visible. General subject knowledge can supply labelled background or questions, never facts about the activity.
+
+## Request missing material
+
+When work reveals missing material, call the `document-request-list` skill and record the information gap. When material arrives, assess whether its contents resolve the gap.

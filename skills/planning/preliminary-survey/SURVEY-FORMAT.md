@@ -1,4 +1,4 @@
-# SURVEY.md Format
+# preliminary-survey.md Format
 
 ## Structure
 
@@ -11,7 +11,7 @@
 
 <Why the engagement was commissioned, initial expectations and boundaries,
 the risk assessment supporting the audit plan when available, and material
-changes since the assignment. State the template or methodology basis used.>
+changes since the assignment.>
 
 ## Activity overview and objectives
 
@@ -48,7 +48,7 @@ of audit evaluation criteria and applicability decisions to the planning memo.>
 <Summary of how the activity is intended to manage its risks, including key
 responsibilities and control activities evident from the material reviewed.
 Reference process descriptions where these already explain the arrangements.
-Distinguish documented design, reported practice, and direct observation.>
+Label each arrangement's basis: documented, reported, or observed.>
 
 ## Recent changes and developments
 
@@ -65,10 +65,10 @@ and reported remediation status, with source dates.>
 <Attributed concerns, priorities, known incidents, and anticipated changes.
 Identify whose views were obtained and when.>
 
-## Matters for risk assessment
+## Leads for risk assessment
 
-<For each matter: the fact or concern, its source, and relevant Process IDs
-when known. Use descriptive leads rather than rated risk statements. State
+<For each lead: the fact or concern, its source, and relevant Process IDs
+when known, described rather than worded or rated as a risk. State
 explicitly when none were identified from the material reviewed.>
 
 ## Information gaps
@@ -90,6 +90,6 @@ or versions. Include attributed statements and identify unreconfirmed prior cont
 
 ## Use of the format
 
-- Keep the process table's three columns and the ID history required by `SKILL.md` when adapting the layout. An empty table contains headers only; missing process information belongs in Information gaps.
+- Keep the process table's three columns and the retired ID history when adapting the layout. An empty table contains headers only; missing process information belongs in Information gaps.
 - Use concise prose and tables where they help explain the activity. The survey should make the activity understandable without reproducing its procedure manuals.
 - State a confirmed absence or non-applicability with its basis. Otherwise, keep the missing information explicit. A complete set of headings does not establish readiness.
