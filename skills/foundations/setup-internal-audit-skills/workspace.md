@@ -31,6 +31,7 @@ The full workspace layout is shown below. Files and directories are created as n
 │           │   └── received/
 │           ├── fieldwork/
 │           ├── planning/
+│           │   ├── preliminary-survey.md
 │           ├── reporting/
 │           └── walkthroughs/
 ├── GLOSSARY.md
