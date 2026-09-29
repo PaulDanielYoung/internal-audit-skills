@@ -9,16 +9,13 @@
 
 > <Audit objective statement, unchanged from ENGAGEMENT.md>
 
-<Why the engagement was commissioned, initial expectations and boundaries,
-the risk assessment supporting the audit plan when available, and material
-changes since the assignment.>
+<Why the engagement was commissioned, initial expectations and boundaries>
 
 ## Activity overview and objectives
 
-<Purpose, mandate, business objectives, and scale: relevant products or services,
-locations, volumes, expenditure, and people. Distinguish business objectives
+<Purpose, business objectives, and scale. Distinguish business objectives
 from the engagement's audit objective statement. Describe management's
-performance measures, targets, and established risk tolerance where available.>
+performance measures and targets.>
 
 ## Governance and organization
 
@@ -30,8 +27,6 @@ performance are monitored, reported, and escalated.>
 | Process ID | Process Title | Process Description |
 | --- | --- | --- |
 
-<Retired Process IDs and their replacement history, when applicable.>
-
 ## Systems, data, and dependencies
 
 <Applications, significant interfaces and data, ownership, and dependencies on
@@ -40,8 +35,7 @@ other functions, service providers, and third parties. Link to processes where u
 ## Policy, regulatory, and contractual framework
 
 <Relevant documented obligations, internal policies, and frameworks, with known
-versions and dates. Record management's existing criteria; leave the selection
-of audit evaluation criteria and applicability decisions to the planning memo.>
+versions and dates.>
 
 ## Known control arrangements
 
@@ -81,15 +75,9 @@ Include unresolved source conflicts and relevant methodology requirements.>
 
 <What is ready for risk assessment, what remains pending, and why. On updates,
 record material changes and affected downstream workpapers or pending handoffs.>
-
-## Sources
-
-<References to retained source files and relevant locations, with known dates
-or versions. Include attributed statements and identify unreconfirmed prior content.>
 ```
 
 ## Use of the format
 
-- Keep the process table's three columns and the retired ID history when adapting the layout. An empty table contains headers only; missing process information belongs in Information gaps.
+- Keep the process table's three columns. An empty table contains headers only; missing process information belongs in Information gaps.
 - Use concise prose and tables where they help explain the activity. The survey should make the activity understandable without reproducing its procedure manuals.
-- State a confirmed absence or non-applicability with its basis. Otherwise, keep the missing information explicit. A complete set of headings does not establish readiness.
