@@ -6,26 +6,22 @@ disable-model-invocation: true
 
 # Ask Methodology
 
-Answer the auditor's questions using the organization's audit methodology. Provide guidance based on what the methodology says, and note when it does not address the question.
+Answer the auditor's question from `METHODOLOGY.md`, as a reply in the conversation.
 
-## 1. Understand the question
+## Find every section that bears on the question
 
-Determine what the auditor is asking, the audit activity or decision involved, and what guidance would help them move forward.
+Search the methodology for every section that bears on the question, including sections that apply indirectly, such as documentation standards, approvals, or definitions governing the activity asked about. The search is done when each part of the question is matched to a section or found **silent**.
 
-Identify the parts of the methodology that are relevant to the question. Consider both explicit requirements and guidance that applies to the situation.
+## Classify each statement
 
-## 2. Apply the methodology
+Every statement in the answer belongs to one of three classes, and the answer makes the class visible:
 
-Relate the relevant methodology to the auditor's situation. Distinguish between what the methodology directly states and what reasonably follows from applying it to the circumstances.
+- **Stated**: what the methodology says. Cite the section by heading and keep its force: a "must" stays a requirement, a "should" stays guidance. Quote prescribed values word for word, such as thresholds, sample sizes, required fields, and approvals.
+- **Inferred**: what reasonably follows from applying a stated section to the auditor's situation. Name the section reasoned from and mark the inference as yours.
+- **Silent**: what the methodology leaves unaddressed. Report the part as silent; that report completes the answer for that part. Offer general audit practice where it helps, labelled as general practice.
 
-When the methodology establishes a specific requirement, such as a threshold, required field, approval, sample size, or other prescribed step, state it clearly and cite the relevant section by heading.
+A blank or absent `METHODOLOGY.md` makes the whole question silent. Say so in the first line of the answer.
 
-When the methodology does not address part of the question, say so rather than presenting general audit practice as a methodology requirement.
+## Shape the answer
 
-## 3. Provide direction
-
-Lead with a direct answer to the auditor's question, then explain the methodology that supports it.
-
-Translate the methodology into practical guidance for what the auditor should do next. When more than one approach is consistent with the methodology, explain the available approaches and recommend a reasonable path based on the circumstances.
-
-Cite the methodology sections relied on by heading. Quote the governing language only when the exact wording matters to the answer.
+Lead with the direct answer, then the methodology supporting it, then what the auditor should do next. When more than one approach is consistent with the methodology, lay out the approaches and recommend one for the circumstances.
