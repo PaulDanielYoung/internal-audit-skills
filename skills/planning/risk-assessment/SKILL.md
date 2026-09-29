@@ -7,6 +7,17 @@ description: Assess or rate an engagement's inherent risks, identify risks from 
 
 Own the engagement risk assessment at `planning/risk-assessment.md` in the selected engagement, including Risk IDs and activity Objective IDs. Identify, word, and present inherent risks for the auditor to rate. Rank risks for `planning-memo`; scope decisions belong there. List no controls; those belong to the RCM.
 
+## File Structure
+
+```text
+/
+└── engagements/
+    └── <year>/
+        └── <name>/
+            └── planning/
+                └── risk-assessment.md
+```
+
 ## Establish the basis
 
 Follow the workspace instructions for engagement selection, read its `ENGAGEMENT.md`, and state the selected engagement and output path. Read the workspace glossary and relevant methodology and organization context when present; proceed silently when absent. Use `audit-terminology` when a term's meaning needs agreement or consistency across engagements.
