@@ -4,7 +4,7 @@ How the internal audit skills should consume workspace documentation when perfor
 
 ## Before working, read these files in `context/`
 
-- `README.md`
+- `INDEX.md`
 - `GLOSSARY.md`
 - `METHODOLOGY.md`
 - `ORGANIZATION.md`
@@ -21,7 +21,7 @@ The full workspace layout is shown below. Files and directories are created as n
 /
 ├── CLAUDE.md
 ├── context/
-│   ├── README.md
+│   ├── INDEX.md
 │   ├── GLOSSARY.md
 │   ├── METHODOLOGY.md
 │   ├── ORGANIZATION.md

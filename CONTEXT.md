@@ -11,7 +11,7 @@ One converted policy, regulation, or framework in the context folder, carrying f
 The workspace's `context/` folder, holding everything agents read for organizational and methodological context.
 
 **Context index**:
-The context folder's README, listing every context document and where to find it.
+The context folder's `INDEX.md`, listing every context document and where to find it.
 
 **Document request**:
 An individual request for material needed for an audit engagement.
