@@ -28,20 +28,25 @@ If an `## Internal audit skills` block already exists in `CLAUDE.md`, update its
 Before performing work, read and follow 'docs/agents/workspace.md'.
 ```
 
-## 3. Create files from templates
+## 3. Create the context folder
+
+Create `context/` and its subfolders `policies/`, `regulations/`, and `frameworks/` if they do not exist. Leave existing folders and their contents unchanged.
+
+## 4. Create files from templates
 
 Copy each template from this skill's folder to its destination. If the file already exists, skip it and leave it unchanged.
 
 | Template | Destination |
 |---|---|
 | [workspace.md](workspace.md) | `docs/agents/workspace.md` |
-| [METHODOLOGY.md](METHODOLOGY.md) | `METHODOLOGY.md` (workspace root) |
-| [ORGANIZATION.md](ORGANIZATION.md) | `ORGANIZATION.md` (workspace root) |
+| [CONTEXT-INDEX.md](CONTEXT-INDEX.md) | `context/README.md` |
+| [METHODOLOGY.md](METHODOLOGY.md) | `context/METHODOLOGY.md` |
+| [ORGANIZATION.md](ORGANIZATION.md) | `context/ORGANIZATION.md` |
 
-## 4. Report
+## 5. Report
 
 Tell the user setup is complete and the internal audit skills will now read from these files.
 
-Explain that newly created `METHODOLOGY.md` and `ORGANIZATION.md` files are blank templates for the auditor to populate manually with approved content.
+Explain that newly created `context/METHODOLOGY.md` and `context/ORGANIZATION.md` files are blank templates for the auditor to populate manually with approved content, and that converted policies, regulations, and frameworks go in the matching `context/` subfolder with a row in `context/README.md`.
 
 Mention that they can edit docs/agents/workspace.md directly to update workspace instructions.
