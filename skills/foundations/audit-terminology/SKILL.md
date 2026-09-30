@@ -9,14 +9,15 @@ Actively build and sharpen the organization's audit vocabulary as you work. Chal
 
 ## File Structure
 
-The workspace contains a single glossary file:
+The workspace contains a single glossary file, in the context folder:
 
 ```text
 /
-└── GLOSSARY.md
+└── context/
+    └── GLOSSARY.md
 ```
 
-Create `GLOSSARY.md` when the first term’s meaning is settled, using the structure in [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md). If the file already exists, update it in place.
+Create `context/GLOSSARY.md` when the first term’s meaning is settled, using the structure in [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md). If the file already exists, update it in place.
 
 ## During the session
 
@@ -31,6 +32,6 @@ Create `GLOSSARY.md` when the first term’s meaning is settled, using the struc
 
 Before adding a new term, check whether the glossary already defines the same or a closely related concept. Reconcile with the existing term rather than creating duplicate, overlapping, or competing definitions.
 
-When a term is resolved, update `GLOSSARY.md` immediately rather than batching updates at the end. Use the format specified in [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md).
+When a term is resolved, update `context/GLOSSARY.md` immediately rather than batching updates at the end. Use the format specified in [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md).
 
 `GLOSSARY.md` should contain one consistent term and meaning for every concept. Keep it limited to audit terminology and definitions.

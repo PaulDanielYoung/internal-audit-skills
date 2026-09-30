@@ -1,5 +1,7 @@
 # GLOSSARY.md Format
 
+The glossary lives at `context/GLOSSARY.md` in the workspace.
+
 ## Structure
 
 ```markdown
