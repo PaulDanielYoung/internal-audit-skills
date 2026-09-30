@@ -1,6 +1,6 @@
 ---
 name: guidance
-description: One entry point for any question about methodology, policies, or regulations. Routes the question to the right ask skill and combines the answers.
+description: Answers methodology, policy, and regulation questions through the relevant ask skills.
 disable-model-invocation: true
 ---
 
@@ -10,7 +10,7 @@ Answer the auditor's question from the context folder by routing it to the right
 
 ## 1. Classify the question
 
-Read `context/INDEX.md` to see which sources the workspace holds. Match each part of the question to the sources that bear on it:
+Match each part of the question by subject to every relevant source category:
 
 | Source | Answers questions about | Answered by |
 |---|---|---|
@@ -18,20 +18,31 @@ Read `context/INDEX.md` to see which sources the workspace holds. Match each par
 | Policies | management's own criteria: what the organization requires of itself | `ask-policy` |
 | Regulations | what the law requires of the organization | `ask-regulation` |
 
-Classification is done when every part of the question has at least one source, or the question is recognized as one of the two cases below.
+Read `context/INDEX.md` to locate the available sources. A missing index, document, or empty table is an evidence gap; keep the question assigned to its relevant source category.
+
+Handle these cases as they arise:
 
 - **A task, not a question**: name the skill whose description fits the task, in one line, and stop.
-- **Genuinely ambiguous**: two sources plausibly apply and their answers could conflict, or the question can't be matched to any source. Call `shared-understanding` to settle the intent with the auditor before answering.
+- **Genuinely ambiguous**: missing facts or unclear intent would materially change which sources apply or how the question is answered. Call `shared-understanding` to resolve that uncertainty, then resume classification. Continue with unaffected parts.
+- **Outside scope**: a clear question falls outside all three source categories. State that boundary for that part and continue with any in-scope parts.
+
+Classification is done when every part has all relevant source categories identified, is outside scope, or is pending a specific clarification. Multiple applicable sources, including a request to compare them, proceed to gathering answers.
 
 ## 2. Gather the answers
 
-Invoke the ask skill for each matched source with the auditor's question.
+Invoke the ask skill for each matched source category with its assigned question parts and the full question as context. Ask it to answer only the assigned parts, using its existing labels and citations.
+
+Where sources are unavailable, report which assigned parts cannot be assessed from the available context. Use **Not addressed** for the ask skills' documented empty-source cases or when the available sources do not cover a part; distinguish those from a listed document that could not be read.
 
 ## 3. Reply
 
-**One source**: return its answer unchanged.
+**One source**: return its answer unchanged, appending any outside-scope parts or pending clarifications.
 
-**Two or more sources**: synthesize. Sources rank by precedence when they bear on the same point: a regulation over a policy; the methodology governs the auditor's own work rather than the auditee's, so it doesn't compete with either. Format the reply as shown below, with only the blocks the answer uses:
+**Two or more sources**: synthesize. Preserve every applicable requirement that can be satisfied together. Where requirements are incompatible, show the conflicting provisions and identify what remains unresolved. Gather and compare the sources before deciding whether missing facts or unclear intent require `shared-understanding`.
+
+In the combined **Answer** and **Recommendation**, preserve each source's uncertainty and distinguish stated requirements, inferences, and general practice. Keep evidence gaps, outside-scope parts, pending clarifications, and unresolved conflicts visible.
+
+The reply is complete when every question part has a supported answer or an explicit limitation. If no part can be answered, return those limitations and what would resolve them. Otherwise, format a multi-source reply as shown below, with only the blocks the answer uses:
 
 ```
 💬 **Answer**
