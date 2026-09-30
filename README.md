@@ -17,18 +17,16 @@ Or with the skills CLI, from a terminal:
 npx skills add PaulDanielYoung/internal-audit-skills -g
 ```
 
-The plugin prefixes each skill name with `internal-audit-skills:`; the CLI installs the plain names. Reinstall to pick up a new version.
-
 ## Skills
 
 Skills are organized into shared capabilities (Foundations and Writing) and engagement stages (Planning, Walkthroughs, Fieldwork, and Reporting). Their invocation names stay the same.
 
 ### [Foundations](skills/foundations/README.md)
 
-- [`setup-internal-audit-skills`](skills/foundations/setup-internal-audit-skills/SKILL.md) prepares a new or existing auditor workspace and its project instructions. Invoke it explicitly for setup.
-- [`audit-terminology`](skills/foundations/audit-terminology/SKILL.md) sharpens audit terminology and maintains agreed definitions in the workspace's `GLOSSARY.md`, creating it when the first definition is settled.
+- [`setup-internal-audit-skills`](skills/foundations/setup-internal-audit-skills/SKILL.md) prepares a new or existing auditor workspace, its `context/` folder, and its project instructions. Invoke it explicitly for setup.
+- [`audit-terminology`](skills/foundations/audit-terminology/SKILL.md) sharpens audit terminology and maintains agreed definitions in the workspace's `context/GLOSSARY.md`, creating it when the first definition is settled.
 - [`shared-understanding`](skills/foundations/shared-understanding/SKILL.md) resolves ambiguity with the user before a judgment is made or work is produced.
-- [`ask-methodology`](skills/foundations/ask-methodology/SKILL.md) answers an auditor's question from the workspace's `METHODOLOGY.md`, separating what it documents from what it leaves unaddressed. Invoke it explicitly.
+- [`ask-methodology`](skills/foundations/ask-methodology/SKILL.md) answers an auditor's question from the workspace's `context/METHODOLOGY.md`, separating what it documents from what it leaves unaddressed. Invoke it explicitly.
 - [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record and folders from an engagement name and audit objective statement. Every later engagement skill starts from it.
 - [`document-request-list`](skills/foundations/document-request-list/SKILL.md) proactively suggests requests for auditor approval and maintains one Markdown document request list per engagement as information and received files become available.
 
