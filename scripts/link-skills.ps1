@@ -1,10 +1,10 @@
 # Maintainer-only script, not a supported install route. Users install through
-# the plugin or `npx skills add` as the README documents.
+# `npx skills add` as the README documents.
 #
 # Links every skill in this repo into the local Claude Code skills directory as
 # a junction, so edits here are live in the next session without reinstalling.
-# Remove the links (`cmd /c rmdir <link>`, no /s) before testing an npx or
-# plugin install, which would otherwise collide with them.
+# Remove the links (`cmd /c rmdir <link>`, no /s) before testing an npx
+# install, which would otherwise collide with them.
 
 param(
     [string]$SkillsDirectory = (Join-Path ([Environment]::GetFolderPath('UserProfile')) '.claude\skills')
