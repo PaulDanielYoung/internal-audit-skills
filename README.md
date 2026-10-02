@@ -4,7 +4,7 @@ A collection of AI agent skills for internal auditors, built for Claude Code.
 
 The skills are designed to work together across the internal audit lifecycle—from planning and walkthroughs through fieldwork, reporting, and follow-up. They are grounded in established internal audit practices and principles, while remaining flexible enough to adapt to your organization’s methodology, terminology, and way of working.
 
-Use them as a starting point. Change the wording, add or remove skills, modify the workflows, and experiment with new ideas. Make them your own and adapt them to the way you and your team actually perform internal audit work.
+Use them as a starting point. Change the wording, add or remove skills, modify the workflows, and experiment with new ideas. Make them your own and adapt them to the way you and your team actually work.
 
 If you’re using these skills, have feedback, or have ideas for improving or expanding them, I’d love to hear from you. Feel free to reach out at pauldanielyoung@outlook.com.
 
