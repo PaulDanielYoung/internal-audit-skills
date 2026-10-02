@@ -10,9 +10,9 @@ If you’re using these skills, have feedback, or have ideas for improving or ex
 
 ## How it works
 
-Create a new folder on your computer and open it in Claude Code. Download the skills, then run the `setup-internal-audit-skills` skill to initialize the workspace. It configures `CLAUDE.md`, adds the workspace instructions the skills follow, and creates the `context/` structure for your organization’s audit guidance.
+Create a new folder on your computer and open it in Claude Code. Download the skills, then run the `setup-internal-audit-skills` to initialize the workspace. It configures `CLAUDE.md`, adds the workspace instructions the skills follow, and creates the `context/` structure for your organization’s context.
 
-Populate `context/METHODOLOGY.md` and `context/ORGANIZATION.md` with your organization’s approved content. Add relevant policies and regulations as Markdown files to their corresponding folders in `context/`.
+Populate `context/METHODOLOGY.md` and `context/ORGANIZATION.md`. Add relevant policies and regulations as Markdown files to their corresponding folders in `context/`.
 
 When you’re ready to begin an audit, run the `create-engagement` skill. It creates the engagement workspace and records the basic context for the audit, including its name and objective statement.
 
