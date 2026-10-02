@@ -33,10 +33,3 @@ The laws and regulations the organization must comply with.
 
 | Document | Description | Effective |
 |---|---|---|
-
-### Frameworks
-
-Authoritative frameworks and professional standards, such as COSO, ISO, NIST, and the IIA Standards.
-
-| Document | Description | Effective |
-|---|---|---|

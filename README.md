@@ -1,68 +1,81 @@
 # Internal Audit Skills
 
-Open-source AI skills for internal auditors using local Claude Code.
+A collection of AI agent skills for internal auditors, built for Claude Code.
+
+The skills are designed to work together across the internal audit lifecycle—from planning and walkthroughs through fieldwork, reporting, and follow-up. They are grounded in established internal audit practices and principles, while remaining flexible enough to adapt to your organization’s methodology, terminology, and way of working.
+
+Use them as a starting point. Change the wording, add or remove skills, modify the workflows, and experiment with new ideas. Make them your own and adapt them to the way you and your team actually perform internal audit work.
+
+If you’re using these skills, have feedback, or have ideas for improving or expanding them, I’d love to hear from you. Feel free to reach out at pauldanielyoung@outlook.com.
+
+## How it works
+
+Create a new folder on your computer and open it in Claude Code. Download the skills, then run the `setup-internal-audit-skills` skill to initialize the workspace. It configures `CLAUDE.md`, adds the workspace instructions the skills follow, and creates the `context/` structure for your organization’s audit guidance.
+
+Populate `context/METHODOLOGY.md` and `context/ORGANIZATION.md` with your organization’s approved content. Add relevant policies and regulations as Markdown files to their corresponding folders in `context/`.
+
+When you’re ready to begin an audit, run the `create-engagement` skill. It creates the engagement workspace and records the basic context for the audit, including its name and objective statement.
+
+From there, the skills work together within the engagement, using both the organization and engagement level context to help you do your work.
 
 ## Installation
 
-As a Claude Code plugin, from a session:
+Run the following command in your terminal and desired workspace folder:
 
-```
-/plugin marketplace add PaulDanielYoung/internal-audit-skills
-/plugin install internal-audit-skills@internal-audit-skills
-```
-
-Or with the skills CLI, from a terminal:
-
-```
-npx skills add PaulDanielYoung/internal-audit-skills -g
+```sh
+npx skills add PaulDanielYoung/internal-audit-skills
 ```
 
-## Skills
+## Setup
 
-Skills are organized into shared capabilities (Foundations, Guidance, and Writing) and engagement stages (Planning, Walkthroughs, Fieldwork, and Reporting). Their invocation names stay the same.
+Run `/setup-internal-audit-skills` once for each project. It initializes the workspace and creates the files and folders the skills rely on.
+
+When you’re ready to begin an individual audit, run `/create-engagement`. It creates a dedicated engagement workspace and the supporting structure for that audit.
+
+## Reference
 
 ### [Foundations](skills/foundations/README.md)
 
-- [`setup-internal-audit-skills`](skills/foundations/setup-internal-audit-skills/SKILL.md) prepares a new or existing auditor workspace, its `context/` folder, and its project instructions. Invoke it explicitly for setup.
-- [`audit-terminology`](skills/foundations/audit-terminology/SKILL.md) sharpens audit terminology and maintains agreed definitions in the workspace's `context/GLOSSARY.md`, creating it when the first definition is settled.
-- [`shared-understanding`](skills/foundations/shared-understanding/SKILL.md) resolves ambiguity with the user before a judgment is made or work is produced.
-- [`create-engagement`](skills/foundations/create-engagement/SKILL.md) creates the engagement record and folders from an engagement name and audit objective statement. Every later engagement skill starts from it.
-- [`document-request-list`](skills/foundations/document-request-list/SKILL.md) proactively suggests requests for auditor approval and maintains one Markdown document request list per engagement as information and received files become available.
+- [setup-internal-audit-skills](skills/foundations/setup-internal-audit-skills/SKILL.md) — Sets up your workspace, context folder, and instructions for Claude.
+- [audit-terminology](skills/foundations/audit-terminology/SKILL.md) — Creates and maintains a shared glossary of organization-specific terminology.
+- [shared-understanding](skills/foundations/shared-understanding/SKILL.md) — Clarifies questions and assumptions that could materially change the work.
+- [create-engagement](skills/foundations/create-engagement/SKILL.md) — Creates an engagement record and folders from its name, objective, and year.
+- [document-request-list](skills/foundations/document-request-list/SKILL.md) — Suggests document requests for your approval and tracks requests and received files.
 
 ### [Guidance](skills/guidance/README.md)
 
-Skills that answer an auditor's question from the context folder without producing a workspace file.
-
-- [`guidance`](skills/guidance/guidance/SKILL.md) is the one entry point for any question about methodology, policies, or regulations. It routes the question to the right ask skill and combines the answers when more than one source applies. Invoke it explicitly.
-- [`ask-methodology`](skills/guidance/ask-methodology/SKILL.md) answers an auditor's question from the workspace's `context/METHODOLOGY.md`, separating what it documents from what it leaves unaddressed.
-- [`ask-policy`](skills/guidance/ask-policy/SKILL.md) answers an auditor's question from the policies in `context/policies/`, citing each policy, section, and effective date relied on.
-- [`ask-regulation`](skills/guidance/ask-regulation/SKILL.md) answers an auditor's question from the regulations in `context/regulations/`, citing each instrument, provision, and effective date relied on.
+- [guidance](skills/guidance/guidance/SKILL.md) — Routes your questions to the relevant methodology, policy, and regulation skills.
+- [ask-methodology](skills/guidance/ask-methodology/SKILL.md) — Answers questions from your audit methodology, citing the relevant provisions.
+- [ask-policy](skills/guidance/ask-policy/SKILL.md) — Answers questions from your organization’s policies, citing the relevant provisions.
+- [ask-regulation](skills/guidance/ask-regulation/SKILL.md) — Answers questions from the regulations you provide, citing the relevant provisions.
 
 ### [Writing](skills/writing/README.md)
 
-Skills for writing and reviewing reusable audit statements and procedures, used across engagement stages.
-
-- [`process-statements`](skills/writing/process-statements/SKILL.md) writes and reviews process titles and descriptions, including purpose, boundaries, roles, and systems.
-- [`risk-statements`](skills/writing/risk-statements/SKILL.md) writes and reviews risk titles and descriptions, connecting events, causes, and consequences to objectives.
-- [`control-statements`](skills/writing/control-statements/SKILL.md) writes and reviews intended-design control titles and descriptions, preserving inline sources and separately referring contrary practice.
-- [`design-adequacy-procedures`](skills/writing/design-adequacy-procedures/SKILL.md) writes and reviews procedures for assessing whether control design addresses the relevant risk, with implementation checks when requested.
-- [`operating-effectiveness-procedures`](skills/writing/operating-effectiveness-procedures/SKILL.md) writes and reviews operating-effectiveness test steps, including evidence, evaluation criteria, population, period, and selection details.
+- [process-statements](skills/writing/process-statements/SKILL.md) — Writes and reviews process titles and descriptions.
+- [risk-statements](skills/writing/risk-statements/SKILL.md) — Writes and reviews risk titles and descriptions.
+- [control-statements](skills/writing/control-statements/SKILL.md) — Writes and reviews control titles and descriptions.
+- [design-adequacy-procedures](skills/writing/design-adequacy-procedures/SKILL.md) — Writes and reviews procedures for assessing whether controls are designed adequately.
+- [operating-effectiveness-procedures](skills/writing/operating-effectiveness-procedures/SKILL.md) — Writes and reviews procedures for testing whether controls operated effectively.
 
 ### [Planning](skills/planning/README.md)
 
-- [`preliminary-survey`](skills/planning/preliminary-survey/SKILL.md) establishes a sourced understanding of the activity, maintains its process list and stable Process IDs, and identifies leads and information gaps for risk assessment.
-- [`risk-assessment`](skills/planning/risk-assessment/SKILL.md) develops sourced inherent risks, presents ratings for the auditor's judgement, and ranks the assessment for planning.
-- [`planning-memo`](skills/planning/planning-memo/SKILL.md) records auditor-agreed objectives and scope, sourced criteria and approach, and the team, budget, and timeline for the RCM handoff.
-- [`risk-and-control-matrix`](skills/planning/risk-and-control-matrix/SKILL.md) owns the preliminary RCM and Control IDs, plans procedures for controls and risk gaps, and generates its HTML view from Markdown.
-
-### [Walkthroughs](skills/walkthroughs/README.md)
-
-
+- [preliminary-survey](skills/planning/preliminary-survey/SKILL.md) — Gathers sufficient background information and understanding the activities operations. 
+- [risk-assessment](skills/planning/risk-assessment/SKILL.md) — Identifies, evaluates, and prioritizes risks.
+- [planning-memo](skills/planning/planning-memo/SKILL.md) — Records agreed objectives, scope, criteria, approach, team, budget, and timeline.
+- [risk-and-control-matrix](skills/planning/risk-and-control-matrix/SKILL.md) — Links risks to controls and plans the engagement’s work program.
 
 ### [Fieldwork](skills/fieldwork/README.md)
 
-- [`exploratory-data-analysis`](skills/fieldwork/exploratory-data-analysis/SKILL.md) explores one CSV or one selected values-only XLSX table and opens a temporary offline HTML report of it.
+- [exploratory-data-analysis](skills/fieldwork/exploratory-data-analysis/SKILL.md) — Explores a CSV or supported XLSX table and opens a temporary HTML report.
 
-### [Reporting](skills/reporting/README.md)
+## Feedback and contributions
 
+Found a problem or have an idea for a skill? [Open an issue](https://github.com/PaulDanielYoung/internal-audit-skills/issues). Feedback, suggestions, and contributions are welcome.
 
+## Acknowledgments
+
+Inspired by [Matt Pocock’s skills repository](https://github.com/mattpocock/skills).
+
+## License
+
+[MIT](LICENSE).

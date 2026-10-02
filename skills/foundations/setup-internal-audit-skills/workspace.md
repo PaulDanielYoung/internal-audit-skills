@@ -25,7 +25,6 @@ The full workspace layout is shown below. Files and directories are created as n
 │   ├── GLOSSARY.md
 │   ├── METHODOLOGY.md
 │   ├── ORGANIZATION.md
-│   ├── frameworks/
 │   ├── policies/
 │   └── regulations/
 ├── docs/
@@ -74,7 +73,7 @@ If needed organizational context is not documented, don't treat the absence as p
 
 ## Consult context documents on demand
 
-When the work depends on a policy, regulation, or framework, find it through the context index and read only the documents that bear on the work. `context/policies/` holds management's own criteria, `context/regulations/` the laws and regulations the organization must comply with, and `context/frameworks/` authoritative frameworks and professional standards.
+When the work depends on a policy or regulation, find it through the context index and read only the documents that bear on the work. `context/policies/` holds management's own criteria and `context/regulations/` the laws and regulations the organization must comply with.
 
 Each context document opens with front matter giving its title, description, and effective date; cite it with those.
 

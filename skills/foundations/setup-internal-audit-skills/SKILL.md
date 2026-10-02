@@ -47,6 +47,6 @@ Copy each template from this skill's folder to its destination. If the file alre
 
 Tell the user setup is complete and the internal audit skills will now read from these files.
 
-Explain that newly created `context/METHODOLOGY.md` and `context/ORGANIZATION.md` files are blank templates for the auditor to populate manually with approved content, and that converted policies, regulations, and frameworks go in the matching `context/` subfolder with a row in `context/INDEX.md`.
+Explain that newly created `context/METHODOLOGY.md` and `context/ORGANIZATION.md` files are blank templates for the auditor to populate manually with approved content, and that converted policies and regulations go in the matching `context/` subfolder with a row in `context/INDEX.md`.
 
 Mention that they can edit docs/agents/workspace.md directly to update workspace instructions.
