@@ -32,17 +32,13 @@ Format each question as shown below for its type, numbering questions in order w
 
 {question body, including choices where useful}
 
-➡️ **Recommended answer**
-
-{recommended answer and brief reasoning}
+➡️ **Recommended answer** - {recommended answer and brief reasoning}
 ---
 ❓ **Q2** - **{factual question title}**
 
 {question asking for the missing fact or supporting evidence}
 
-➡️ **Suggested source**
-
-{where or how to establish the fact, when useful; otherwise omit this section}
+🔎 **Suggested source** - {where or how to establish the fact, when useful; otherwise omit this section}
 ```
 
 After each round, reassess the decision tree. The user's answers may settle other questions, introduce new ones, change assumptions, or move the frontier.
