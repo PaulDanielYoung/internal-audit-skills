@@ -33,7 +33,7 @@ How the internal audit skills should consume workspace documentation when perfor
 
 If any of these files are absent or contain only a blank template, **proceed silently**. Do not flag their absence or blank content alone; don't suggest populating them upfront.
 
-Everything in `context/` is an approved reference maintained by the internal audit department. Agents read it without making edits, with one exception: `GLOSSARY.md`, which only the `audit-terminology` skill edits.
+Everything in `context/` is an approved reference maintained by the internal audit department. Agents read it without making edits.
 
 ### File structure
 
