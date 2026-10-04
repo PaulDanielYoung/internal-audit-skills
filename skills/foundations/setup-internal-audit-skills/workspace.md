@@ -21,7 +21,6 @@ The full workspace layout is shown below. Files and directories are created as n
 /
 ├── CLAUDE.md
 ├── context/
-│   ├── INDEX.md
 │   ├── GLOSSARY.md
 │   ├── METHODOLOGY.md
 │   ├── ORGANIZATION.md
@@ -54,9 +53,9 @@ Clarification through `shared-understanding` settles the current work only; it d
 
 ## Use the glossary's vocabulary
 
-When your output names an audit concept, use the term as defined in `context/GLOSSARY.md`. Don't drift to synonyms the glossary explicitly avoids.
+When your output names an audit concept, use the term as defined in `context/GLOSSARY.md`.
 
-If a needed concept is not in the glossary, first consider whether you're introducing language the auditors don't use. Route it through `audit-terminology` when its meaning needs agreement or consistency across engagements. Otherwise, use the established meaning and continue the work.
+If a term or concept arises that would be useful to define in the glossary, suggest it to the user.
 
 ## Follow the documented methodology
 

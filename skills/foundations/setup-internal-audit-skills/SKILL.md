@@ -39,11 +39,14 @@ Copy each template from this skill's folder to its destination. If the file alre
 | Template | Destination |
 |---|---|
 | [workspace.md](workspace.md) | `docs/agents/workspace.md` |
+| [GLOSSARY.md](GLOSSARY.md) | `context/GLOSSARY.md` |
 | [METHODOLOGY.md](METHODOLOGY.md) | `context/METHODOLOGY.md` |
 | [ORGANIZATION.md](ORGANIZATION.md) | `context/ORGANIZATION.md` |
 
 ## 5. Report
 
-Tell the user setup is complete and the internal audit skills will now read from these files.
+Tell the user setup is complete and the internal audit skills will now read from the files in `context/`.
 
-Explain that newly created `context/METHODOLOGY.md` and `context/ORGANIZATION.md` files are blank templates for the auditor to populate manually with approved content, and that policies converted into markdown go in the matching `context/` subfolder.
+Explain that `context/GLOSSARY.md`, `context/METHODOLOGY.md`, and `context/ORGANIZATION.md` are blank templates for the user to complete and maintain. The user is responsible for keeping the information in these files accurate and up to date.
+
+Explain that organizational policies converted to Markdown should be added to `context/policies/`.
