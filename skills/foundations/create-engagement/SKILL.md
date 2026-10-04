@@ -40,5 +40,5 @@ Create `engagements/`, the year folder, and the engagement folder if they do not
 
 Within the engagement folder:
 
-- Create `ENGAGEMENT.md` using the structure in [ENGAGEMENT-FORMAT.md](ENGAGEMENT-FORMAT.md). If the file already exists, leave it unchanged and report the conflict to the user.
+- Create `ENGAGEMENT.md` using the structure in [ENGAGEMENT-FORMAT.md](ENGAGEMENT-FORMAT.md), replacing each comment with the engagement's content. If the file already exists, leave it unchanged and report the conflict to the user.
 - Create any missing directories from the File structure section above. Leave existing directories unchanged.
