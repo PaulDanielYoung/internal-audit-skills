@@ -30,7 +30,7 @@ Before performing work, read and follow 'docs/agents/workspace.md'.
 
 ## 3. Create the context folder
 
-Create `context/` and its subfolders `policies/`, `regulations/`, and `frameworks/` if they do not exist. Leave existing folders and their contents unchanged.
+Create `context/` and its subfolders `policies/` and `regulations/`, if they do not exist. Leave existing folders and their contents unchanged.
 
 ## 4. Create files from templates
 
