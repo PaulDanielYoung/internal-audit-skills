@@ -63,11 +63,11 @@ When the work involves something addressed by the audit methodology, follow the 
 
 If the methodology does not address something needed for the work, don't treat the absence as permission to invent it. Note the genuine methodology gap and resolve uncertainty with the auditor by calling the `shared-understanding` skill.
 
-## Reference organizational facts
+## Tailor work to the organization
 
-When the work depends on organization-specific facts, use the relevant context in `context/ORGANIZATION.md`. Treat the facts as context for the work rather than replacing them with generic assumptions.
+Use the organization's name, description, and industry to tailor your work to the organization.
 
-If needed organizational context is not documented, don't treat the absence as permission to invent it. Note the genuine organizational context gap and resolve uncertainty with the auditor by calling the `shared-understanding` skill.
+Use the organization's name when it is natural and useful.
 
 ## Consult context documents on demand
 
