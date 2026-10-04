@@ -13,7 +13,7 @@ Analyze one table from one CSV or XLSX file. CSV files must be comma-delimited w
 
 Read the source in place and leave its bytes unchanged. The report is throwaway: the driver, the report, and every intermediate file go in the OS temporary directory, and each run writes a fresh report.
 
-Read the workspace glossary and the relevant methodology and organization context, if present. Use `audit-terminology` for missing, ambiguous, or contested terms. If documented methodology conflicts with this skill's exploratory scope or temporary outputs, surface it before proceeding with affected work.
+Read the workspace glossary and the relevant methodology and organization context, if present. Use `shared-understanding` for missing, ambiguous, or contested terms. If documented methodology conflicts with this skill's exploratory scope or temporary outputs, surface it before proceeding with affected work.
 
 ## 1. Orient and profile
 

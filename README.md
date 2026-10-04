@@ -12,7 +12,7 @@ If you’re using these skills, have feedback, or have ideas for improving or ex
 
 Create a new folder on your computer and open it in Claude Code. Download the skills, then run the `setup-internal-audit-skills` to initialize the workspace. It configures `CLAUDE.md`, adds the workspace instructions the skills follow, and creates the `context/` structure for your organization’s context.
 
-Populate `context/METHODOLOGY.md` and `context/ORGANIZATION.md`. Add relevant policies and regulations as Markdown files to their corresponding folders in `context/`.
+Populate `context/METHODOLOGY.md` and `context/ORGANIZATION.md`. Add relevant policies as Markdown files to `context/policies/`.
 
 When you’re ready to begin an audit, run the `create-engagement` skill. It creates the engagement workspace and records the basic context for the audit, including its name and objective statement.
 
@@ -37,17 +37,10 @@ When you’re ready to begin an individual audit, run `/create-engagement`. It c
 ### [Foundations](skills/foundations/README.md)
 
 - [setup-internal-audit-skills](skills/foundations/setup-internal-audit-skills/SKILL.md) — Sets up your workspace, context folder, and instructions for Claude.
-- [audit-terminology](skills/foundations/audit-terminology/SKILL.md) — Creates and maintains a shared glossary of organization-specific terminology.
 - [shared-understanding](skills/foundations/shared-understanding/SKILL.md) — Clarifies questions and assumptions that could materially change the work.
+- [ask-context](skills/foundations/ask-context/SKILL.md) — Answers questions from your audit methodology and your organization’s policies, citing the relevant provisions.
 - [create-engagement](skills/foundations/create-engagement/SKILL.md) — Creates an engagement record and folders from its name, objective, and year.
 - [document-request-list](skills/foundations/document-request-list/SKILL.md) — Suggests document requests for your approval and tracks requests and received files.
-
-### [Guidance](skills/guidance/README.md)
-
-- [guidance](skills/guidance/guidance/SKILL.md) — Routes your questions to the relevant methodology, policy, and regulation skills.
-- [ask-methodology](skills/guidance/ask-methodology/SKILL.md) — Answers questions from your audit methodology, citing the relevant provisions.
-- [ask-policy](skills/guidance/ask-policy/SKILL.md) — Answers questions from your organization’s policies, citing the relevant provisions.
-- [ask-regulation](skills/guidance/ask-regulation/SKILL.md) — Answers questions from the regulations you provide, citing the relevant provisions.
 
 ### [Writing](skills/writing/README.md)
 
