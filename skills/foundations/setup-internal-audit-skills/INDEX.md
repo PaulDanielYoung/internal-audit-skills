@@ -26,10 +26,3 @@ Management's own criteria: the policies, procedures, and standards the organizat
 
 | Document | Description | Effective |
 |---|---|---|
-
-### Regulations
-
-The laws and regulations the organization must comply with.
-
-| Document | Description | Effective |
-|---|---|---|
