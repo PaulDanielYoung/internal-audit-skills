@@ -98,9 +98,9 @@ Each context document opens with front matter giving its title, description, and
 
 Engagements live in `engagements/<year>/<name>/`. Before producing engagement work, resolve the engagement named by the auditor and read its `ENGAGEMENT.md`. Ask if the selection is ambiguous. Keep engagement-specific outputs within that engagement's folder.
 
-### Request missing material
+### Track document requests
 
-When work reveals missing material, call the `document-request-list` skill and record the information gap. When material arrives, assess whether its contents resolve the gap.
+Call the `document-request-list` skill when starting work on an engagement, and whenever work reveals missing material.
 ````
 
 ## 3. Create the context folder

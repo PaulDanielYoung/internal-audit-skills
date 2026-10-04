@@ -40,7 +40,7 @@ When you’re ready to begin an individual audit, run `/create-engagement`. It c
 - [shared-understanding](skills/foundations/shared-understanding/SKILL.md) — Clarifies questions and assumptions that could materially change the work.
 - [ask-context](skills/foundations/ask-context/SKILL.md) — Answers questions from your audit methodology and your organization’s policies, citing the relevant provisions.
 - [create-engagement](skills/foundations/create-engagement/SKILL.md) — Creates an engagement record and folders from its name, objective, and year.
-- [document-request-list](skills/foundations/document-request-list/SKILL.md) — Suggests document requests for your approval and tracks requests and received files.
+- [document-request-list](skills/foundations/document-request-list/SKILL.md) — Proposes document requests for your approval, matches received files to requests, and tracks what is still outstanding.
 
 ### [Writing](skills/writing/README.md)
 

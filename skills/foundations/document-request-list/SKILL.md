@@ -1,11 +1,11 @@
 ---
 name: document-request-list
-description: Proactively maintain audit engagement document requests. Use when missing materials warrant a request, received files may change a request's status, or the auditor asks to create or update the list.
+description: Proactively maintain audit engagement document requests. Use when missing material warrants a request, received files need reconciling, a scope change affects a request, or the auditor asks to create or update the list.
 ---
 
 # Document Request List
 
-Proactively suggest document requests as needs emerge. The agent maintains `REQUESTS.md`; the auditor approves new requests and places client-provided files in `document-requests/received/`.
+Proactively maintain the engagement's document request list in `REQUESTS.md`. The agent proposes requests and keeps them current; the auditor approves requests and places client-provided files in `document-requests/received/`.
 
 ## File Structure
 
@@ -19,20 +19,38 @@ Proactively suggest document requests as needs emerge. The agent maintains `REQU
                 └── received/
 ```
 
-Create `document-requests/`, `document-requests/received/`, and `REQUESTS.md` when the first request is approved or the auditor asks to create a request list. Format `REQUESTS.md` according to [REQUESTS-FORMAT.md](REQUESTS-FORMAT.md). If any already exist, update them in place.
+Create `document-requests/`, `document-requests/received/`, and `REQUESTS.md` when the first request is proposed or the auditor asks to create a request list. Format `REQUESTS.md` according to [REQUESTS-FORMAT.md](REQUESTS-FORMAT.md). If any already exist, update them in place.
 
-## Suggest and add requests
+## 1. Reconcile received files
 
-When audit work identifies missing material, check `REQUESTS.md` and the received files for existing coverage. If a new request is warranted, propose it in the conversation, explain why it is needed, and ask the auditor to approve adding it.
+Start every run by reconciling `received/`, including subfolders, against `REQUESTS.md`. For each file not yet listed in any request's Received column, read its contents and judge which requests it answers against each request's Request and Purpose.
 
-Add the request only after approval. An explicit instruction to add a request counts as approval. Keep unapproved suggestions in the conversation.
+- **Matches a request**: add the file to that request's Received column. A file may answer more than one request. Close the request when the received material fully satisfies it; otherwise keep it Open and record in Notes what is still missing.
+- **Matches no request**: flag it to the auditor.
 
-## Maintain requests
+Reconciliation is done when every file in `received/` is listed against a request or flagged to the auditor. Status changes from reconciliation need no separate approval.
 
-Update `REQUESTS.md` as relevant information and received files become available. Maintain request statuses without separate approval, using the status rules in [REQUESTS-FORMAT.md](REQUESTS-FORMAT.md).
+## 2. Propose requests
 
-Ask the user for clarification if the status of a request is unclear.
+When work reveals missing material, check `REQUESTS.md` and the received files for existing coverage. If a request already covers the need, return its RQ ID. Otherwise, add a Proposed row with its Purpose and return the new RQ ID to the calling work.
+
+Gather the proposals from a piece of work and present them to the auditor together at the end, each with its purpose, for approval. On approval, set the request Open and its Requested date to today. A declined proposal becomes Withdrawn, with the auditor's reason in Notes.
+
+An explicit instruction from the auditor to add a request counts as approval: add it directly as Open.
+
+## 3. Keep requests current
+
+- Record owners, due dates, follow-ups, and partial-response gaps as information becomes available.
+- When a scope change leaves a request without a purpose, such as a planning memo exclusion or a removed risk or control, flag the request to the auditor as a withdrawal candidate. Withdraw it on the auditor's direction, with the reason in Notes.
+- Flag Open requests past their due date.
+- When a request's status is unclear, call the `shared-understanding` skill.
 
 ## Done
 
-If `REQUESTS.md` changed, briefly summarize the changes to the user, including the affected requests. Surface any unresolved questions that require the user's input.
+If `REQUESTS.md` changed or reconciliation flagged anything, summarize for the auditor:
+
+- Proposed requests awaiting approval, with their purposes.
+- Status changes, with the received files behind them.
+- Unmatched received files.
+- Overdue requests and withdrawal candidates.
+- Unresolved questions that require the auditor's input.
