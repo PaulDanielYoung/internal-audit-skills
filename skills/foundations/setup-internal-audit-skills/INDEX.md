@@ -1,4 +1,4 @@
-# Context Index
+# Index
 
 What agents read for organizational and methodological context. Everything in this folder is read-only for agents except `GLOSSARY.md`, which only `audit-terminology` edits.
 
@@ -6,7 +6,7 @@ What agents read for organizational and methodological context. Everything in th
 
 - `GLOSSARY.md`: the organization's own audit vocabulary.
 - `METHODOLOGY.md`: the internal audit methodology.
-- `ORGANIZATION.md`: organization context and facts.
+- `ORGANIZATION.md`: organization name, description, and industry.
 
 ## Context documents
 
